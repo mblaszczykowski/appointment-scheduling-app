@@ -1,6 +1,6 @@
 import React from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { request, setAuthHeader } from '../util/axios_helper';
+import {CSSTransition, SwitchTransition} from 'react-transition-group';
+import {request, setAuthHeader} from '../util/axios_helper';
 import LoggedInContent from './LoggedInContent';
 import LoginForm from './LoginForm';
 import WelcomeContent from './WelcomeContent';
@@ -35,14 +35,14 @@ export default class AppContent extends React.Component {
         setAuthHeader(null);
     };
 
-    onLogin = (e, username, password) => {
-        e.preventDefault();
+    onLogin = (obj) => {
+        const {login, password} = obj;
         request(
             "POST",
             "/login",
             {
-                login: username,
-                password: password
+                login,
+                password,
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
@@ -57,16 +57,16 @@ export default class AppContent extends React.Component {
         );
     };
 
-    onRegister = (event, firstName, lastName, username, password) => {
-        event.preventDefault();
+    onRegister = (obj) => {
+        const {firstName, lastName, username, password} = obj;
         request(
             "POST",
             "/register",
             {
-                firstName: firstName,
-                lastName: lastName,
+                firstName,
+                lastName,
                 login: username,
-                password: password
+                password
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
@@ -84,15 +84,15 @@ export default class AppContent extends React.Component {
     renderComponent() {
         switch (this.state.componentToShow) {
             case "welcome":
-                return <WelcomeContent />;
+                return <WelcomeContent/>;
             case "login":
-                return <LoginForm onLogin={this.onLogin} />;
+                return <LoginForm onLogin={this.onLogin}/>;
             case "register":
-                return <RegisterForm onRegister={this.onRegister} />;
+                return <RegisterForm onRegister={this.onRegister}/>;
             case "messages":
-                return <LoggedInContent />;
+                return <LoggedInContent/>;
             case "calendar":
-                return <Calendar />;
+                return <Calendar/>;
             default:
                 return null;
         }
