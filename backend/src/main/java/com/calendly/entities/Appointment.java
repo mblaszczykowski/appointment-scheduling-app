@@ -21,17 +21,32 @@ public class Appointment {
     @Column(nullable = false)
     private LocalDateTime endTime;
 
+    @Column(nullable = false)
+    private String bookerName;
+
+    @Column(nullable = false)
+    private String bookerEmail;
+
+    @Column(nullable = true)
+    private LocalDateTime bookedAt = LocalDateTime.now();
+
     public Appointment() {
     }
 
-    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime) {
+    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime, String bookerName, String bookerEmail) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.bookerName = bookerName;
+        this.bookerEmail = bookerEmail;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -56,5 +71,29 @@ public class Appointment {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public String getBookerName() {
+        return bookerName;
+    }
+
+    public void setBookerName(String bookerName) {
+        this.bookerName = bookerName;
+    }
+
+    public String getBookerEmail() {
+        return bookerEmail;
+    }
+
+    public void setBookerEmail(String bookerEmail) {
+        this.bookerEmail = bookerEmail;
+    }
+
+    public LocalDateTime getBookedAt() {
+        return bookedAt;
+    }
+
+    public void setBookedAt(LocalDateTime bookedAt) {
+        this.bookedAt = bookedAt;
     }
 }

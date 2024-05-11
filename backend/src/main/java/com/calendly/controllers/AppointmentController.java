@@ -33,7 +33,8 @@ public class AppointmentController {
             return checkAuthorizationResult;
         }
 
-        if (appointmentDTO.startTime() == null || appointmentDTO.endTime() == null) {
+        if (appointmentDTO.startTime() == null || appointmentDTO.endTime() == null
+        || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())) {
             return new ResponseEntity<>("Invalid request parameters", HttpStatus.BAD_REQUEST);
         }
 
@@ -42,7 +43,9 @@ public class AppointmentController {
         appointmentService.createAppointment(
                 userId,
                 appointmentDTO.startTime(),
-                appointmentDTO.endTime()
+                appointmentDTO.endTime(),
+                appointmentDTO.bookerName(),
+                appointmentDTO.bookerEmail()
         );
 
         return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);

@@ -26,6 +26,12 @@ const contactSchema = Yup.object().shape({
         .min(8, 'Password must be at least 8 symbols.')
         .max(20, 'Max length is 20.')
         .required('Password is required.'),
+    calendarUrl: Yup.string()
+        .matches(
+            /^[\w\-\/]+$/,
+            'Invalid subpath format. Only alphanumeric characters, dashes, and slashes are allowed.'
+        )
+        .required('Calendar subpath is required.'),
     availableFromHour: Yup.number()
         .min(0, 'Earliest hour must be 0.')
         .max(23, 'Latest hour can be 23.')
@@ -49,6 +55,7 @@ export default class RegisterForm extends React.Component {
             lastName: '',
             email: '',
             password: '',
+            calendarUrl: '',
             availableFromHour: 0,
             availableToHour: 0,
             availableDays: [],
@@ -81,6 +88,7 @@ export default class RegisterForm extends React.Component {
                         lastname: '',
                         email: '',
                         password: '',
+                        calendarUrl: '',
                         availableFromHour: '',
                         availableToHour: '',
                         availableDays: [],
@@ -118,6 +126,9 @@ export default class RegisterForm extends React.Component {
                                         Log in
                                     </a>
                                 </label>
+                            </div>
+                            <div className="mb-3">
+                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Tell us a bit about yourself</h1>
                             </div>
                             <div className="mb-5">
                                 <Field
@@ -175,6 +186,27 @@ export default class RegisterForm extends React.Component {
 
                             <div className="mt-2 mb-5">
                                 <div className="mb-3">
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
+                                        calendar</h1>
+                                </div>
+                                <div className="mb-5">
+                                    <Field
+                                        type="text"
+                                        name="calendarUrl"
+                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                        placeholder={`Your calendar's URL`}
+                                    ></Field>
+                                    <ErrorMessage
+                                        name="calendarUrl"
+                                        component="span"
+                                        className={css.error}
+                                    />
+                                </div>
+                            </div>
+
+
+                            <div className="mt-2 mb-5">
+                                <div className="mb-3">
                                     <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
                                         availability</h1>
                                 </div>
@@ -212,17 +244,17 @@ export default class RegisterForm extends React.Component {
                                         </label>
                                     ))}
                                 </div>
-                                <ErrorMessage name="availableDays" component="div" className={css.error} />
+                                <ErrorMessage name="availableDays" component="div" className={css.error}/>
 
 
                                 {/* Submit button */}
-                            <button type="submit"
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Register
-                            </button>
-                        </div>
+                                <button type="submit"
+                                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Register
+                                </button>
+                            </div>
                         </Form>
-                        )}
+                    )}
                 </Formik>
             </div>
         );

@@ -3,10 +3,9 @@
 ### Uruchomienie
 
 ```
-yarn install
-```
-```
-yarn start
+cd frontend
+npm install
+npm start
 ```
 
 Zauważyłem, że aplikacja musi działać na porcie 3000 (domyślnym) aby łączyła się poprawnie z backendem, nie patrzyłem jeszcze dlaczego, czy to gdzieś jest zdefiniowane.

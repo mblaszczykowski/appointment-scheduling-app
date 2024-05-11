@@ -25,15 +25,15 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-    private static final long EXPIRATION_TIME_ACCESS = 900000;
-    private static final long EXPIRATION_TIME_REFRESH = 3600000 * 24;
+    public static final long EXPIRATION_TIME_ACCESS = 900000;
+    public static final long EXPIRATION_TIME_REFRESH = 3600000 * 24;
     private final TokenDAO tokenDAO;
-    private final Key jwtKey;
+    private static Key jwtKey;
 
     @Autowired
     public TokenService(TokenDAO tokenDAO, @Value("${jwt.Key}") String secretKey) {
         this.tokenDAO = tokenDAO;
-        this.jwtKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+        jwtKey = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public void addToken(Integer userId, String tokenString) {
@@ -51,7 +51,7 @@ public class TokenService {
                 );
     }
 
-    public String generateToken(long expirationDate, Integer userID) {
+    public static String generateToken(long expirationDate, Integer userID) {
         long currentTimeMillis = System.currentTimeMillis();
         Date expirationDateToken = new Date(currentTimeMillis + expirationDate);
         String token = Jwts.builder()

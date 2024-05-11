@@ -1,7 +1,7 @@
 import React from 'react';
 import {CSSTransition, SwitchTransition} from 'react-transition-group';
 import {getAuthToken, request, setAuthHeader} from '../util/axios_helper';
-import LoggedInContent from './LoggedInContent';
+import Dashboard from './Dashboard';
 import LoginForm from './LoginForm';
 import WelcomeContent from './WelcomeContent';
 import Calendar from "./Calendar";
@@ -59,7 +59,7 @@ export default class AppContent extends React.Component {
     };
 
     onRegister = (obj) => {
-        const {firstname, lastname, email, password, availableFromHour, availableToHour, availableDays} = obj;
+        const {firstname, lastname, email, password, calendarUrl, availableFromHour, availableToHour, availableDays} = obj;
         console.log(obj);
         request(
             "POST",
@@ -69,12 +69,13 @@ export default class AppContent extends React.Component {
                 lastname,
                 email,
                 password,
+                calendarUrl,
                 availableFromHour,
                 availableToHour,
                 availableDays,
             }).then(
             (response) => {
-                setAuthHeader(response.data.token);
+                setAuthHeader(response.data);
                 this.setState({componentToShow: "messages"});
                 this.setState({isLoggedIn: true});
                 //window.location = "/";
@@ -95,7 +96,7 @@ export default class AppContent extends React.Component {
             case "register":
                 return <RegisterForm onRegister={this.onRegister}/>;
             case "messages":
-                return <LoggedInContent/>;
+                return <Dashboard/>;
             case "calendar":
                 return <Calendar/>;
             default:

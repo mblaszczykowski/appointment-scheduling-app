@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { request, setAuthHeader } from '../util/axios_helper';
+import {getUserIdFromToken, request, setAuthHeader} from '../util/axios_helper';
 
-export default class LoggedInContent extends React.Component {
+export default class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -12,9 +12,10 @@ export default class LoggedInContent extends React.Component {
     };
 
     componentDidMount() {
+        // tutaj wyswietlamh miedzy innymi spotkania zabookowane z getAppointmentsByUserId
         request(
             "GET",
-            "/messages",
+            "/api/appointments/user/" + getUserIdFromToken(),
             {}).then(
             (response) => {
                 this.setState({data: response.data})
@@ -33,11 +34,13 @@ export default class LoggedInContent extends React.Component {
   render() {
     return (
         <div className="row justify-content-md-center">
-            <div className="col-4">
-                <div className="card" style={{width: "18rem"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Backend response</h5>
-                        <p className="card-text">Content:</p>
+            <div>
+                <div>
+                    <div>
+                        <h5 className="card-title">Dashboard</h5>
+                        <p className="card-text">User's (id: {getUserIdFromToken()}) appointments: </p>
+                        <br/><p style={{color: "red"}}>note: data has to be processed before display</p>
+
                         <ul>
                             {this.state.data && this.state.data
                                 .map((line) =>

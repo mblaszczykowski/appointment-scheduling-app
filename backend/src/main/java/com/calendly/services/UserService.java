@@ -33,6 +33,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.calendly.services.TokenService.EXPIRATION_TIME_ACCESS;
+import static com.calendly.services.TokenService.generateToken;
+
 @Service
 public class UserService {
     private final UserDAO userDAO;
@@ -131,6 +134,7 @@ public class UserService {
                 isNullOrEmpty(userRegistrationRequest.lastname()) ||
                 isNullOrEmpty(userRegistrationRequest.email()) ||
                 isNullOrEmpty(userRegistrationRequest.password()) ||
+                isNullOrEmpty(userRegistrationRequest.calendarUrl()) ||
                 userRegistrationRequest.availableFromHour() == null ||
                 userRegistrationRequest.availableToHour() == null ||
                 isNullOrEmpty(userRegistrationRequest.availableDays())) {
@@ -159,9 +163,12 @@ public class UserService {
 
         //Encrypting password
         String generatedSecuredPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
-        User user = new User(firstname, lastname, email, generatedSecuredPasswordHash, userRegistrationRequest.availableFromHour(), userRegistrationRequest.availableToHour(), userRegistrationRequest.availableDays());
+        User user = new User(firstname, lastname, email, generatedSecuredPasswordHash, userRegistrationRequest.calendarUrl(), userRegistrationRequest.availableFromHour(), userRegistrationRequest.availableToHour(), userRegistrationRequest.availableDays());
         userDAO.addUser(user);
-        return ResponseEntity.ok("Account activated successfully.");
+
+        // logujemy od razu poki co po rejestracji, bez aktywacji
+        String accessToken = generateToken(EXPIRATION_TIME_ACCESS, user.getId());
+        return ResponseEntity.ok(accessToken);
     }
 
     public boolean isNullOrEmpty(String str) {
