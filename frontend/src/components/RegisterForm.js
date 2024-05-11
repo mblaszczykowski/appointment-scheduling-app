@@ -3,7 +3,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
 
-// Updated validation schema
+// Validation schema
 const contactSchema = Yup.object().shape({
     firstname: Yup.string()
         .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
@@ -35,8 +35,9 @@ const contactSchema = Yup.object().shape({
         .max(23, 'Latest hour can be 23.')
         .required('Available to hour is required.'),
     availableDays: Yup.array()
-        .of(Yup.string())
-        .required('At least one day must be selected.'),
+        .of(Yup.string().required())
+        .min(1, 'At least one day must be selected.')
+        .required('Available days are required.'),
 });
 
 export default class RegisterForm extends React.Component {
@@ -100,6 +101,24 @@ export default class RegisterForm extends React.Component {
                 >
                     {({ setFieldValue, values }) => (
                         <Form className="max-w-sm mx-auto">
+                            <div className="py-3">
+                                <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Create an
+                                    account</h1>
+                            </div>
+                            <div className="flex items-start mb-6">
+                                <label
+                                    htmlFor="terms"
+                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                >
+                                    Already have an account?{' '}
+                                    <a
+                                        href="#"
+                                        className="text-blue-600 hover:underline dark:text-blue-500"
+                                    >
+                                        Log in
+                                    </a>
+                                </label>
+                            </div>
                             <div className="mb-5">
                                 <Field
                                     type="text"
@@ -152,50 +171,58 @@ export default class RegisterForm extends React.Component {
                                     component="span"
                                 />
                             </div>
-                            <div className="mb-5">
-                                <Field as="select" name="availableFromHour" className="select">
-                                    {Array.from({length: 24}, (_, i) => (
-                                        <option key={i} value={i}>{i}:00</option>
-                                    ))}
-                                </Field>
-                                <Field as="select" name="availableToHour" className="select">
-                                    {Array.from({length: 24}, (_, i) => (
-                                        <option key={i} value={i}>{i}:00</option>
-                                    ))}
-                                </Field>
-                                <div>
+
+
+                            <div className="mt-2 mb-5">
+                                <div className="mb-3">
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
+                                        availability</h1>
+                                </div>
+                                <div className="mb-3">
+                                    <h1 className="block text-md text-gray-800 dark:text-white">Available hours:</h1>
+                                </div>
+
+
+                                <div className="flex justify-between items-center my-4">
+                                    <Field as="select" name="availableFromHour"
+                                           className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        {Array.from({length: 24}, (_, i) => (
+                                            <option key={i} value={i}>{`${i}:00`}</option>
+                                        ))}
+                                    </Field>
+                                    <span className="mx-2">-</span>
+                                    <Field as="select" name="availableToHour"
+                                           className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg:white focus:border-blue-600 focus:outline-none">
+                                        {Array.from({length: 24}, (_, i) => (
+                                            <option key={i} value={i}>{`${i}:00`}</option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="availableFromHour" component="div" className={css.error}/>
+                                    <ErrorMessage name="availableToHour" component="div" className={css.error}/>
+                                </div>
+                                <div className="mt-3">
+                                    <h1 className="block text-md text-gray-800 dark:text-white">Available days:</h1>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
                                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                                        <label key={day}>
-                                            <Field type="checkbox" name="availableDays" value={day}/>
-                                            {day}
+                                        <label key={day} className="flex items-center space-x-2">
+                                            <Field type="checkbox" name="availableDays" value={day}
+                                                   className="form-checkbox text-blue-600 w-5 h-5"/>
+                                            <span className="text-gray-700 dark:text-white">{day}</span>
                                         </label>
                                     ))}
                                 </div>
+                                <ErrorMessage name="availableDays" component="div" className={css.error} />
 
-                            </div>
 
-                            <div className="flex items-start mb-5">
-                                <label
-                                    htmlFor="terms"
-                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    Already have an account?{' '}
-                                    <a
-                                        href="#"
-                                        className="text-blue-600 hover:underline dark:text-blue-500"
-                                    >
-                                        Log in
-                                    </a>
-                                </label>
-                            </div>
-                            <button
-                                type="submit"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Register new account
+                                {/* Submit button */}
+                            <button type="submit"
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Register
                             </button>
+                        </div>
                         </Form>
-                    )}
+                        )}
                 </Formik>
             </div>
         );
