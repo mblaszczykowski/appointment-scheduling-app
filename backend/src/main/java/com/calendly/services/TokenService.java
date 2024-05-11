@@ -1,11 +1,11 @@
 package com.calendly.services;
 
+import com.calendly.daos.TokenDAO;
+import com.calendly.entities.Token;
+import com.calendly.entities.User;
 import com.calendly.exception.ApiError;
 import com.calendly.exception.NotValidResourceException;
 import com.calendly.exception.ResourceNotFoundException;
-import com.calendly.entities.Token;
-import com.calendly.daos.TokenDAO;
-import com.calendly.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

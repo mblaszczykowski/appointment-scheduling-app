@@ -1,8 +1,6 @@
 package com.calendly.entities;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {

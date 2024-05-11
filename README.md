@@ -1,4 +1,4 @@
-# React Frontend
+## React Frontend
 
 ### Uruchomienie
 
@@ -22,7 +22,7 @@ Zauważyłem, że aplikacja musi działać na porcie 3000 (domyślnym) aby łąc
 https://github.com/hatchways/team-carbonara
 bądź samym Calendly.com
 
-# Java Backend
+## Java Backend
 
 ### Create a database
 
@@ -31,3 +31,5 @@ psql -U postgres
 CREATE DATABASE calendly;
 GRANT ALL PRIVILEGES ON DATABASE "calendly" TO postgres;
 ```
+
+Ustawiłem baze danych w application.properties - spring.jpa.hibernate.ddl-auto na create-drop jako ze ciagle sie zmienialy pola poczatkowo, jak chcecie miec zapisany stan to zmiencie na update.

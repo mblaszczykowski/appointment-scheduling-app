@@ -1,8 +1,8 @@
 package com.calendly.email;
 
 import com.calendly.entities.PasswordResetToken;
-import com.calendly.repositories.TokenResetRepository;
 import com.calendly.entities.User;
+import com.calendly.repositories.TokenResetRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

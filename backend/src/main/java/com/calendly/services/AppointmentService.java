@@ -4,12 +4,10 @@ import com.calendly.entities.Appointment;
 import com.calendly.entities.User;
 import com.calendly.repositories.AppointmentRepository;
 import com.calendly.repositories.UserRepository;
-import com.calendly.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.calendly.daos;
 
-import com.calendly.repositories.TokenRepository;
 import com.calendly.entities.Token;
+import com.calendly.repositories.TokenRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

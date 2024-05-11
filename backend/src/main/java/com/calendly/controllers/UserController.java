@@ -1,18 +1,14 @@
 package com.calendly.controllers;
 
-import com.calendly.exception.ApiError;
 import com.calendly.email.MailService;
-import com.calendly.entities.User;
-import com.calendly.requests.ChangePasswordRequest;
-import com.calendly.requests.PasswordResetEmail;
-import com.calendly.requests.PasswordResetRequest;
 import com.calendly.entities.PasswordResetToken;
+import com.calendly.entities.User;
+import com.calendly.exception.ApiError;
 import com.calendly.repositories.TokenResetRepository;
-import com.calendly.services.TokenService;
-import com.calendly.requests.UserRegistrationRequest;
 import com.calendly.repositories.UserRepository;
+import com.calendly.requests.*;
+import com.calendly.services.TokenService;
 import com.calendly.services.UserService;
-import com.calendly.requests.UserUpdateRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

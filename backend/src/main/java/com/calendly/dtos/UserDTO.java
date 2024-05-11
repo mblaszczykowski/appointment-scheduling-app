@@ -1,9 +1,5 @@
 package com.calendly.dtos;
 
-import jakarta.annotation.Nullable;
-
-import java.time.LocalDate;
-
 public class UserDTO {
     private Integer id;
     private String firstname;

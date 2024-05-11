@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
-import { generateDate, months } from "../util/calendar";
+import React, {useState} from "react";
+import {generateDate, months} from "../util/calendar";
 import cn from "../util/cn";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import {GrFormNext, GrFormPrevious} from "react-icons/gr";
 import BookMeetingForm from './BookMeetingForm'; // Adjust the path according to your project structure
 
 export default function Calendar() {

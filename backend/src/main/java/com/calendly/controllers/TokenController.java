@@ -3,7 +3,6 @@ package com.calendly.controllers;
 import com.calendly.exception.ApiError;
 import com.calendly.requests.LoginRequest;
 import com.calendly.services.TokenService;
-import com.calendly.entities.User;
 import com.calendly.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

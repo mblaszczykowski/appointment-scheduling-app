@@ -1,35 +1,26 @@
 package com.calendly.services;
 
-import com.calendly.exception.ApiError;
 import com.calendly.daos.UserDAO;
+import com.calendly.dtos.UserDTO;
 import com.calendly.email.MailService;
 import com.calendly.entities.User;
+import com.calendly.exception.ApiError;
 import com.calendly.exception.ResourceNotFoundException;
-import com.calendly.repositories.UserRepository;
-import com.calendly.requests.UserRegistrationRequest;
-import com.calendly.requests.ChangePasswordRequest;
 import com.calendly.repositories.TokenResetRepository;
-import com.calendly.dtos.UserDTO;
+import com.calendly.repositories.UserRepository;
+import com.calendly.requests.ChangePasswordRequest;
+import com.calendly.requests.UserRegistrationRequest;
 import com.calendly.requests.UserUpdateRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 

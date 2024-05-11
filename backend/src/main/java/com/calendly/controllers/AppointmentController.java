@@ -4,11 +4,11 @@ import com.calendly.dtos.AppointmentDTO;
 import com.calendly.entities.Appointment;
 import com.calendly.services.AppointmentService;
 import com.calendly.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.UUID;
