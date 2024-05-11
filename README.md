@@ -57,5 +57,5 @@ The `UserAuthenticationProvider` manages the authentication, creating the JWT or
 
 The `UsernamePasswordAuthFitler` is the filter which reads the username and password information.
 
-The `WebConfig` contains the CORS configuration.
+The `com.calendly.WebConfig` contains the CORS configuration.
 

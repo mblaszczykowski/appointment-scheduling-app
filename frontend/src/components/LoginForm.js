@@ -5,10 +5,8 @@ import css from './RegisterForm.module.css';
 
 const contactSchema = Yup.object().shape({
     login: Yup.string()
-        .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
-        .min(4, 'Username must be at least 4 symbols.')
-        .max(20, 'Max length is 20.')
-        .required('Username is required.'),
+        .email('Invalid email address format.')
+        .required('Email is required.'),
     password: Yup.string()
         .matches(
             /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_`+=[\]{};':"\\|,.<>/?]*$/,

@@ -1,6 +1,6 @@
 import React from 'react';
 import {CSSTransition, SwitchTransition} from 'react-transition-group';
-import {request, setAuthHeader} from '../util/axios_helper';
+import {getAuthToken, request, setAuthHeader} from '../util/axios_helper';
 import LoggedInContent from './LoggedInContent';
 import LoginForm from './LoginForm';
 import WelcomeContent from './WelcomeContent';
@@ -12,8 +12,8 @@ export default class AppContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            componentToShow: "welcome",
-            isLoggedIn: false
+            componentToShow: getAuthToken() != null ? "messages" : "welcome",
+            isLoggedIn: getAuthToken() != null
         };
     };
 
@@ -37,15 +37,16 @@ export default class AppContent extends React.Component {
 
     onLogin = (obj) => {
         const {login, password} = obj;
+        let email = login;
         request(
             "POST",
-            "/login",
+            "/api/auth/login",
             {
-                login,
+                email,
                 password,
             }).then(
             (response) => {
-                setAuthHeader(response.data.token);
+                setAuthHeader(response.data);
                 this.setState({componentToShow: "messages"});
                 this.setState({isLoggedIn: true});
                 //window.location = "/";
@@ -58,15 +59,19 @@ export default class AppContent extends React.Component {
     };
 
     onRegister = (obj) => {
-        const {firstName, lastName, username, password} = obj;
+        const {firstname, lastname, email, password, availableFromHour, availableToHour, availableDays} = obj;
+        console.log(obj);
         request(
             "POST",
-            "/register",
+            "api/users",
             {
-                firstName,
-                lastName,
-                login: username,
-                password
+                firstname,
+                lastname,
+                email,
+                password,
+                availableFromHour,
+                availableToHour,
+                availableDays,
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
