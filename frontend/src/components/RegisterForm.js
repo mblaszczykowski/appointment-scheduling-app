@@ -61,11 +61,8 @@ export default class RegisterForm extends React.Component {
             availableDays: [],
             onLogin: props.onLogin,
             onRegister: props.onRegister,
+            login: props.login
         };
-    }
-
-    componentDidMount() {
-        console.log("RegisterForm mounted");
     }
 
     onChangeHandler = (event) => {
@@ -120,7 +117,7 @@ export default class RegisterForm extends React.Component {
                                 >
                                     Already have an account?{' '}
                                     <a
-                                        href="#"
+                                        onClick={this.state.login}
                                         className="text-blue-600 hover:underline dark:text-blue-500"
                                     >
                                         Log in

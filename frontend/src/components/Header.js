@@ -4,10 +4,10 @@ export default function Header(props) {
     return (
         <header className="flex justify-center w-full py-4 z-50">
             <nav className="relative max-w-7xl w-full flex justify-between items-center px-4 md:px-8 mx-auto" aria-label="Global">
-                <a href="https://flowbite.com" className="flex items-center justify-center md:justify-start">
-                    <img src="https://flowbite.com/docs/images/logo.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite Logo"/>
+                <button className="flex items-center justify-center md:justify-start" onClick={props.isLoggedIn ? props.dashboard : props.welcome}>
+                    <img src="https://flowbite.com/docs/images/logo.svg" className="mr-3 h-6 sm:h-9" alt="Logo"/>
                     <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Meetly</span>
-                </a>
+                </button>
 
                 <div className="flex items-center gap-x-2 py-1">
                     {!props.isLoggedIn ? (

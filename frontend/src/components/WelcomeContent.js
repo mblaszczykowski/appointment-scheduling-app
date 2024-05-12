@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-export default class WelcomeContent extends React.Component {
-
-  render() {
+export default function WelcomeContent(props) {
     return (
         <div className="relative overflow-hidden">
             <div aria-hidden="true" className="flex absolute -top-96 start-1/2 transform -translate-x-1/2">
@@ -31,8 +29,8 @@ export default class WelcomeContent extends React.Component {
 
                         <div className="mt-8 gap-3 flex justify-center">
                             <a className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                               href="#">
-                                Get started
+                               onClick={props.register}>
+                                Create your own calendar
                                 <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                      height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                      strokeLinecap="round" strokeLinejoin="round">
@@ -45,8 +43,5 @@ export default class WelcomeContent extends React.Component {
                 </div>
             </div>
         </div>
-
-
     );
-  };
 }

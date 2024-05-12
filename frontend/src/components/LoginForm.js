@@ -28,6 +28,7 @@ export default class LoginForm extends Component {
             password: '',
             onLogin: props.onLogin,
             onRegister: props.onRegister,
+            register: props.register
         };
     }
 
@@ -82,7 +83,7 @@ export default class LoginForm extends Component {
                             >
                                 Don't have an account?{' '}
                                 <a
-                                    href="#"
+                                    onClick={this.state.register}
                                     className="text-blue-600 hover:underline dark:text-blue-500"
                                 >
                                     Sign up

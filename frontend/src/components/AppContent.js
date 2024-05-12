@@ -21,6 +21,10 @@ export default class AppContent extends React.Component {
         this.setState({componentToShow: "dashboard"});
     };
 
+    welcome = () => {
+        this.setState({componentToShow: "welcome"});
+    };
+
     login = () => {
         this.setState({componentToShow: "login"});
     };
@@ -90,11 +94,11 @@ export default class AppContent extends React.Component {
     renderComponent() {
         switch (this.state.componentToShow) {
             case "welcome":
-                return <WelcomeContent/>;
+                return <WelcomeContent register={this.register}/>;
             case "login":
-                return <LoginForm onLogin={this.onLogin}/>;
+                return <LoginForm onLogin={this.onLogin} register={this.register}/>;
             case "register":
-                return <RegisterForm onRegister={this.onRegister}/>;
+                return <RegisterForm onRegister={this.onRegister} login={this.login}/>;
             case "dashboard":
                 return <Dashboard/>;
             case "calendar":
@@ -108,7 +112,8 @@ export default class AppContent extends React.Component {
         return (
             <>
                 <Header
-                    calendar={this.dashboard}
+                    dashboard={this.dashboard}
+                    welcome={this.welcome}
                     login={this.login}
                     register={this.register}
                     logout={this.logout}
