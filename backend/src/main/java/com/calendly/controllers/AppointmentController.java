@@ -28,27 +28,37 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO, HttpServletRequest request) {
+        // we allow anonymous users to create appointments
+        /*
         ResponseEntity<?> checkAuthorizationResult = userService.checkAuthorization(request);
         if (checkAuthorizationResult.getStatusCode() != HttpStatus.OK) {
             return checkAuthorizationResult;
         }
+        */
 
         if (appointmentDTO.startTime() == null || appointmentDTO.endTime() == null
-        || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())) {
+        || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())
+        || appointmentDTO.startTime().isAfter(appointmentDTO.endTime()) || userService.isNullOrEmpty(appointmentDTO.calendarUrl())) {
             return new ResponseEntity<>("Invalid request parameters", HttpStatus.BAD_REQUEST);
         }
 
-        int userId = userService.getUserIDFromAccessToken(request);
+        // TODO: check if this date is not already booked
+
+
+        // w przyszlosci mozna by najpierw potwierdzic mailem spotkanie i dopiero je zabookować
+
+
+        var user = userService.getUserIdFromCalendarUrl(appointmentDTO.calendarUrl());
 
         appointmentService.createAppointment(
-                userId,
+                user.getId(),
                 appointmentDTO.startTime(),
                 appointmentDTO.endTime(),
                 appointmentDTO.bookerName(),
                 appointmentDTO.bookerEmail()
         );
 
-        return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Appointment created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/user/{userId}")

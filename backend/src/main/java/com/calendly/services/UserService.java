@@ -311,8 +311,15 @@ public class UserService {
         }
         return -1;
     }
+
+    public User getUserIdFromCalendarUrl(String calendarUrl) {
+        return userDAO.getUserByCalendarUrl(calendarUrl)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer with calendarUrl [%s] not found".formatted(calendarUrl))
+                );
+    }
       
-public ResponseEntity<?> getUserDetails(Integer uuid, UserService userService, HttpServletRequest request) {
+    public ResponseEntity<?> getUserDetails(Integer uuid, UserService userService, HttpServletRequest request) {
         //Check if user is logged in
         ResponseEntity<?> checkAuthorizationResult = checkAuthorization(request);
         if (checkAuthorizationResult.getStatusCode() != HttpStatus.OK) {

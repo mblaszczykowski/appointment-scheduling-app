@@ -50,4 +50,8 @@ public class UserDAO {
     public boolean existsById(Integer userId) {
         return userRepository.existsById(userId);
     }
+
+    public Optional<User> getUserByCalendarUrl(String calendarUrl) {
+        return userRepository.findByCalendarUrl(calendarUrl);
+    }
 }

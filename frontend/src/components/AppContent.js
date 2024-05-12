@@ -12,13 +12,13 @@ export default class AppContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            componentToShow: getAuthToken() != null ? "messages" : "welcome",
+            componentToShow: getAuthToken() != null ? "dashboard" : "welcome",
             isLoggedIn: getAuthToken() != null
         };
     };
 
-    calendar = () => {
-        this.setState({componentToShow: "calendar"});
+    dashboard = () => {
+        this.setState({componentToShow: "dashboard"});
     };
 
     login = () => {
@@ -47,7 +47,7 @@ export default class AppContent extends React.Component {
             }).then(
             (response) => {
                 setAuthHeader(response.data);
-                this.setState({componentToShow: "messages"});
+                this.setState({componentToShow: "dashboard"});
                 this.setState({isLoggedIn: true});
                 //window.location = "/";
             }).catch(
@@ -76,7 +76,7 @@ export default class AppContent extends React.Component {
             }).then(
             (response) => {
                 setAuthHeader(response.data);
-                this.setState({componentToShow: "messages"});
+                this.setState({componentToShow: "dashboard"});
                 this.setState({isLoggedIn: true});
                 //window.location = "/";
             }).catch(
@@ -95,7 +95,7 @@ export default class AppContent extends React.Component {
                 return <LoginForm onLogin={this.onLogin}/>;
             case "register":
                 return <RegisterForm onRegister={this.onRegister}/>;
-            case "messages":
+            case "dashboard":
                 return <Dashboard/>;
             case "calendar":
                 return <Calendar/>;
@@ -108,7 +108,7 @@ export default class AppContent extends React.Component {
         return (
             <>
                 <Header
-                    calendar={this.calendar}
+                    calendar={this.dashboard}
                     login={this.login}
                     register={this.register}
                     logout={this.logout}
