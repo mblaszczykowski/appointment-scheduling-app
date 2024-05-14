@@ -9,6 +9,8 @@ import Dashboard from "./components/Dashboard";
 import WelcomeContent from "./components/WelcomeContent";
 import {setAuthHeader} from "./util/axios_helper";
 import React, {useState} from "react";
+import ErrorPage from "./components/ErrorPage";
+import BookingSuccess from "./components/BookingSuccess";
 
 
 function App() {
@@ -36,7 +38,9 @@ function App() {
                         <div className="col">
                             <Header isLoggedIn={isLoggedIn} onLogout={handleLogout}/>
                             <Routes>
-                                <Route path="/calendar/:calendarLink" element={<Calendar/>}/>
+                                <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
+                                <Route path="/error" element={<ErrorPage/>}/>
+                                <Route path="/booking-success" element={<BookingSuccess/>}/>
                                 <Route path="/login" element={<LoginForm onLogin={handleLogin}/>}/>
                                 <Route path="/register" element={<RegisterForm onRegister={handleLogin}/>}/>
                                 <Route path="/dashboard" element={<Dashboard/>}/>
