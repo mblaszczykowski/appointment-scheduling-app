@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React, {Component} from 'react';
 
 import {getUserIdFromToken, request, setAuthHeader} from '../util/axios_helper';
 
-export default class Dashboard extends React.Component {
+export default class Dashboard extends Component {
 
     constructor(props) {
         super(props);

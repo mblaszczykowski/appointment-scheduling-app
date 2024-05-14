@@ -2,7 +2,8 @@ import * as React from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-
+import {useNavigate} from "react-router-dom";
+import {request, setAuthHeader} from "../util/axios_helper";
 // Validation schema
 const contactSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -46,214 +47,228 @@ const contactSchema = Yup.object().shape({
         .required('Available days are required.'),
 });
 
-export default class RegisterForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: 'login',
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            calendarUrl: '',
-            availableFromHour: 0,
-            availableToHour: 0,
-            availableDays: [],
-            onLogin: props.onLogin,
-            onRegister: props.onRegister,
-            login: props.login
-        };
-    }
 
-    onChangeHandler = (event) => {
-        const { name, value, type, checked } = event.target;
-        const newValue = type === 'checkbox' ? checked : value;
-        this.setState({ [name]: newValue });
-    };
-
-    onSubmitRegister = (values) => {
-        console.log("Registration submitted", values);
-        this.state.onRegister(values);
-    };
-
-    render() {
-        return (
-            <div>
-                <Formik
-                    initialValues={{
-                        firstname: '',
-                        lastname: '',
-                        email: '',
-                        password: '',
-                        calendarUrl: '',
-                        availableFromHour: '',
-                        availableToHour: '',
-                        availableDays: [],
-                    }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        // Convert hours to integers
-                        values.availableFromHour = parseInt(values.availableFromHour, 10);
-                        values.availableToHour = parseInt(values.availableToHour, 10);
-
-                        // Join the availableDays array into a comma-separated string
-                        values.availableDays = values.availableDays.join(',');
-
-                        console.log(values); // You can see the modified values in the console
-                        this.onSubmitRegister(values);
-                        setSubmitting(false);
-                    }}
-                    validationSchema={contactSchema}
-                >
-                    {({ setFieldValue, values }) => (
-                        <Form className="max-w-sm mx-auto">
-                            <div className="py-3">
-                                <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Create an
-                                    account</h1>
-                            </div>
-                            <div className="flex items-start mb-6">
-                                <label
-                                    htmlFor="terms"
-                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    Already have an account?{' '}
-                                    <a
-                                        onClick={this.state.login}
-                                        className="text-blue-600 hover:underline dark:text-blue-500"
-                                    >
-                                        Log in
-                                    </a>
-                                </label>
-                            </div>
-                            <div className="mb-3">
-                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Tell us a bit about yourself</h1>
-                            </div>
-                            <div className="mb-5">
-                                <Field
-                                    type="text"
-                                    name="firstname"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                    placeholder={`First name`}
-                                ></Field>
-                                <ErrorMessage
-                                    name="firstname"
-                                    component="span"
-                                    className={css.error}
-                                />
-                            </div>
-                            <div className="mb-5">
-                                <Field
-                                    type="text"
-                                    name="lastname"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                    placeholder={`Last name`}
-                                ></Field>
-                                <ErrorMessage
-                                    name="lastname"
-                                    component="span"
-                                    className={css.error}
-                                />
-                            </div>
-                            <div className="mb-5">
-                                <Field
-                                    type="text"
-                                    name="email"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                    placeholder={`Email`}
-                                ></Field>
-                                <ErrorMessage
-                                    name="email"
-                                    component="span"
-                                    className={css.error}
-                                />
-                            </div>
-                            <div className="mb-5">
-                                <Field
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                    type="text"
-                                    name="password"
-                                    placeholder={`Password`}
-                                ></Field>
-                                <ErrorMessage
-                                    className={css.error}
-                                    name="password"
-                                    component="span"
-                                />
-                            </div>
-
-
-                            <div className="mt-2 mb-5">
-                                <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
-                                        calendar</h1>
-                                </div>
-                                <div className="mb-5">
-                                    <Field
-                                        type="text"
-                                        name="calendarUrl"
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                        placeholder={`Your calendar's URL`}
-                                    ></Field>
-                                    <ErrorMessage
-                                        name="calendarUrl"
-                                        component="span"
-                                        className={css.error}
-                                    />
-                                </div>
-                            </div>
-
-
-                            <div className="mt-2 mb-5">
-                                <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
-                                        availability</h1>
-                                </div>
-                                <div className="mb-3">
-                                    <h1 className="block text-md text-gray-800 dark:text-white">Available hours:</h1>
-                                </div>
-
-
-                                <div className="flex justify-between items-center my-4">
-                                    <Field as="select" name="availableFromHour"
-                                           className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
-                                        {Array.from({length: 24}, (_, i) => (
-                                            <option key={i} value={i}>{`${i}:00`}</option>
-                                        ))}
-                                    </Field>
-                                    <span className="mx-2">-</span>
-                                    <Field as="select" name="availableToHour"
-                                           className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg:white focus:border-blue-600 focus:outline-none">
-                                        {Array.from({length: 24}, (_, i) => (
-                                            <option key={i} value={i}>{`${i}:00`}</option>
-                                        ))}
-                                    </Field>
-                                    <ErrorMessage name="availableFromHour" component="div" className={css.error}/>
-                                    <ErrorMessage name="availableToHour" component="div" className={css.error}/>
-                                </div>
-                                <div className="mt-3">
-                                    <h1 className="block text-md text-gray-800 dark:text-white">Available days:</h1>
-                                </div>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
-                                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                                        <label key={day} className="flex items-center space-x-2">
-                                            <Field type="checkbox" name="availableDays" value={day}
-                                                   className="form-checkbox text-blue-600 w-5 h-5"/>
-                                            <span className="text-gray-700 dark:text-white">{day}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                                <ErrorMessage name="availableDays" component="div" className={css.error}/>
-
-
-                                {/* Submit button */}
-                                <button type="submit"
-                                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Register
-                                </button>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+function RegisterForm({onRegister}) {
+    const navigate = useNavigate();
+    const handleRegister = (obj) => {
+        const {
+            firstname,
+            lastname,
+            email,
+            password,
+            calendarUrl,
+            availableFromHour,
+            availableToHour,
+            availableDays
+        } = obj;
+        console.log(obj);
+        request(
+            "POST",
+            "api/users",
+            {
+                firstname,
+                lastname,
+                email,
+                password,
+                calendarUrl,
+                availableFromHour,
+                availableToHour,
+                availableDays,
+            }).then(
+            (response) => {
+                setAuthHeader(response.data);
+                onRegister();
+                navigate("/dashboard");
+            }).catch(
+            (error) => {
+                setAuthHeader(null);
+                navigate("/")
+                console.error("Register error:", error.response || error.message);
+            }
         );
+    };
+
+    const redirectToLogin = () => {
+        navigate('/login');
     }
+
+    return (
+        <div>
+            <Formik
+                initialValues={{
+                    firstname: '',
+                    lastname: '',
+                    email: '',
+                    password: '',
+                    calendarUrl: '',
+                    availableFromHour: '',
+                    availableToHour: '',
+                    availableDays: [],
+                }}
+                onSubmit={(values, {setSubmitting}) => {
+                    // Convert hours to integers
+                    values.availableFromHour = parseInt(values.availableFromHour, 10);
+                    values.availableToHour = parseInt(values.availableToHour, 10);
+
+                    // Join the availableDays array into a comma-separated string
+                    values.availableDays = values.availableDays.join(',');
+
+                    console.log(values); // You can see the modified values in the console
+                    handleRegister(values);
+                    setSubmitting(false);
+                }}
+                validationSchema={contactSchema}
+            >
+                <Form className="max-w-sm mx-auto">
+                    <div className="py-3">
+                        <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Create an
+                            account</h1>
+                    </div>
+                    <div className="flex items-start mb-6">
+                        <label
+                            htmlFor="terms"
+                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                            Already have an account?{' '}
+                            <a
+                                onClick={redirectToLogin}
+                                className="text-blue-600 hover:underline dark:text-blue-500"
+                            >
+                                Log in
+                            </a>
+                        </label>
+                    </div>
+                    <div className="mb-3">
+                        <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Tell us a bit about
+                            yourself</h1>
+                    </div>
+                    <div className="mb-5">
+                        <Field
+                            type="text"
+                            name="firstname"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            placeholder={`First name`}
+                        ></Field>
+                        <ErrorMessage
+                            name="firstname"
+                            component="span"
+                            className={css.error}
+                        />
+                    </div>
+                    <div className="mb-5">
+                        <Field
+                            type="text"
+                            name="lastname"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            placeholder={`Last name`}
+                        ></Field>
+                        <ErrorMessage
+                            name="lastname"
+                            component="span"
+                            className={css.error}
+                        />
+                    </div>
+                    <div className="mb-5">
+                        <Field
+                            type="text"
+                            name="email"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            placeholder={`Email`}
+                        ></Field>
+                        <ErrorMessage
+                            name="email"
+                            component="span"
+                            className={css.error}
+                        />
+                    </div>
+                    <div className="mb-5">
+                        <Field
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            type="text"
+                            name="password"
+                            placeholder={`Password`}
+                        ></Field>
+                        <ErrorMessage
+                            className={css.error}
+                            name="password"
+                            component="span"
+                        />
+                    </div>
+
+
+                    <div className="mt-2 mb-5">
+                        <div className="mb-3">
+                            <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
+                                calendar</h1>
+                        </div>
+                        <div className="mb-5">
+                            <Field
+                                type="text"
+                                name="calendarUrl"
+                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                placeholder={`Your calendar's URL`}
+                            ></Field>
+                            <ErrorMessage
+                                name="calendarUrl"
+                                component="span"
+                                className={css.error}
+                            />
+                        </div>
+                    </div>
+
+
+                    <div className="mt-2 mb-5">
+                        <div className="mb-3">
+                            <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
+                                availability</h1>
+                        </div>
+                        <div className="mb-3">
+                            <h1 className="block text-md text-gray-800 dark:text-white">Available hours:</h1>
+                        </div>
+
+
+                        <div className="flex justify-between items-center my-4">
+                            <Field as="select" name="availableFromHour"
+                                   className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                {Array.from({length: 24}, (_, i) => (
+                                    <option key={i} value={i}>{`${i}:00`}</option>
+                                ))}
+                            </Field>
+                            <span className="mx-2">-</span>
+                            <Field as="select" name="availableToHour"
+                                   className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg:white focus:border-blue-600 focus:outline-none">
+                                {Array.from({length: 24}, (_, i) => (
+                                    <option key={i} value={i}>{`${i}:00`}</option>
+                                ))}
+                            </Field>
+                            <ErrorMessage name="availableFromHour" component="div" className={css.error}/>
+                            <ErrorMessage name="availableToHour" component="div" className={css.error}/>
+                        </div>
+                        <div className="mt-3">
+                            <h1 className="block text-md text-gray-800 dark:text-white">Available days:</h1>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
+                            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+                                <label key={day} className="flex items-center space-x-2">
+                                    <Field type="checkbox" name="availableDays" value={day}
+                                           className="form-checkbox text-blue-600 w-5 h-5"/>
+                                    <span className="text-gray-700 dark:text-white">{day}</span>
+                                </label>
+                            ))}
+                        </div>
+                        <ErrorMessage name="availableDays" component="div" className={css.error}/>
+
+
+                        {/* Submit button */}
+                        <button type="submit"
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Register
+                        </button>
+                    </div>
+                </Form>
+            </Formik>
+        </div>
+    );
 }
+
+export default RegisterForm;
