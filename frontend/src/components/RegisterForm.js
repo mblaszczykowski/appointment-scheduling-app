@@ -37,7 +37,13 @@ const validationSchemas = [
                 /^[\w\-\/]+$/,
                 'Invalid subpath format. Only alphanumeric characters, dashes, and slashes are allowed.'
             )
-            .required('Calendar subpath is required.')
+            .required('Calendar subpath is required.'),
+        meetingLink: Yup.string()
+            .matches(
+                /^(https?:\/\/)[a-zA-Z0-9.\/]+$/,
+                'Invalid URL format. Please enter a valid meeting link.'
+            )
+            .required('Meeting link is required.'),
     }),
     Yup.object().shape({
         availableFromHour: Yup.number()
@@ -66,11 +72,11 @@ function RegisterForm({ onRegister, onToggleForm }) {
             email,
             password,
             calendarUrl,
+            meetingLink,
             availableFromHour,
             availableToHour,
             availableDays
         } = obj;
-        console.log(obj);
         request(
             "POST",
             "api/users",
@@ -80,6 +86,7 @@ function RegisterForm({ onRegister, onToggleForm }) {
                 email,
                 password,
                 calendarUrl,
+                meetingLink,
                 availableFromHour,
                 availableToHour,
                 availableDays,
@@ -125,6 +132,7 @@ function RegisterForm({ onRegister, onToggleForm }) {
                     email: '',
                     password: '',
                     calendarUrl: '',
+                    meetingLink: '',
                     availableFromHour: '',
                     availableToHour: '',
                     availableDays: [],
@@ -252,11 +260,22 @@ function RegisterForm({ onRegister, onToggleForm }) {
                                                 <Field
                                                     type="text"
                                                     name="calendarUrl"
-                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    className="mt-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                                                     placeholder={`Your calendar's URL`}
                                                 ></Field>
                                                 <ErrorMessage
                                                     name="calendarUrl"
+                                                    component="span"
+                                                    className={css.error}
+                                                />
+                                                <Field
+                                                    type="text"
+                                                    name="meetingLink"
+                                                    className="mt-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    placeholder={'Your meeting link'}
+                                                    ></Field>
+                                                <ErrorMessage
+                                                    name="meetingLink"
                                                     component="span"
                                                     className={css.error}
                                                 />
