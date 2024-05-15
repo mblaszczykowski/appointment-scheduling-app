@@ -1,55 +1,64 @@
-import * as React from 'react';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React from 'react';
+import { useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-import {useNavigate} from "react-router-dom";
-import {request, setAuthHeader} from "../util/axios_helper";
-// Validation schema
-const contactSchema = Yup.object().shape({
-    firstname: Yup.string()
-        .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
-        .min(2, 'First name must be at least 2 symbols.')
-        .max(20, 'Max length is 20.')
-        .required('First name is required.'),
-    lastname: Yup.string()
-        .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
-        .min(2, 'Last name must be at least 2 symbols.')
-        .max(20, 'Max length is 20.')
-        .required('Last name is required.'),
-    email: Yup.string()
-        .email('Invalid email address format.')
-        .required('Email is required.'),
-    password: Yup.string()
-        .matches(
-            /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_`+=[\]{};':"\\|,.<>/?]*$/,
-            'At least one digit and one uppercase latin letter.'
-        )
-        .min(8, 'Password must be at least 8 symbols.')
-        .max(20, 'Max length is 20.')
-        .required('Password is required.'),
-    calendarUrl: Yup.string()
-        .matches(
-            /^[\w\-\/]+$/,
-            'Invalid subpath format. Only alphanumeric characters, dashes, and slashes are allowed.'
-        )
-        .required('Calendar subpath is required.'),
-    availableFromHour: Yup.number()
-        .min(0, 'Earliest hour must be 0.')
-        .max(23, 'Latest hour can be 23.')
-        .required('Available from hour is required.'),
-    availableToHour: Yup.number()
-        .min(0, 'Earliest hour must be 0.')
-        .max(23, 'Latest hour can be 23.')
-        .required('Available to hour is required.'),
-    availableDays: Yup.array()
-        .of(Yup.string().required())
-        .min(1, 'At least one day must be selected.')
-        .required('Available days are required.'),
-});
+import { useNavigate } from "react-router-dom";
+import { request, setAuthHeader } from "../util/axios_helper";
 
+const validationSchemas = [
+    Yup.object().shape({
+        firstname: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
+            .min(2, 'First name must be at least 2 symbols.')
+            .max(20, 'Max length is 20.')
+            .required('First name is required.'),
+        lastname: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
+            .min(2, 'Last name must be at least 2 symbols.')
+            .max(20, 'Max length is 20.')
+            .required('Last name is required.'),
+        email: Yup.string()
+            .email('Invalid email address format.')
+            .required('Email is required.'),
+        password: Yup.string()
+            .matches(
+                /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_`+=[\]{};':"\\|,.<>/?]*$/,
+                'At least one digit and one uppercase latin letter.'
+            )
+            .min(8, 'Password must be at least 8 symbols.')
+            .max(20, 'Max length is 20.')
+            .required('Password is required.')
+    }),
+    Yup.object().shape({
+        calendarUrl: Yup.string()
+            .matches(
+                /^[\w\-\/]+$/,
+                'Invalid subpath format. Only alphanumeric characters, dashes, and slashes are allowed.'
+            )
+            .required('Calendar subpath is required.')
+    }),
+    Yup.object().shape({
+        availableFromHour: Yup.number()
+            .min(0, 'Earliest hour must be 0.')
+            .max(23, 'Latest hour can be 23.')
+            .required('Available from hour is required.'),
+        availableToHour: Yup.number()
+            .min(0, 'Earliest hour must be 0.')
+            .max(23, 'Latest hour can be 23.')
+            .required('Available to hour is required.'),
+        availableDays: Yup.array()
+            .of(Yup.string().required())
+            .min(1, 'At least one day must be selected.')
+            .required('Available days are required.')
+    })
+];
 
-function RegisterForm({onRegister}) {
+function RegisterForm({ onRegister, onToggleForm }) {
     const navigate = useNavigate();
+    const [currentStep, setCurrentStep] = useState(0);
+
     const handleRegister = (obj) => {
         const {
             firstname,
@@ -88,12 +97,27 @@ function RegisterForm({onRegister}) {
         );
     };
 
-    const redirectToLogin = () => {
-        navigate('/login');
-    }
+    const handleNext = async (validateForm, setTouched) => {
+        const errors = await validateForm();
+        if (Object.keys(errors).length === 0) {
+            setCurrentStep((prev) => prev + 1);
+        } else {
+            setTouched(errors);
+        }
+    };
+
+    const handlePrev = () => {
+        setCurrentStep((prev) => prev - 1);
+    };
+
+    const steps = [
+        { id: 0, title: 'Tell us a bit about yourself' },
+        { id: 1, title: 'Set the calendar' },
+        { id: 2, title: 'Set your availability' }
+    ];
 
     return (
-        <div>
+        <div className={css['form-container']}>
             <Formik
                 initialValues={{
                     firstname: '',
@@ -105,7 +129,10 @@ function RegisterForm({onRegister}) {
                     availableToHour: '',
                     availableDays: [],
                 }}
-                onSubmit={(values, {setSubmitting}) => {
+                validationSchema={validationSchemas[currentStep]}
+                validateOnChange={false}
+                validateOnBlur={false}
+                onSubmit={(values, { setSubmitting }) => {
                     // Convert hours to integers
                     values.availableFromHour = parseInt(values.availableFromHour, 10);
                     values.availableToHour = parseInt(values.availableToHour, 10);
@@ -117,155 +144,206 @@ function RegisterForm({onRegister}) {
                     handleRegister(values);
                     setSubmitting(false);
                 }}
-                validationSchema={contactSchema}
             >
-                <Form className="max-w-sm mx-auto">
-                    <div className="py-3">
-                        <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Create an
-                            account</h1>
-                    </div>
-                    <div className="flex items-start mb-6">
-                        <label
-                            htmlFor="terms"
-                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                            Already have an account?{' '}
-                            <a
-                                onClick={redirectToLogin}
-                                className="text-blue-600 hover:underline dark:text-blue-500"
+                {({ values, validateForm, setTouched }) => (
+                    <Form className="max-w-sm mx-auto">
+                        <TransitionGroup>
+                            <CSSTransition
+                                key={currentStep}
+                                timeout={300}
+                                classNames="fade"
                             >
-                                Log in
-                            </a>
-                        </label>
-                    </div>
-                    <div className="mb-3">
-                        <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Tell us a bit about
-                            yourself</h1>
-                    </div>
-                    <div className="mb-5">
-                        <Field
-                            type="text"
-                            name="firstname"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            placeholder={`First name`}
-                        ></Field>
-                        <ErrorMessage
-                            name="firstname"
-                            component="span"
-                            className={css.error}
-                        />
-                    </div>
-                    <div className="mb-5">
-                        <Field
-                            type="text"
-                            name="lastname"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            placeholder={`Last name`}
-                        ></Field>
-                        <ErrorMessage
-                            name="lastname"
-                            component="span"
-                            className={css.error}
-                        />
-                    </div>
-                    <div className="mb-5">
-                        <Field
-                            type="text"
-                            name="email"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            placeholder={`Email`}
-                        ></Field>
-                        <ErrorMessage
-                            name="email"
-                            component="span"
-                            className={css.error}
-                        />
-                    </div>
-                    <div className="mb-5">
-                        <Field
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            type="text"
-                            name="password"
-                            placeholder={`Password`}
-                        ></Field>
-                        <ErrorMessage
-                            className={css.error}
-                            name="password"
-                            component="span"
-                        />
-                    </div>
+                                <div className={css['form-step']}>
+                                    {currentStep === 0 && (
+                                        <div>
+                                            <div className="py-3">
+                                                <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
+                                                    Get started
+                                                </h1>
+                                            </div>
+                                            <div className="flex items-start mb-6">
+                                                <label
+                                                    htmlFor="terms"
+                                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                                >
+                                                    Already have an account?{' '}
+                                                    <a
+                                                        onClick={onToggleForm}
+                                                        className="text-blue-600 hover:underline dark:text-blue-500"
+                                                    >
+                                                        Log in
+                                                    </a>
+                                                </label>
+                                            </div>
+                                            <div className="mb-3">
+                                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[0].title}</h1>
+                                            </div>
+                                            <div className="mb-5">
+                                                <Field
+                                                    type="text"
+                                                    name="firstname"
+                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    placeholder={`First name`}
+                                                ></Field>
+                                                <ErrorMessage
+                                                    name="firstname"
+                                                    component="span"
+                                                    className={css.error}
+                                                />
+                                            </div>
+                                            <div className="mb-5">
+                                                <Field
+                                                    type="text"
+                                                    name="lastname"
+                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    placeholder={`Last name`}
+                                                ></Field>
+                                                <ErrorMessage
+                                                    name="lastname"
+                                                    component="span"
+                                                    className={css.error}
+                                                />
+                                            </div>
+                                            <div className="mb-5">
+                                                <Field
+                                                    type="text"
+                                                    name="email"
+                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    placeholder={`Email`}
+                                                ></Field>
+                                                <ErrorMessage
+                                                    name="email"
+                                                    component="span"
+                                                    className={css.error}
+                                                />
+                                            </div>
+                                            <div className="mb-5">
+                                                <Field
+                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    type="password"
+                                                    name="password"
+                                                    placeholder={`Password`}
+                                                ></Field>
+                                                <ErrorMessage
+                                                    className={css.error}
+                                                    name="password"
+                                                    component="span"
+                                                />
+                                            </div>
 
+                                            <div className="relative w-full h-16">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleNext(validateForm, setTouched)}
+                                                    className="absolute top-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
 
-                    <div className="mt-2 mb-5">
-                        <div className="mb-3">
-                            <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
-                                calendar</h1>
-                        </div>
-                        <div className="mb-5">
-                            <Field
-                                type="text"
-                                name="calendarUrl"
-                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                placeholder={`Your calendar's URL`}
-                            ></Field>
-                            <ErrorMessage
-                                name="calendarUrl"
-                                component="span"
-                                className={css.error}
-                            />
-                        </div>
-                    </div>
+                                        </div>
+                                    )}
+                                    {currentStep === 1 && (
+                                        <div>
+                                            <div className="mb-3">
+                                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[1].title}</h1>
+                                            </div>
+                                            <div className="mb-5">
+                                                <Field
+                                                    type="text"
+                                                    name="calendarUrl"
+                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                    placeholder={`Your calendar's URL`}
+                                                ></Field>
+                                                <ErrorMessage
+                                                    name="calendarUrl"
+                                                    component="span"
+                                                    className={css.error}
+                                                />
+                                            </div>
+                                            <div className="relative w-full h-16">
+                                                <button
+                                                    type="button"
+                                                    onClick={handlePrev}
+                                                    className="absolute left-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Previous
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleNext(validateForm, setTouched)}
+                                                    className="absolute top-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {currentStep === 2 && (
+                                        <div>
+                                            <div className="mb-3">
+                                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[2].title}</h1>
+                                            </div>
+                                            <div className="mb-3">
+                                                <h1 className="block text-md text-gray-800 dark:text-white">Available
+                                                    hours:</h1>
+                                            </div>
+                                            <div className="flex justify-between items-center my-4">
+                                                <Field as="select" name="availableFromHour"
+                                                       className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                                    {Array.from({length: 24}, (_, i) => (
+                                                        <option key={i} value={i}>{`${i}:00`}</option>
+                                                    ))}
+                                                </Field>
+                                                <span className="mx-2">-</span>
+                                                <Field as="select" name="availableToHour"
+                                                       className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                                    {Array.from({length: 24}, (_, i) => (
+                                                        <option key={i} value={i}>{`${i}:00`}</option>
+                                                    ))}
+                                                </Field>
+                                                <ErrorMessage name="availableFromHour" component="div"
+                                                              className={css.error}/>
+                                                <ErrorMessage name="availableToHour" component="div"
+                                                              className={css.error}/>
+                                            </div>
+                                            <div className="mt-3">
+                                                <h1 className="block text-md text-gray-800 dark:text-white">Available
+                                                    days:</h1>
+                                            </div>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
+                                                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+                                                    <label key={day} className="flex items-center space-x-2">
+                                                        <Field type="checkbox" name="availableDays" value={day}
+                                                               className="form-checkbox text-blue-600 w-5 h-5"/>
+                                                        <span className="text-gray-700 dark:text-white">{day}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                            <ErrorMessage name="availableDays" component="div" className={css.error}/>
 
-
-                    <div className="mt-2 mb-5">
-                        <div className="mb-3">
-                            <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
-                                availability</h1>
-                        </div>
-                        <div className="mb-3">
-                            <h1 className="block text-md text-gray-800 dark:text-white">Available hours:</h1>
-                        </div>
-
-
-                        <div className="flex justify-between items-center my-4">
-                            <Field as="select" name="availableFromHour"
-                                   className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
-                                {Array.from({length: 24}, (_, i) => (
-                                    <option key={i} value={i}>{`${i}:00`}</option>
-                                ))}
-                            </Field>
-                            <span className="mx-2">-</span>
-                            <Field as="select" name="availableToHour"
-                                   className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg:white focus:border-blue-600 focus:outline-none">
-                                {Array.from({length: 24}, (_, i) => (
-                                    <option key={i} value={i}>{`${i}:00`}</option>
-                                ))}
-                            </Field>
-                            <ErrorMessage name="availableFromHour" component="div" className={css.error}/>
-                            <ErrorMessage name="availableToHour" component="div" className={css.error}/>
-                        </div>
-                        <div className="mt-3">
-                            <h1 className="block text-md text-gray-800 dark:text-white">Available days:</h1>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
-                            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                                <label key={day} className="flex items-center space-x-2">
-                                    <Field type="checkbox" name="availableDays" value={day}
-                                           className="form-checkbox text-blue-600 w-5 h-5"/>
-                                    <span className="text-gray-700 dark:text-white">{day}</span>
-                                </label>
-                            ))}
-                        </div>
-                        <ErrorMessage name="availableDays" component="div" className={css.error}/>
-
-
-                        {/* Submit button */}
-                        <button type="submit"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Register
-                        </button>
-                    </div>
-                </Form>
+                                            <div className="relative w-full h-16">
+                                                <button
+                                                    type="button"
+                                                    onClick={handlePrev}
+                                                    className="absolute left-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Previous
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="absolute top-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Register
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </CSSTransition>
+                        </TransitionGroup>
+                    </Form>
+                )}
             </Formik>
         </div>
     );

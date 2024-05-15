@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Meetly",
+  "name": "The Intuitive Appointment Scheduling",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,77 +1,45 @@
-.container {
-  background-color: rgba(0, 0, 0, 0.1);
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  height: 530px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.form-step {
+  width: 100%;
+  height: 100%;
+}
+
+.form-content {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
+.buttons-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-  padding: 60px;
-  margin: 0 auto;
-  margin-bottom: 40px;
-  width: 334px;
-}
-
-.button {
-  display: block;
-  margin: 0 auto;
-  font-size: 16px;
-  font-weight: 500;
-  height: 40px;
-  width: 230px;
-  border-radius: 20px;
-  border: 1px solid lightgray;
-  background-color: transparent;
-  cursor: pointer;
-  transition: border 150ms ease-in;
-  margin-top: 10px;
-}
-
-.button:hover {
-  border: 1px solid rgb(14, 102, 153);
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .error {
-  display: block;
+  margin-left: 5px;
+  margin-bottom: 0;
+  font-size: 14px;
   color: orangered;
-  margin-bottom: 10px;
 }
 
-.field {
-  margin-bottom: 18px;
-  height: 36px;
-  width: 300px;
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-bottom: 1px solid lightgrey;
-  padding-left: 32px;
-  transition: border-bottom 100ms ease-in;
+.fade-enter {
+  opacity: 0;
 }
-
-.field:hover,
-.field:focus {
-  border-bottom: 1px solid lightgray;
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
 }
-
-.field:focus + .icon,
-.field:hover + .icon {
-  color: lightgray;
+.fade-exit {
+  opacity: 1;
 }
-
-.field::placeholder {
-  color: lightslategrey;
-}
-
-.title {
-  font-style: italic;
-  margin-bottom: 5px;
-}
-
-.formWrapper {
-  position: relative;
-  text-align: center;
-}
-
-.wrapper {
-  margin-top: 100px;
-  margin-bottom: 100px;
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
 }

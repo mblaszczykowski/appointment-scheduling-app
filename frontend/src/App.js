@@ -1,56 +1,52 @@
 import './App.css';
+import './transitions.css';
 import Footer from "./components/Footer";
-import { Route, Routes, useNavigate} from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Calendar from "./components/Calendar";
 import Header from "./components/Header";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
 import WelcomeContent from "./components/WelcomeContent";
-import {setAuthHeader} from "./util/axios_helper";
-import React, {useState} from "react";
-import ErrorPage from "./components/ErrorPage";
-import BookingSuccess from "./components/BookingSuccess";
-
+import { setAuthHeader } from "./util/axios_helper";
+import React, { useState } from "react";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
     const handleLogin = () => {
         setIsLoggedIn(true);
-
     };
 
     const handleLogout = () => {
         setAuthHeader(null);
         setIsLoggedIn(false);
-        navigate("/login")
+        navigate("/login");
     };
 
-    const redirectToRegister = () => {
-        navigate("/register");
-    }
     return (
-            <div className="App">
-
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col">
-                            <Header isLoggedIn={isLoggedIn} onLogout={handleLogout}/>
-                            <Routes>
-                                <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
-                                <Route path="/error" element={<ErrorPage/>}/>
-                                <Route path="/booking-success" element={<BookingSuccess/>}/>
-                                <Route path="/login" element={<LoginForm onLogin={handleLogin}/>}/>
-                                <Route path="/register" element={<RegisterForm onRegister={handleLogin}/>}/>
-                                <Route path="/dashboard" element={<Dashboard/>}/>
-                                <Route path="/" element={<WelcomeContent onRegister={redirectToRegister}/>}/>
-                            </Routes>
-                        </div>
+        <div className="App">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col">
+                        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+                        <TransitionGroup>
+                            <CSSTransition key={location.key} classNames="fade" timeout={{ enter: 500, exit: 0 }}>
+                                <Routes location={location}>
+                                    <Route path="/" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"register"}/>} />
+                                    <Route path="/login" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"login"}/>} />
+                                    <Route path="/register" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"register"}/>} />
+                                    <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/calendar/:calendarLink" element={<Calendar />} />
+                                </Routes>
+                            </CSSTransition>
+                        </TransitionGroup>
                     </div>
                 </div>
-                <Footer/>
             </div>
+            <Footer />
+        </div>
     );
 }
 
