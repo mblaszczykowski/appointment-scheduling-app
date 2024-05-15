@@ -9,6 +9,7 @@ import WelcomeContent from "./components/WelcomeContent";
 import { setAuthHeader } from "./util/axios_helper";
 import React, { useState } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +40,7 @@ function App() {
                                     <Route path="/register" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"register"}/>} />
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/calendar/:calendarLink" element={<Calendar />} />
+                                    <Route path="/error" element={<ErrorPage/>}/>
                                 </Routes>
                             </CSSTransition>
                         </TransitionGroup>
