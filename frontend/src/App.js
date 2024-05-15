@@ -39,7 +39,7 @@ function App() {
                                     <Route path="/login" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"login"}/>} />
                                     <Route path="/register" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"register"}/>} />
                                     <Route path="/dashboard" element={<Dashboard />} />
-                                    <Route path="/calendar/:calendarLink" element={<Calendar />} />
+                                    <Route path="/calendar/:calendarUrl" element={<Calendar />} />
                                     <Route path="/error" element={<ErrorPage/>}/>
                                 </Routes>
                             </CSSTransition>
