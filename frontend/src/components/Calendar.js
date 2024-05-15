@@ -81,10 +81,11 @@ export default function Calendar() {
         setSelectedTimeSlot(hour);
         setShowBookingForm(true);
     };
-
     const handleFormSubmit = async (name, email) => {
-        const startTime = `${selectDate.format('YYYY-MM-DD')}T${selectedTimeSlot}:00:00`;
-        const endTime = `${selectDate.format('YYYY-MM-DD')}T${selectedTimeSlot + 1}:00:00`;
+        const formatTime = (time) => time.toString().padStart(2, '0');
+
+        const startTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot)}:00:00`;
+        const endTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot + 1)}:00:00`;
 
         try {
             await axios.post('/api/appointments', {
