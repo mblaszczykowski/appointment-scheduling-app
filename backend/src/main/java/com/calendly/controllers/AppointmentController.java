@@ -4,6 +4,7 @@ import com.calendly.dtos.AppointmentDTO;
 import com.calendly.entities.Appointment;
 import com.calendly.services.AppointmentService;
 import com.calendly.services.UserService;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,10 +58,19 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getAppointmentsByUserIdAndDate(@PathVariable Integer userId, @RequestParam String date) {
-        LocalDate localDate = LocalDate.parse(date);
-        List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
-        return ResponseEntity.ok(appointments);
+    public ResponseEntity<?> getAppointmentsByUserIdAndDate(@PathVariable Integer userId, @RequestParam @Nullable String date, HttpServletRequest request) {
+        if(date !=null) {
+            LocalDate localDate = LocalDate.parse(date);
+            List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
+            return ResponseEntity.ok(appointments);
+        } else {
+            ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
+            if (!authResponse.getStatusCode().is2xxSuccessful()) {
+                return authResponse;
+            }
+            List<Appointment> appointments = appointmentService.getAppointmentsByUserId(userId);
+            return ResponseEntity.ok(appointments);
+        }
     }
 
     @DeleteMapping("/{id}")

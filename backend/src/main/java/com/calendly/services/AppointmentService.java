@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -39,6 +40,11 @@ public class AppointmentService {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         return appointmentRepository.findByUserIdAndDate(userId, startOfDay, endOfDay);
+    }
+    public List<Appointment> getAppointmentsByUserId(Integer userId) {
+        return appointmentRepository.findAll().stream()
+                .filter(appointment -> appointment.getUser().getId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     public void deleteAppointment(UUID appointmentId) {
