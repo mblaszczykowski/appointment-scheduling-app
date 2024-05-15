@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -34,10 +35,10 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public List<Appointment> getAppointmentsByUserId(Integer userId) {
-        return appointmentRepository.findAll().stream()
-                .filter(appointment -> appointment.getUser().getId().equals(userId))
-                .collect(Collectors.toList());
+    public List<Appointment> getAppointmentsByUserIdAndDate(Integer userId, LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        return appointmentRepository.findByUserIdAndDate(userId, startOfDay, endOfDay);
     }
 
     public void deleteAppointment(UUID appointmentId) {

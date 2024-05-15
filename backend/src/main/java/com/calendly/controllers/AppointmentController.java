@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,14 +28,8 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO, HttpServletRequest request) {
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         // we allow anonymous users to create appointments
-        /*
-        ResponseEntity<?> checkAuthorizationResult = userService.checkAuthorization(request);
-        if (checkAuthorizationResult.getStatusCode() != HttpStatus.OK) {
-            return checkAuthorizationResult;
-        }
-        */
 
         if (appointmentDTO.startTime() == null || appointmentDTO.endTime() == null
         || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())
@@ -62,12 +57,9 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getAppointmentsByUserId(@PathVariable Integer userId, HttpServletRequest request) {
-        ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
-        if (!authResponse.getStatusCode().is2xxSuccessful()) {
-            return authResponse;
-        }
-        List<Appointment> appointments = appointmentService.getAppointmentsByUserId(userId);
+    public ResponseEntity<?> getAppointmentsByUserIdAndDate(@PathVariable Integer userId, @RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
         return ResponseEntity.ok(appointments);
     }
 
