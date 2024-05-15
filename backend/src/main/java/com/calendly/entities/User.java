@@ -30,6 +30,9 @@ public class User {
     @Column(name = "calendarUrl", nullable = false)
     private String calendarUrl;
 
+    @Column(name = "meetingLink", nullable = false)
+    private String meetingLink;
+
     @Column(name = "isActive", nullable = false, columnDefinition = "boolean default false")
     private boolean isActive;
 
@@ -47,12 +50,13 @@ public class User {
     public User() {
     }
 
-    public User(String firstname, String lastname, String email, String password, String calendarUrl, Integer availableFromHour, Integer availableToHour, String availableDays) {
+    public User(String firstname, String lastname, String email, String password, String calendarUrl, String meetingLink, Integer availableFromHour, Integer availableToHour, String availableDays) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.calendarUrl = calendarUrl;
+        this.meetingLink = meetingLink;
         this.availableFromHour = availableFromHour;
         this.availableToHour = availableToHour;
         this.availableDays = availableDays;
@@ -137,4 +141,8 @@ public class User {
     public void setAvailableDays(String availableDays) {
         this.availableDays = availableDays;
     }
+
+    public String getMeetingLink() {return meetingLink;}
+
+    public void setMeetingLink(String meetingLink) {this.meetingLink = meetingLink;}
 }

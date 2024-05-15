@@ -87,7 +87,7 @@ public class UserService {
             ApiError error = new ApiError("Validation", "password", "Password should contain at least one uppercase letter");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
+        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
             ApiError error = new ApiError("Validation", "password", "Password should contain at least one special character");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
@@ -155,7 +155,15 @@ public class UserService {
 
         //Encrypting password
         String generatedSecuredPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
-        User user = new User(firstname, lastname, email, generatedSecuredPasswordHash, userRegistrationRequest.calendarUrl(), userRegistrationRequest.availableFromHour(), userRegistrationRequest.availableToHour(), userRegistrationRequest.availableDays());
+        User user = new User(firstname,
+                lastname,
+                email,
+                generatedSecuredPasswordHash,
+                userRegistrationRequest.calendarUrl(),
+                userRegistrationRequest.meetingLink(),
+                userRegistrationRequest.availableFromHour(),
+                userRegistrationRequest.availableToHour(),
+                userRegistrationRequest.availableDays());
         userDAO.addUser(user);
 
         // logujemy od razu poki co po rejestracji, bez aktywacji
@@ -232,15 +240,12 @@ public class UserService {
             user.setActive(true);
             userRepository.save(user);
             return ResponseEntity.ok("Account activated successfully.");
-        }
-        catch (ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid token: User not found");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
-
 
 
     public ResponseEntity<?> changePassword(Integer userId, ChangePasswordRequest changePasswordRequest) {
@@ -284,19 +289,14 @@ public class UserService {
 
     boolean checkAuthorizationHeader(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return true;
-        }
-        return false;
+        return authorizationHeader != null && authorizationHeader.startsWith("Bearer ");
     }
 
     boolean checkLoggedUser(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwtToken = authorizationHeader.substring(7);
-            if (tokenService.validateAccessToken(jwtToken)) {
-                return true;
-            }
+            return tokenService.validateAccessToken(jwtToken);
         }
         return false;
     }
@@ -326,7 +326,6 @@ public class UserService {
             return checkAuthorizationResult;
         }
         var user = userService.getUserById(uuid);
-        var userId = userService.getUserIDFromAccessToken(request);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)

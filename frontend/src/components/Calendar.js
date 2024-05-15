@@ -24,7 +24,6 @@ export default function Calendar() {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`/api/calendar/${calendarUrl}`);
-                console.log(response.data);
                 setUserData(response.data);
                 setLoading(false);
             } catch (error) {
