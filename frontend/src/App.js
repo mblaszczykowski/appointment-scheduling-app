@@ -6,10 +6,13 @@ import Calendar from "./components/Calendar";
 import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
 import WelcomeContent from "./components/WelcomeContent";
+import SettingsContent from "./components/SettingsContent";
 import { setAuthHeader } from "./util/axios_helper";
 import React, { useState } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ErrorPage from "./components/ErrorPage";
+import RegisterForm from "./components/RegisterForm";
+import SettingsSuccess from "./components/SettingsSuccess";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +42,9 @@ function App() {
                                     <Route path="/login" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"login"}/>} />
                                     <Route path="/register" element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin} show={"register"}/>} />
                                     <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/calendar/:calendarUrl" element={<Calendar />} />
+                                    <Route path="/settings" element={<SettingsContent onRegister={handleLogin} onLogin={handleLogin} />} />
+                                    <Route path="/settings-success" element={<SettingsSuccess />} />
                                     <Route path="/calendar/:calendarUrl" element={<Calendar />} />
                                     <Route path="/error" element={<ErrorPage/>}/>
                                 </Routes>

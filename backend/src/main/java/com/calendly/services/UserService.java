@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static com.calendly.services.TokenService.EXPIRATION_TIME_ACCESS;
@@ -199,19 +200,24 @@ public class UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Customer with id [%s] not found".formatted(uuid))
                 );
-        if (userUpdateRequest.firstname() != null) {
-            String firstname = userUpdateRequest.firstname();
-            user.setFirstname(firstname);
-        }
-
-        if (userUpdateRequest.lastname() != null) {
-            String lastname = userUpdateRequest.lastname();
-            user.setLastname(lastname);
-        }
+        updateIfNotNull(user::setFirstname, userUpdateRequest.firstname());
+        updateIfNotNull(user::setLastname, userUpdateRequest.lastname());
+        updateIfNotNull(user::setEmail, userUpdateRequest.email());
+        updateIfNotNull(user::setCalendarUrl, userUpdateRequest.calendarUrl());
+        updateIfNotNull(user::setAvailableFromHour, userUpdateRequest.availableFromHour());
+        updateIfNotNull(user::setAvailableToHour, userUpdateRequest.availableToHour());
+        updateIfNotNull(user::setAvailableDays, userUpdateRequest.availableDays());
 
         userDAO.updateUser(user);
         return ResponseEntity.ok("User updated successfully");
     }
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
 
     public boolean hasExpired(LocalDateTime expiryDateTime) {
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -326,7 +332,10 @@ public class UserService {
             return checkAuthorizationResult;
         }
         var user = userService.getUserById(uuid);
-        var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail());
+        var userId = userService.getUserIDFromAccessToken(request);
+        var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
+                                    user.getEmail(), user.getPassword(), user.getCalendarUrl(),
+                                    user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDTO);
