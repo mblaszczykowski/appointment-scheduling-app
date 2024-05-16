@@ -118,7 +118,7 @@ export default class Dashboard extends Component {
             return (
                 <div>
                     <h1 className="mt-4 mb-5 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
-                        Profile settings
+                        Update your account
                     </h1>
                     <SettingsForm/>
                 </div>
@@ -132,17 +132,21 @@ export default class Dashboard extends Component {
         return (
             <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent min-h-screen">
                 {/* Main Container */}
-                <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
                     <div className="max-w-6xl mx-auto">
 
                         {/* Welcome Text */}
+                        <h1 className="mb-1 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
+                            Hello, <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
+                        </h1>
                         <h1 className="mb-8 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-3xl dark:text-white">
-                            Welcome to your <span className="text-blue-600">dashboard</span>
+                            This is your <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">dashboard</span>
                         </h1>
 
                         {/* Sidebar and Main Content */}
                         <div className="flex flex-col md:flex-row md:items-start">
-                            <div className="w-full md:w-1/4 flex-shrink-0 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 shadow-lg rounded-2xl p-4 mb-6 md:mb-0">
+                            <div
+                                className="w-full md:w-1/4 flex-shrink-0 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 shadow-lg rounded-2xl p-4 mb-6 md:mb-0">
                                 <button
                                     onClick={() => this.setSelectedTab('upcoming')}
                                     className={`w-full mt-1 md-1 flex items-center gap-x-3.5 py-2 px-2.5 text-md rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${selectedTab === 'upcoming' ? 'bg-gray-100 dark:bg-neutral-700' : 'text-neutral-700 dark:text-white'}`}

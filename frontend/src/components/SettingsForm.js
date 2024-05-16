@@ -163,11 +163,7 @@ function SettingsForm() {
             }}
         >
             {formik => (
-                <Form className="max-w-sm mx-auto">
-                    <div className="py-3">
-                        <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Set your Account</h1>
-                    </div>
-                    <br/>
+                <Form className="max-w-sm">
                     <div className="mb-5 flex items-center">
                         <label htmlFor="firstname" className="mr-4 text-m font-medium text-gray-700">
                             First name
