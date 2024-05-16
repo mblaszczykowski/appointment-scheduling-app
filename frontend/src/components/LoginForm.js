@@ -59,10 +59,10 @@ function LoginForm({onLogin, onToggleForm}) {
                 <Form className="max-w-sm mx-auto">
 
                     <div className="py-5 mt-12">
-                        <h1 className="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
+                        <h1 className="block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                             Welcome back
                         </h1>
-                        <h1 className="block text-xl mt-2 font-bold text-gray-600 dark:text-white">Log in to see your
+                        <h1 className="block text-lg mt-2 font-bold text-gray-600 dark:text-white">Log in to see your
                             schedule</h1>
                     </div>
                     <div className="flex items-start mb-6 pt-1">

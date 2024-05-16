@@ -169,10 +169,10 @@ function RegisterForm({onRegister, onToggleForm}) {
                                     {currentStep === 0 && (
                                         <div>
                                             <div className="py-3">
-                                                <h1 className="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
+                                                <h1 className="block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                                     Get started
                                                 </h1>
-                                                <h1 className="block text-xl mt-4 font-bold text-gray-600 dark:text-white">Create
+                                                <h1 className="block text-lg mt-4 font-bold text-gray-600 dark:text-white">Create
                                                     a free account</h1>
                                             </div>
                                             <div className="flex items-start mb-6">
@@ -190,7 +190,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 </label>
                                             </div>
                                             <div className="mb-3">
-                                                <h1 className="block text-lg mt-1 font-bold text-gray-600 dark:text-white">{steps[0].title}</h1>
+                                                <h1 className="block text-md mt-1 font-bold text-gray-600 dark:text-white">{steps[0].title}</h1>
                                             </div>
                                             <div className={`mb-3 ${errors.firstname ? "mb-1" : "mb-5"}`}>
                                                 <Field

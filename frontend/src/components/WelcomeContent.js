@@ -19,8 +19,8 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                     <div className="grid items-center md:grid-cols-2 lg:mb-8">
                         <div className="max-w-2xl mx-auto p-14">
                             <div className="max-w-2xl">
-                                <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-4xl md:text-5xl lg:text-6xl dark:from-black dark:to-blue-800">
-                                    The Intuitive Appointment Scheduling
+                                <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-3xl md:text-5xl lg:text-5xl dark:from-black dark:to-blue-800">
+                                    The Intuitive Appointment<br/> Scheduling
                                 </h1>
                             </div>
                             <div className="mt-3 max-w-3xl">
@@ -167,11 +167,11 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                         </div>
                     </div>
                     <>
-                        <div className="max-w-[85rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-10 mx-auto">
+                        <div className="max-w-[85rem] px-4 mt-8 sm:px-6 lg:px-8 lg:mt-14 mx-auto mb-8">
                             <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between">
                                 <div className="lg:w-1/3">
                                     <div className="lg:pe-6 xl:pe-12 ml-20">
-                                        <p className="text-5xl font-bold leading-10 text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
+                                        <p className="text-4xl font-bold leading-10 text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                             1,000+
                                             <span
                                                 className="ml-3 ms-1 inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-neutral-800 dark:text-neutral-300">
@@ -206,14 +206,6 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                             </div>
                         </div>
                     </>
-                    <div
-                        className="mt-6 md:mt-12 lg:mt-8 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:after:border-neutral-700">
-                        <span
-                            className="font-semibold bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-transparent dark:from-blue-400 dark:to-violet-400">
-                          Web Application Technologies
-                        </span>
-                        team project
-                    </div>
                 </div>
             </div>
         </React.Fragment>
