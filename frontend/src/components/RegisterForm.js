@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
