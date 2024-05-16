@@ -4,7 +4,7 @@ import { getUserIdFromToken, request, setAuthHeader } from '../../util/axios_hel
 import dayjs from 'dayjs';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Dashboard.css'; // Make sure to import the CSS file for animations
-import { HomeIcon, CalendarIcon, UserIcon } from '../Icons';
+import { HomeIcon, CalendarIcon, UserIconDashboard } from '../Icons';
 import UpcomingMeetings from './UpcomingMeetings';
 import PastMeetings from './PastMeetings';
 import SettingsForm from "./SettingsForm";
@@ -44,11 +44,11 @@ export default class Dashboard extends Component {
     }
 
     filterAppointments = () => {
-        const { data } = this.state;
+        const { data, searchQuery } = this.state;
         const now = dayjs();
 
         const filteredData = data.filter(appointment =>
-            appointment.bookerName.toLowerCase().includes(this.state.searchQuery.toLowerCase())
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
         const groupAppointments = (filterFn) => filteredData.filter(filterFn);
@@ -132,7 +132,7 @@ export default class Dashboard extends Component {
                                     onClick={() => this.setSelectedTab('settings')}
                                     className={`w-full flex items-center gap-x-3.5 py-2 mt-1 md-1 px-2.5 text-md rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${selectedTab === 'settings' ? 'bg-gray-100 dark:bg-neutral-700' : 'text-neutral-700 dark:text-white'}`}
                                 >
-                                    <UserIcon />
+                                    <UserIconDashboard />
                                     Profile settings
                                 </button>
                                 <div className="mb-5"></div>
