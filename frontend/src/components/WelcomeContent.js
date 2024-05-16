@@ -18,7 +18,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                     <div className="grid items-center md:grid-cols-2 lg:mb-8">
                         <div className="max-w-2xl mx-auto p-14">
                             <div className="max-w-2xl">
-                                <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-b from-black to-blue-500 text-4xl md:text-5xl lg:text-6xl dark:from-black dark:to-blue-800">
+                                <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-4xl md:text-5xl lg:text-6xl dark:from-black dark:to-blue-800">
                                     The Intuitive Appointment Scheduling
                                 </h1>
                             </div>
@@ -128,7 +128,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                             <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between">
                                 <div className="lg:w-1/3">
                                     <div className="lg:pe-6 xl:pe-12 ml-20">
-                                        <p className="text-5xl font-bold leading-10 text-blue-600">
+                                        <p className="text-5xl font-bold leading-10 text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                             1,000+
                                             <span
                                                 className="ml-3 ms-1 inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-neutral-800 dark:text-neutral-300">
@@ -143,7 +143,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                                 <div className="lg:w-2/3 flex justify-center mt-4">
                                     <div className="grid gap-6 grid-cols-2 sm:gap-8">
                                         <div className="col-span-1">
-                                            <p className="text-3xl font-semibold text-blue-600">
+                                            <p className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                                 10,000+
                                             </p>
                                             <p className="mt-1 text-gray-500 dark:text-neutral-500">
@@ -151,7 +151,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                                             </p>
                                         </div>
                                         <div className="col-span-1 ml-10">
-                                            <p className="text-3xl font-semibold text-blue-600">
+                                            <p className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                                 100+
                                             </p>
                                             <p className="mt-1 text-gray-500 dark:text-neutral-500">
@@ -166,7 +166,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                     <div
                         className="mt-6 md:mt-12 lg:mt-6 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:after:border-neutral-700">
                         <span
-                            className="font-semibold bg-clip-text bg-gradient-to-l from-blue-600 to-violet-500 text-transparent dark:from-blue-400 dark:to-violet-400">
+                            className="font-semibold bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-transparent dark:from-blue-400 dark:to-violet-400">
                           Web Application Technologies
                         </span>
                         team project

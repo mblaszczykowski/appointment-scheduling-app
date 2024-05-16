@@ -9,14 +9,14 @@ export default function Header({isLoggedIn, onLogout}) {
                 <Link className="flex items-center justify-center md:justify-start"
                       to={isLoggedIn ? "/dashboard" : "/"}>
                     <img src="https://flowbite.com/docs/images/logo.svg" className="mr-3 h-6 sm:h-9" alt="Logo"/>
-                    <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Meetly</span>
+                    <span className="self-center text-xl font-semibold whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">Meetly</span>
                 </Link>
 
                 <div className="flex items-center gap-x-2 py-1">
                     {!isLoggedIn ? (
                         <React.Fragment>
                             <Link to={"/register"}
-                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-600 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-600">
+                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500">
                                 Sign up
                             </Link>
                             <Link to={"/login"}
@@ -27,7 +27,7 @@ export default function Header({isLoggedIn, onLogout}) {
                     ) : (
                         <React.Fragment>
                             <Link type="Link"
-                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-600 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-600"
+                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
                                   to={"/dashboard"}>
                                 Dashboard
                             </Link>
