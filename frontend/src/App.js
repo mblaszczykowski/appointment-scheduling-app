@@ -11,8 +11,8 @@ import { setAuthHeader } from "./util/axios_helper";
 import React, { useState } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ErrorPage from "./components/ErrorPage";
-import RegisterForm from "./components/RegisterForm";
 import SettingsSuccess from "./components/SettingsSuccess";
+import BookingSuccess from "./components/BookingSuccess";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,6 +47,7 @@ function App() {
                                     <Route path="/settings-success" element={<SettingsSuccess />} />
                                     <Route path="/calendar/:calendarUrl" element={<Calendar />} />
                                     <Route path="/error" element={<ErrorPage/>}/>
+                                    <Route path="/booking-success" element={<BookingSuccess />} />
                                 </Routes>
                             </CSSTransition>
                         </TransitionGroup>
