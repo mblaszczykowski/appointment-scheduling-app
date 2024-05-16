@@ -127,8 +127,7 @@ function SettingsForm() {
                 availableToHour,
                 availableDays,
             }).then(
-            (response) => {
-                setAuthHeader(response.data);
+            () => {
                 navigate("/settings-success");
             }).catch(
             (error) => {
