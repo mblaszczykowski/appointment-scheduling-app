@@ -1,9 +1,10 @@
 import * as React from "react";
-import {useState} from "react";
+import { useState } from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
+import { CheckIcon, StarIcon, UserIcon } from './Icons';
 
-export default function WelcomeContent({onRegister, onLogin, show}) {
+export default function WelcomeContent({ onRegister, onLogin, show }) {
     const [showForm, setShowForm] = useState(show);
 
     const handleToggleForm = () => {
@@ -12,100 +13,54 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
 
     return (
         <React.Fragment>
-
-            <div
-                className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent">
+            <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent">
                 <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
                     <div className="grid items-center md:grid-cols-2 lg:mb-8">
                         <div className="max-w-2xl mx-auto p-14">
                             <div className="max-w-2xl">
                                 <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-3xl md:text-5xl lg:text-5xl dark:from-black dark:to-blue-800">
-                                    The Intuitive Appointment<br/> Scheduling
+                                    The Intuitive Appointment<br /> Scheduling
                                 </h1>
                             </div>
                             <div className="mt-3 max-w-3xl">
                                 <p className="text-lg text-gray-600 dark:text-neutral-400">
                                     Meetly is a platform designed to streamline
-                                    <br/>
+                                    <br />
                                     meeting and appointment scheduling effortlessly.
                                 </p>
                             </div>
                             <div className="pt-6">
                                 <ul className="space-y-2 sm:space-y-4">
                                     <li className="flex space-x-3">
-                                        <span
-                                            className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-                                          <svg
-                                              className="flex-shrink-0 size-3.5"
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              width={24}
-                                              height={24}
-                                              viewBox="0 0 24 24"
-                                              fill="none"
-                                              stroke="currentColor"
-                                              strokeWidth={2}
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                          >
-                                            <polyline points="20 6 9 17 4 12"/>
-                                          </svg>
+                                        <span className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                            <CheckIcon className="flex-shrink-0 size-3.5" />
                                         </span>
                                         <span className="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                                          <span className="font-bold">Simplify</span> your
-                                          scheduling with easy calendar setup
+                                            <span className="font-bold">Simplify</span> your
+                                            scheduling with easy calendar setup
                                         </span>
                                     </li>
                                     <li className="flex space-x-3">
-                    <span
-                        className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-                      <svg
-                          className="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    </span>
+                                        <span className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                            <CheckIcon className="flex-shrink-0 size-3.5" />
+                                        </span>
                                         <span className="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                      Allow others to book your available slots{" "}
+                                            Allow others to book your available slots{" "}
                                             <span className="font-bold">in just a few clicks</span>
-                    </span>
+                                        </span>
                                     </li>
                                     <li className="flex space-x-3">
-                    <span
-                        className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-                      <svg
-                          className="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    </span>
+                                        <span className="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                            <CheckIcon className="flex-shrink-0 size-3.5" />
+                                        </span>
                                         <span className="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                      Get <span className="font-bold">automatic</span> email
-                      reminders for all appointments
-                    </span>
+                                            Get <span className="font-bold">automatic</span> email
+                                            reminders for all appointments
+                                        </span>
                                     </li>
                                 </ul>
-                                {/* End List */}
                             </div>
 
-                            {/* REVIEWS */}
                             <div className="mt-8 flex items-center gap-x-5">
                                 <div className="flex -space-x-2">
                                     <img
@@ -124,33 +79,18 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                                         alt="Image Description"
                                     />
 
-                                    <span
-                                        className="inline-flex justify-center items-center h-8 w-8 rounded-full bg-blue-600 text-white ring-2 ring-white">
-                                        <svg
-                                            className="h-3.5 w-3.5"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={16}
-                                            height={16}
-                                            fill="currentColor"
-                                            viewBox="0 0 16 16"
-                                        >
-                                            <path
-                                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                        </svg>
+                                    <span className="inline-flex justify-center items-center h-8 w-8 rounded-full bg-blue-600 text-white ring-2 ring-white">
+                                        <StarIcon className="h-3.5 w-3.5" />
                                     </span>
                                 </div>
                                 <span className="text-sm text-gray-500 dark:text-neutral-500">
-        Rated best by over 500 reviews
-    </span>
+                                    Rated best by over 500 reviews
+                                </span>
                             </div>
-                            {/* END REVIEWS */}
-
-
                         </div>
                         <div>
                             <div className="lg:max-w-lg lg:mx-auto lg:me-0 ms-auto px-4">
-                                <div
-                                    className="p-4 mt-6 sm:p-7 flex flex-col bg-white rounded-2xl shadow-lg dark:bg-neutral-900">
+                                <div className="p-4 mt-6 sm:p-7 flex flex-col bg-white rounded-2xl shadow-lg dark:bg-neutral-900">
                                     {showForm !== "login" ? (
                                         <RegisterForm
                                             onRegister={onRegister}
@@ -173,13 +113,12 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                                     <div className="lg:pe-6 xl:pe-12 ml-20">
                                         <p className="text-4xl font-bold leading-10 text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                             1,000+
-                                            <span
-                                                className="ml-3 ms-1 inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-neutral-800 dark:text-neutral-300">
+                                            <span className="ml-3 ms-1 inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-neutral-800 dark:text-neutral-300">
                                                 +20% this month
                                             </span>
                                         </p>
                                         <p className="mt-2 sm:mt-3 text-gray-900 dark:text-neutral-500">
-                                            Professionals use our app<br/> for scheduling meetings
+                                            Professionals use our app<br /> for scheduling meetings
                                         </p>
                                     </div>
                                 </div>
