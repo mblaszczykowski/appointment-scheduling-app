@@ -174,7 +174,6 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 </h1>
                                                 <h1 className="block text-xl mt-4 font-bold text-gray-600 dark:text-white">Create
                                                     a free account</h1>
-
                                             </div>
                                             <div className="flex items-start mb-6">
                                                 <label

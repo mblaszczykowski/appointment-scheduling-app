@@ -167,7 +167,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                         </div>
                     </div>
                     <>
-                        <div className="max-w-[85rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-12 mx-auto">
+                        <div className="max-w-[85rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-10 mx-auto">
                             <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between">
                                 <div className="lg:w-1/3">
                                     <div className="lg:pe-6 xl:pe-12 ml-20">
@@ -207,7 +207,7 @@ export default function WelcomeContent({onRegister, onLogin, show}) {
                         </div>
                     </>
                     <div
-                        className="mt-6 md:mt-12 lg:mt-6 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:after:border-neutral-700">
+                        className="mt-6 md:mt-12 lg:mt-8 py-3 flex items-center text-sm text-gray-800 gap-x-1.5 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:after:border-neutral-700">
                         <span
                             className="font-semibold bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-transparent dark:from-blue-400 dark:to-violet-400">
                           Web Application Technologies

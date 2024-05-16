@@ -57,12 +57,15 @@ function LoginForm({onLogin, onToggleForm}) {
                 validationSchema={contactSchema}
             >
                 <Form className="max-w-sm mx-auto">
-                    <div className="py-3">
-                        <h1 className="block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
+
+                    <div className="py-5 mt-12">
+                        <h1 className="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                             Welcome back
                         </h1>
+                        <h1 className="block text-xl mt-2 font-bold text-gray-600 dark:text-white">Log in to see your
+                            schedule</h1>
                     </div>
-                    <div className="flex items-start mb-6">
+                    <div className="flex items-start mb-6 pt-1">
                         <label
                             htmlFor="terms"
                             className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
