@@ -42,7 +42,7 @@ const validationSchemas = [
 ];
 
 
-function SettingsForm({onRegister, onToggleForm}) {
+function SettingsForm() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState({
@@ -126,7 +126,6 @@ function SettingsForm({onRegister, onToggleForm}) {
             }).then(
             (response) => {
                 setAuthHeader(response.data);
-                onRegister();
                 navigate("/settings-success");
             }).catch(
             (error) => {
