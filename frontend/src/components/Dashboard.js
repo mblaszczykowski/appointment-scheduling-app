@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
-import {getUserIdFromToken, request, setAuthHeader} from '../util/axios_helper';
+import React, { Component } from 'react';
+import { getUserIdFromToken, request, setAuthHeader } from '../util/axios_helper';
 import dayjs from 'dayjs';
 import SettingsForm from "./SettingsForm";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import './Dashboard.css'; // Make sure to import the CSS file for animations
 
 export default class Dashboard extends Component {
     constructor(props) {
@@ -17,23 +19,23 @@ export default class Dashboard extends Component {
             .then((response) => {
                 console.log('DATA: ');
                 console.log(response.data);
-                this.setState({data: response.data});
+                this.setState({ data: response.data });
             })
             .catch((error) => {
                 if (error.response.status === 401) {
                     setAuthHeader(null);
                 } else {
-                    this.setState({data: error.response.code});
+                    this.setState({ data: error.response.code });
                 }
             });
     }
 
     setSelectedTab = (tab) => {
-        this.setState({selectedTab: tab});
+        this.setState({ selectedTab: tab });
     }
 
     renderContent() {
-        const {selectedTab, data} = this.state;
+        const { selectedTab, data } = this.state;
 
         if (selectedTab === 'upcoming') {
             return (
@@ -54,8 +56,8 @@ export default class Dashboard extends Component {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                 >
-                                    <circle cx={11} cy={11} r={8}/>
-                                    <path d="m21 21-4.3-4.3"/>
+                                    <circle cx={11} cy={11} r={8} />
+                                    <path d="m21 21-4.3-4.3" />
                                 </svg>
                             </div>
                             <input
@@ -127,7 +129,7 @@ export default class Dashboard extends Component {
     }
 
     render() {
-        const {selectedTab} = this.state;
+        const { selectedTab } = this.state;
 
         return (
             <div
@@ -237,10 +239,17 @@ export default class Dashboard extends Component {
                                 <div className="mb-8"></div>
                             </div>
 
-
                             {/* Main Content */}
                             <div className="w-full md:w-3/4 pl-0 md:pl-8">
-                                {this.renderContent()}
+                                <TransitionGroup>
+                                    <CSSTransition
+                                        key={selectedTab}
+                                        timeout={300}
+                                        classNames="fade"
+                                    >
+                                        {this.renderContent()}
+                                    </CSSTransition>
+                                </TransitionGroup>
                             </div>
                         </div>
 
