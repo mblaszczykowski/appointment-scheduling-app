@@ -38,7 +38,9 @@ export default function Header({isLoggedIn, onLogout}) {
                                 Log out
                             </button>
                             <Link to="/settings">
-                                <svg className="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg className="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                     strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="18" cy="15" r="3"></circle>
                                     <circle cx="9" cy="7" r="4"></circle>
                                     <path d="M10 15H6a4 4 0 0 0-4 4v2"></path>

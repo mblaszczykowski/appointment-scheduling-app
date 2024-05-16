@@ -1,11 +1,11 @@
 import React from 'react';
-import { useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import {useState} from 'react';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-import { useNavigate } from "react-router-dom";
-import { request, setAuthHeader } from "../util/axios_helper";
+import {useNavigate} from "react-router-dom";
+import {request, setAuthHeader} from "../util/axios_helper";
 
 const validationSchemas = [
     Yup.object().shape({
@@ -61,7 +61,7 @@ const validationSchemas = [
     })
 ];
 
-function RegisterForm({ onRegister, onToggleForm }) {
+function RegisterForm({onRegister, onToggleForm}) {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
 
@@ -118,9 +118,9 @@ function RegisterForm({ onRegister, onToggleForm }) {
     };
 
     const steps = [
-        { id: 0, title: 'Tell us a bit about yourself' },
-        { id: 1, title: 'Set the calendar' },
-        { id: 2, title: 'Set your availability' }
+        {id: 0, title: 'Tell us a bit about yourself'},
+        {id: 1, title: 'Set the calendar'},
+        {id: 2, title: 'Set your availability'}
     ];
 
     return (
@@ -140,7 +140,7 @@ function RegisterForm({ onRegister, onToggleForm }) {
                 validationSchema={validationSchemas[currentStep]}
                 validateOnChange={false}
                 validateOnBlur={false}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={(values, {setSubmitting}) => {
                     // Convert hours to integers
                     values.availableFromHour = parseInt(values.availableFromHour, 10);
                     values.availableToHour = parseInt(values.availableToHour, 10);
@@ -153,7 +153,7 @@ function RegisterForm({ onRegister, onToggleForm }) {
                     setSubmitting(false);
                 }}
             >
-                {({ values, validateForm, setTouched }) => (
+                {({values, validateForm, setTouched}) => (
                     <Form className="max-w-sm mx-auto">
                         <TransitionGroup>
                             <CSSTransition
@@ -273,7 +273,7 @@ function RegisterForm({ onRegister, onToggleForm }) {
                                                     name="meetingLink"
                                                     className="mt-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                                                     placeholder={'Your meeting link'}
-                                                    ></Field>
+                                                ></Field>
                                                 <ErrorMessage
                                                     name="meetingLink"
                                                     component="span"

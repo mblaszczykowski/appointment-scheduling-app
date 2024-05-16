@@ -1,9 +1,9 @@
 import React from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-import { request, setAuthHeader } from "../util/axios_helper";
-import { useNavigate } from "react-router-dom";
+import {request, setAuthHeader} from "../util/axios_helper";
+import {useNavigate} from "react-router-dom";
 
 const contactSchema = Yup.object().shape({
     login: Yup.string()
@@ -19,10 +19,10 @@ const contactSchema = Yup.object().shape({
         .required('Password is required.'),
 });
 
-function LoginForm({ onLogin, onToggleForm }) {
+function LoginForm({onLogin, onToggleForm}) {
     const navigate = useNavigate();
     const handleLogin = (obj) => {
-        const { login, password } = obj;
+        const {login, password} = obj;
         let email = login;
         request(
             "POST",

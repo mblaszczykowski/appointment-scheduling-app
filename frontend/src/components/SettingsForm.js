@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React, {useState, useEffect} from 'react';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {getUserIdFromToken, request, setAuthHeader} from "../util/axios_helper";
 
 const validationSchemas = [
@@ -42,7 +42,7 @@ const validationSchemas = [
 ];
 
 
-function SettingsForm({ onRegister, onToggleForm }) {
+function SettingsForm({onRegister, onToggleForm}) {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState({
@@ -153,7 +153,7 @@ function SettingsForm({ onRegister, onToggleForm }) {
             validationSchema={validationSchemas[0]}
 
 
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, {setSubmitting}) => {
                 values.availableFromHour = parseInt(values.availableFromHour, 10);
                 values.availableToHour = parseInt(values.availableToHour, 10);
 
@@ -167,7 +167,8 @@ function SettingsForm({ onRegister, onToggleForm }) {
                 <Form className="max-w-sm mx-auto">
                     <div className="py-3">
                         <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Set your Account</h1>
-                    </div><br/>
+                    </div>
+                    <br/>
                     <div className="mb-5 flex items-center">
                         <label htmlFor="firstname" className="mr-4 text-m font-medium text-gray-700">
                             First name

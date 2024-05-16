@@ -7,9 +7,9 @@ export const getAuthToken = () => {
 
 export const setAuthHeader = (token) => {
     if (token !== null) {
-      window.localStorage.setItem("auth_token", token);
+        window.localStorage.setItem("auth_token", token);
     } else {
-      window.localStorage.removeItem("auth_token");
+        window.localStorage.removeItem("auth_token");
     }
 };
 
@@ -40,5 +40,6 @@ export const request = (method, url, data) => {
         method: method,
         url: url,
         headers: headers,
-        data: data});
+        data: data
+    });
 };
