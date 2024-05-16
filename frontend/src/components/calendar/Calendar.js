@@ -245,8 +245,8 @@ const Calendar = () => {
                         </div>
                     </div>
                     <a
-                        className="group block bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-all duration-300 dark:bg-white/10 dark:hover:bg-white/10 fixed bottom-4 left-0 right-0 mx-4"
-                        href="#"
+                        className="cursor-pointer group block bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-all duration-300 dark:bg-white/10 dark:hover:bg-white/10 fixed bottom-4 left-0 right-0 mx-4"
+                        onClick={() => navigate('/register')}
                         style={{ zIndex: 1000 }}
                     >
                         <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">

@@ -104,7 +104,7 @@ export default class Dashboard extends Component {
                         <h1 className="mb-2 ml-4 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-3xl dark:text-white">
                             Hello, <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
                         </h1>
-                        <h1 className="ml-4 mb-8 block text-xl font-bold text-gray-800 sm:text-4xl md:text-xl dark:text-white">
+                        <h1 className="ml-4 mb-8 block text-lg font-medium text-gray-800 sm:text-4xl md:text-lg dark:text-white">
                             Today is {currentDate}
                         </h1>
 

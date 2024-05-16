@@ -3,6 +3,7 @@ import { useState } from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import { CheckIcon, StarIcon, UserIcon } from './Icons';
+import Footer from "./Footer";
 
 export default function WelcomeContent({ onRegister, onLogin, show }) {
     const [showForm, setShowForm] = useState(show);
@@ -147,6 +148,7 @@ export default function WelcomeContent({ onRegister, onLogin, show }) {
                     </>
                 </div>
             </div>
+            <Footer/>
         </React.Fragment>
     );
 }
