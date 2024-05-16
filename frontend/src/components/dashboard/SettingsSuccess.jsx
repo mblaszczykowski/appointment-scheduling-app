@@ -1,7 +1,14 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React, {useEffect} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 
 function SettingsSuccess() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!(localStorage.getItem("isLoggedIn") === "true")) {
+            navigate("/dashboard");
+        }
+    }, []);
     return (
         <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="text-center">

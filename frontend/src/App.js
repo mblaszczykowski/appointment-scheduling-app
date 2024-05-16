@@ -7,24 +7,23 @@ import Header from "./components/Header";
 import Dashboard from "./components/dashboard/Dashboard";
 import WelcomeContent from "./components/WelcomeContent";
 import {setAuthHeader} from "./util/axios_helper";
-import React, {useState} from "react";
+import React from "react";
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import ErrorPage from "./components/ErrorPage";
 import SettingsSuccess from "./components/dashboard/SettingsSuccess";
 import BookingSuccess from "./components/calendar/BookingSuccess";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleLogin = () => {
-        setIsLoggedIn(true);
+        localStorage.setItem('isLoggedIn', 'true');
     };
 
     const handleLogout = () => {
         setAuthHeader(null);
-        setIsLoggedIn(false);
+        localStorage.setItem("isLoggedIn", "false");
         navigate("/login");
     };
 
@@ -33,7 +32,7 @@ function App() {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col">
-                        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout}/>
+                        <Header isLoggedIn={localStorage.getItem("isLoggedIn")==="true"} onLogout={handleLogout}/>
                         <TransitionGroup>
                             <CSSTransition key={location.key} classNames="fade" timeout={{enter: 500, exit: 0}}>
                                 <Routes location={location}>
@@ -49,7 +48,6 @@ function App() {
                                     <Route path="/dashboard" element={<Dashboard/>}/>
                                     <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
                                     <Route path="/settings-success" element={<SettingsSuccess/>}/>
-                                    <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
                                     <Route path="/error" element={<ErrorPage/>}/>
                                     <Route path="/booking-success" element={<BookingSuccess/>}/>
                                 </Routes>

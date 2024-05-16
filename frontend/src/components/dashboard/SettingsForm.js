@@ -57,6 +57,9 @@ function SettingsForm() {
     });
 
     useEffect(() => {
+        if(!(localStorage.getItem("isLoggedIn") === "true")) {
+            navigate("/dashboard");
+        }
         const handleSettings = () => {
             request('GET', `/api/users/${getUserIdFromToken()}`, {})
                 .then((response) => {

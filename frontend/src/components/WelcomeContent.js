@@ -1,16 +1,25 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
+import { useNavigate } from "react-router-dom";
 import { CheckIcon, StarIcon, UserIcon } from './Icons';
 import Footer from "./Footer";
 
 export default function WelcomeContent({ onRegister, onLogin, show }) {
     const [showForm, setShowForm] = useState(show);
+    const navigate = useNavigate();
 
     const handleToggleForm = () => {
         setShowForm((prev) => (prev === "login" ? "register" : "login"));
     };
+
+    useEffect(() => {
+        let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if(isLoggedIn) {
+            navigate("/dashboard");
+        }
+    }, []);
 
     return (
         <React.Fragment>
