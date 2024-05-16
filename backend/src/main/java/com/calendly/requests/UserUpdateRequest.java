@@ -1,8 +1,8 @@
 package com.calendly.requests;
 
-import java.time.LocalDate;
-
 public record UserUpdateRequest(
-        String firstname, String lastname, LocalDate birthDate
-) {
+        String firstname, String lastname, String email, String password,
+        String calendarUrl, Integer availableFromHour, Integer availableToHour, String availableDays
+)
+{
 }
