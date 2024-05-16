@@ -4,7 +4,7 @@ import { getUserIdFromToken, request, setAuthHeader } from '../../util/axios_hel
 import dayjs from 'dayjs';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Dashboard.css'; // Make sure to import the CSS file for animations
-import { HomeIcon, CalendarIcon, UserIconDashboard } from '../Icons';
+import { HomeIcon, CalendarIcon, UserIcon } from '../Icons';
 import UpcomingMeetings from './UpcomingMeetings';
 import PastMeetings from './PastMeetings';
 import SettingsForm from "./SettingsForm";
