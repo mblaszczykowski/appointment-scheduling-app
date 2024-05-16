@@ -27,13 +27,24 @@ import java.util.Date;
 public class TokenService {
     public static final long EXPIRATION_TIME_ACCESS = 900000;
     public static final long EXPIRATION_TIME_REFRESH = 3600000 * 24;
-    private final TokenDAO tokenDAO;
     private static Key jwtKey;
+    private final TokenDAO tokenDAO;
 
     @Autowired
     public TokenService(TokenDAO tokenDAO, @Value("${jwt.Key}") String secretKey) {
         this.tokenDAO = tokenDAO;
         jwtKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
+    public static String generateToken(long expirationDate, Integer userID) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Date expirationDateToken = new Date(currentTimeMillis + expirationDate);
+        String token = Jwts.builder()
+                .setSubject(String.valueOf(userID))
+                .setExpiration(expirationDateToken)
+                .signWith(jwtKey, SignatureAlgorithm.HS512)
+                .compact();
+        return token;
     }
 
     public void addToken(Integer userId, String tokenString) {
@@ -49,17 +60,6 @@ public class TokenService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Token [%s] not found".formatted(token))
                 );
-    }
-
-    public static String generateToken(long expirationDate, Integer userID) {
-        long currentTimeMillis = System.currentTimeMillis();
-        Date expirationDateToken = new Date(currentTimeMillis + expirationDate);
-        String token = Jwts.builder()
-                .setSubject(String.valueOf(userID))
-                .setExpiration(expirationDateToken)
-                .signWith(jwtKey, SignatureAlgorithm.HS512)
-                .compact();
-        return token;
     }
 
     public ResponseEntity<?> loginUser(String email, String password, UserService userService) {
@@ -139,10 +139,12 @@ public class TokenService {
                 .getBody();
         return Integer.parseInt(claims.getSubject());
     }
+
     @Transactional
     public void deleteToken(String tokenContent) {
         tokenDAO.deleteByContent(tokenContent);
     }
+
     @Transactional
     public void deleteAllTokens(Integer userID) {
         tokenDAO.deleteAllTokens(userID);

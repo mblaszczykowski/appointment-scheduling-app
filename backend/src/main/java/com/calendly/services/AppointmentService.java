@@ -41,6 +41,7 @@ public class AppointmentService {
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         return appointmentRepository.findByUserIdAndDate(userId, startOfDay, endOfDay);
     }
+
     public List<Appointment> getAppointmentsByUserId(Integer userId) {
         return appointmentRepository.findAll().stream()
                 .filter(appointment -> appointment.getUser().getId().equals(userId))

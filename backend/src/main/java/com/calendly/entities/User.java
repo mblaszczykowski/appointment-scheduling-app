@@ -106,16 +106,16 @@ public class User {
         return isActive;
     }
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public String getCalendarUrl() {
         return calendarUrl;
     }
 
     public void setCalendarUrl(String calendarUrl) {
         this.calendarUrl = calendarUrl;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
     public Integer getAvailableFromHour() {
@@ -142,7 +142,11 @@ public class User {
         this.availableDays = availableDays;
     }
 
-    public String getMeetingLink() {return meetingLink;}
+    public String getMeetingLink() {
+        return meetingLink;
+    }
 
-    public void setMeetingLink(String meetingLink) {this.meetingLink = meetingLink;}
+    public void setMeetingLink(String meetingLink) {
+        this.meetingLink = meetingLink;
+    }
 }

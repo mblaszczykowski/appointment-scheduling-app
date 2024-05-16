@@ -64,7 +64,7 @@ public class UserController {
             @RequestBody UserUpdateRequest request,
             HttpServletRequest httpRequest
     ) {
-           return userService.updateUser(uuid, request, httpRequest);
+        return userService.updateUser(uuid, request, httpRequest);
     }
 
     @PostMapping("/reset-pass")

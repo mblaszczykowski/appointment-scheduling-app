@@ -33,8 +33,8 @@ public class AppointmentController {
         // we allow anonymous users to create appointments
 
         if (appointmentDTO.startTime() == null || appointmentDTO.endTime() == null
-        || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())
-        || appointmentDTO.startTime().isAfter(appointmentDTO.endTime()) || userService.isNullOrEmpty(appointmentDTO.calendarUrl())) {
+                || userService.isNullOrEmpty(appointmentDTO.bookerName()) || userService.isNullOrEmpty(appointmentDTO.bookerEmail())
+                || appointmentDTO.startTime().isAfter(appointmentDTO.endTime()) || userService.isNullOrEmpty(appointmentDTO.calendarUrl())) {
             return new ResponseEntity<>("Invalid request parameters", HttpStatus.BAD_REQUEST);
         }
 
@@ -59,7 +59,7 @@ public class AppointmentController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAppointmentsByUserIdAndDate(@PathVariable Integer userId, @RequestParam @Nullable String date, HttpServletRequest request) {
-        if(date !=null) {
+        if (date != null) {
             LocalDate localDate = LocalDate.parse(date);
             List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
             return ResponseEntity.ok(appointments);

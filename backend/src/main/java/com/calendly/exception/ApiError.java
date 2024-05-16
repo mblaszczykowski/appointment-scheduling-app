@@ -15,20 +15,20 @@ public class ApiError {
         return type;
     }
 
-    public String getField() {
-        return field;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public void setType(String type) {
         this.type = type;
     }
 
+    public String getField() {
+        return field;
+    }
+
     public void setField(String field) {
         this.field = field;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void setMessage(String message) {

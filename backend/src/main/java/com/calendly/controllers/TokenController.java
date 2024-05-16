@@ -21,13 +21,13 @@ public class TokenController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest requestBody) {
-        if((requestBody.email()==null && requestBody.password()==null)||(requestBody.email()=="" && requestBody.password()=="")){
+        if ((requestBody.email() == null && requestBody.password() == null) || (requestBody.email() == "" && requestBody.password() == "")) {
             ApiError error = new ApiError("Validation", "Both", "Missing data");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        } else if(requestBody.email()==null || requestBody.email()==""){
+        } else if (requestBody.email() == null || requestBody.email() == "") {
             ApiError error = new ApiError("Validation", "E-mail", "Missing e-mail");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        } else if(requestBody.password() == null || requestBody.password() == ""){
+        } else if (requestBody.password() == null || requestBody.password() == "") {
             ApiError error = new ApiError("Validation", "Password", "Missing password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } else {
@@ -37,10 +37,10 @@ public class TokenController {
 
     @GetMapping("refresh")
     public ResponseEntity<?> refresh(@CookieValue(value = "refreshToken", defaultValue = "") String refreshToken) {
-        if(refreshToken == null){
+        if (refreshToken == null) {
             ApiError error = new ApiError("Refresh", null, "No token");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }else{
+        } else {
             return tokenService.refreshToken(refreshToken);
         }
     }

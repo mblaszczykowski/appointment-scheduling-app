@@ -324,7 +324,7 @@ public class UserService {
                         new ResourceNotFoundException("Customer with calendarUrl [%s] not found".formatted(calendarUrl))
                 );
     }
-      
+
     public ResponseEntity<?> getUserDetails(Integer uuid, UserService userService, HttpServletRequest request) {
         //Check if user is logged in
         ResponseEntity<?> checkAuthorizationResult = checkAuthorization(request);
@@ -334,8 +334,8 @@ public class UserService {
         var user = userService.getUserById(uuid);
         var userId = userService.getUserIDFromAccessToken(request);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
-                                    user.getEmail(), user.getPassword(), user.getCalendarUrl(),
-                                    user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
+                user.getEmail(), user.getPassword(), user.getCalendarUrl(),
+                user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDTO);

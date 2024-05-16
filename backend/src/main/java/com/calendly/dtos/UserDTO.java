@@ -1,15 +1,15 @@
 package com.calendly.dtos;
 
 public class UserDTO {
-    private Integer id;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String password;
-    private String calendarUrl;
-    private Integer availableFromHour;
-    private Integer availableToHour;
-    private String availableDays;
+    private final Integer id;
+    private final String firstname;
+    private final String lastname;
+    private final String email;
+    private final String password;
+    private final String calendarUrl;
+    private final Integer availableFromHour;
+    private final Integer availableToHour;
+    private final String availableDays;
 
     public UserDTO(Integer id, String firstname, String lastname,
                    String email, String password, String calendarUrl,
@@ -40,10 +40,25 @@ public class UserDTO {
     public String getEmail() {
         return email;
     }
-    public String getPassword() { return password; }
-    public String getCalendarUrl() { return calendarUrl; }
-    public Integer getAvailableFromHour() { return availableFromHour; }
-    public Integer getAvailableToHour() { return availableToHour; }
-    public String getAvailableDays() { return availableDays; }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCalendarUrl() {
+        return calendarUrl;
+    }
+
+    public Integer getAvailableFromHour() {
+        return availableFromHour;
+    }
+
+    public Integer getAvailableToHour() {
+        return availableToHour;
+    }
+
+    public String getAvailableDays() {
+        return availableDays;
+    }
 
 }
