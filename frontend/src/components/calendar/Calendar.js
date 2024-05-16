@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import React, {useEffect, useState} from "react";
-import {generateDate, months} from "../util/calendar";
-import cn from "../util/cn";
+import {generateDate, months} from "../../util/calendar";
+import cn from "../../util/cn";
 import {GrFormNext, GrFormPrevious} from "react-icons/gr";
 import BookMeetingForm from './BookMeetingForm';
 import {useNavigate, useParams} from "react-router-dom";

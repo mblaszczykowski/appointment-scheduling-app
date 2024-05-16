@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import css from './RegisterForm.module.css';
+import css from '../RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
-import {getUserIdFromToken, request, setAuthHeader} from "../util/axios_helper";
+import {getUserIdFromToken, request, setAuthHeader} from "../../util/axios_helper";
 
 const validationSchemas = [
     Yup.object().shape({

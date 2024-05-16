@@ -2,16 +2,16 @@ import './App.css';
 import './transitions.css';
 import Footer from "./components/Footer";
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
-import Calendar from "./components/Calendar";
+import Calendar from "./components/calendar/Calendar";
 import Header from "./components/Header";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import WelcomeContent from "./components/WelcomeContent";
 import {setAuthHeader} from "./util/axios_helper";
 import React, {useState} from "react";
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import ErrorPage from "./components/ErrorPage";
-import SettingsSuccess from "./components/SettingsSuccess";
-import BookingSuccess from "./components/BookingSuccess";
+import SettingsSuccess from "./components/dashboard/SettingsSuccess";
+import BookingSuccess from "./components/calendar/BookingSuccess";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
