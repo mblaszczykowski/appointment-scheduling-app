@@ -116,6 +116,15 @@ function RegisterForm({onRegister, onToggleForm}) {
         setCurrentStep((prev) => prev - 1);
     };
 
+    const selectWorkingDays = (setFieldValue) => {
+        setFieldValue('availableDays', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
+    };
+
+    const selectWorkingHours = (setFieldValue) => {
+        setFieldValue('availableFromHour', 9);
+        setFieldValue('availableToHour', 17);
+    };
+
     const steps = [
         {id: 0, title: 'Tell us a bit about yourself'},
         {id: 1, title: 'Set the calendar'},
@@ -140,19 +149,15 @@ function RegisterForm({onRegister, onToggleForm}) {
                 validateOnChange={false}
                 validateOnBlur={false}
                 onSubmit={(values, {setSubmitting}) => {
-                    // Convert hours to integers
                     values.availableFromHour = parseInt(values.availableFromHour, 10);
                     values.availableToHour = parseInt(values.availableToHour, 10);
-
-                    // Join the availableDays array into a comma-separated string
                     values.availableDays = values.availableDays.join(',');
 
-                    console.log(values); // You can see the modified values in the console
                     handleRegister(values);
                     setSubmitting(false);
                 }}
             >
-                {({values, validateForm, setTouched}) => (
+                {({errors, validateForm, setTouched, setFieldValue}) => (
                     <Form className="max-w-sm mx-auto">
                         <TransitionGroup>
                             <CSSTransition
@@ -164,9 +169,12 @@ function RegisterForm({onRegister, onToggleForm}) {
                                     {currentStep === 0 && (
                                         <div>
                                             <div className="py-3">
-                                                <h1 className="block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
+                                                <h1 className="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
                                                     Get started
                                                 </h1>
+                                                <h1 className="block text-xl mt-4 font-bold text-gray-600 dark:text-white">Create
+                                                    a free account</h1>
+
                                             </div>
                                             <div className="flex items-start mb-6">
                                                 <label
@@ -183,9 +191,9 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 </label>
                                             </div>
                                             <div className="mb-3">
-                                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[0].title}</h1>
+                                                <h1 className="block text-lg mt-1 font-bold text-gray-600 dark:text-white">{steps[0].title}</h1>
                                             </div>
-                                            <div className="mb-5">
+                                            <div className={`mb-3 ${errors.firstname ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     type="text"
                                                     name="firstname"
@@ -198,7 +206,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                     className={css.error}
                                                 />
                                             </div>
-                                            <div className="mb-5">
+                                            <div className={`mb-3 ${errors.lastname ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     type="text"
                                                     name="lastname"
@@ -211,7 +219,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                     className={css.error}
                                                 />
                                             </div>
-                                            <div className="mb-5">
+                                            <div className={`mb-3 ${errors.email ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     type="text"
                                                     name="email"
@@ -224,7 +232,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                     className={css.error}
                                                 />
                                             </div>
-                                            <div className="mb-5">
+                                            <div className={`mb-3 ${errors.password ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                                                     type="password"
@@ -255,7 +263,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                             <div className="mb-3">
                                                 <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[1].title}</h1>
                                             </div>
-                                            <div className="mb-5">
+                                            <div className={`mb-3 ${errors.calendarUrl ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     type="text"
                                                     name="calendarUrl"
@@ -267,6 +275,8 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                     component="span"
                                                     className={css.error}
                                                 />
+                                            </div>
+                                            <div className={`mb-3 ${errors.meetingLink ? "mb-1" : "mb-5"}`}>
                                                 <Field
                                                     type="text"
                                                     name="meetingLink"
@@ -303,7 +313,7 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[2].title}</h1>
                                             </div>
                                             <div className="mb-3">
-                                                <h1 className="block text-md text-gray-800 dark:text-white">Available
+                                                <h1 className="block text-md font-medium text-gray-800 dark:text-white">Available
                                                     hours:</h1>
                                             </div>
                                             <div className="flex justify-between items-center my-4">
@@ -325,11 +335,20 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 <ErrorMessage name="availableToHour" component="div"
                                                               className={css.error}/>
                                             </div>
-                                            <div className="mt-3">
-                                                <h1 className="block text-md text-gray-800 dark:text-white">Available
+                                            <div className="mt-3 flex space-x-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => selectWorkingHours(setFieldValue)}
+                                                    className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Select 9-17
+                                                </button>
+                                            </div>
+                                            <div className="mt-5">
+                                                <h1 className="block text-md font-medium text-gray-800 dark:text-white">Available
                                                     days:</h1>
                                             </div>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 py-3">
                                                 {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
                                                     <label key={day} className="flex items-center space-x-2">
                                                         <Field type="checkbox" name="availableDays" value={day}
@@ -339,8 +358,17 @@ function RegisterForm({onRegister, onToggleForm}) {
                                                 ))}
                                             </div>
                                             <ErrorMessage name="availableDays" component="div" className={css.error}/>
+                                            <div className="mt-1 flex space-x-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => selectWorkingDays(setFieldValue)}
+                                                    className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    Select Mon-Fri
+                                                </button>
+                                            </div>
 
-                                            <div className="relative w-full h-16">
+                                            <div className="relative w-full h-16 mt-8">
                                                 <button
                                                     type="button"
                                                     onClick={handlePrev}
