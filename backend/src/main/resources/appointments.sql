@@ -13,3 +13,31 @@ INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_t
 INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id) VALUES (13, '2024-05-14 17:45:00.000000', 'email8@gmail.com', 'James Wilson', '2024-05-14 20:30:00.000000', '2024-05-14 20:00:00.000000', 1);
 INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id) VALUES (14, '2024-05-14 17:50:00.000000', 'email9@gmail.com', 'Emily Davis', '2024-05-14 21:00:00.000000', '2024-05-14 20:30:00.000000', 1);
 INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id) VALUES (15, '2024-05-14 17:55:00.000000', 'email10@gmail.com', 'David Anderson', '2024-05-14 21:30:00.000000', '2024-05-14 21:00:00.000000', 1);
+
+
+
+
+
+
+-- Today's appointments (16 May 2024)
+INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id)
+VALUES
+    (16, '2024-04-14 14:53:58.000000', 'booker1@gmail.com', 'booker1', '2024-05-16 14:54:21.000000', '2024-05-16 14:54:22.000000', 1);
+
+-- Next days' appointments
+INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id)
+VALUES
+    (17, '2024-04-15 14:54:35.000000', 'booker2@gmail.com', 'booker2', '2024-05-17 14:54:21.000000', '2024-05-17 14:54:22.000000', 1);
+
+-- Next weeks' appointments
+INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id)
+VALUES
+    (18, '2024-04-16 16:57:06.000000', 'booker3@gmail.com', 'Michał Błaszczykowski', '2024-05-24 18:00:00.000000', '2024-05-24 17:00:00.000000', 1),
+    (19, '2024-06-14 16:58:39.000000', 'booker4@gmail.com', 'Misha Iereschenko', '2024-05-31 16:00:00.000000', '2024-05-31 15:30:00.000000', 1);
+
+-- Past appointments
+INSERT INTO public.appointments (id, booked_at, booker_email, booker_name, end_time, start_time, user_id)
+VALUES
+    (20, '2024-06-18 17:06:28.000000', 'booker5@gmail.com', 'Daniel Siara', '2024-05-14 17:15:00.000000', '2024-05-14 17:00:00.000000', 1),
+    (21, '2024-06-19 17:10:00.000000', 'booker6@gmail.com', 'John Doe', '2024-05-13 17:30:00.000000', '2024-05-13 17:00:00.000000', 1),
+    (22, '2024-07-20 17:15:00.000000', 'booker7@gmail.com', 'Jane Smith', '2024-05-12 17:45:00.000000', '2024-05-12 17:15:00.000000', 1);

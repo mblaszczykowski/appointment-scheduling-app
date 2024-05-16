@@ -47,9 +47,26 @@ export default class Dashboard extends Component {
             appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
+        // Get today's date
+        const today = dayjs().startOf('day');
+        const endOfWeek = today.endOf('week');
+        const endOfMonth = today.endOf('month');
+        const endOfNextMonth = today.add(1, 'month').endOf('month');
+
+        // Group appointments
+        const todayAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isSame(today, 'day'));
+        const thisWeekAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isAfter(today, 'day') && dayjs(appointment.startTime).isBefore(endOfWeek, 'day'));
+        const thisMonthAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isAfter(endOfWeek, 'day') && dayjs(appointment.startTime).isBefore(endOfMonth, 'day'));
+        const nextMonthAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isAfter(endOfMonth, 'day') && dayjs(appointment.startTime).isBefore(endOfNextMonth, 'day'));
+        const laterAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isAfter(endOfNextMonth, 'day'));
+        const pastAppointments = filteredData.filter(appointment => dayjs(appointment.startTime).isBefore(today, 'day'));
+
         if (selectedTab === 'upcoming') {
             return (
                 <div>
+                    <h1 className="mt-4 mb-3 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
+                        Upcoming meetings
+                    </h1>
                     <div className="mb-4">
                         <label htmlFor="icon" className="sr-only">
                             Search
@@ -66,8 +83,8 @@ export default class Dashboard extends Component {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                 >
-                                    <circle cx={11} cy={11} r={8} />
-                                    <path d="m21 21-4.3-4.3" />
+                                    <circle cx={11} cy={11} r={8}/>
+                                    <path d="m21 21-4.3-4.3"/>
                                 </svg>
                             </div>
                             <input
@@ -82,47 +99,114 @@ export default class Dashboard extends Component {
                         </div>
                     </div>
 
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2">
-                        Today
-                    </h3>
-
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredData.map((appointment) => (
-                            <div
-                                key={appointment.id}
-                                className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
-                            >
-                                <div className="p-4 md:p-6">
-                                    <span className="block mb-1 text-xs font-semibold uppercase text-blue-600 dark:text-blue-500">
-                                        {dayjs(appointment.startTime).format('MMMM D, YYYY')}
-                                    </span>
-                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white">
-                                        {appointment.bookerName}
-                                    </h3>
-                                    <p className="mt-3 text-gray-500 dark:text-neutral-500">
-                                        Meeting note? To add - booker should have option to add it
-                                    </p>
-                                </div>
-                                <div className="mt-auto flex border-t border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-                                    <div className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                        Start time: {dayjs(appointment.startTime).format('h:mm A')}
-                                    </div>
-                                    <div className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                        Duration: {dayjs(appointment.endTime).diff(dayjs(appointment.startTime), 'minute')} mins
-                                    </div>
-                                </div>
+                    {todayAppointments.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2">
+                                Today
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {todayAppointments.map(appointment => (
+                                    <AppointmentCard key={appointment.id} appointment={appointment}/>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </>
+                    )}
+
+                    {thisWeekAppointments.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2 mt-4">
+                                This Week
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {thisWeekAppointments.map(appointment => (
+                                    <AppointmentCard key={appointment.id} appointment={appointment}/>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {thisMonthAppointments.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2 mt-4">
+                                This Month
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {thisMonthAppointments.map(appointment => (
+                                    <AppointmentCard key={appointment.id} appointment={appointment}/>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {nextMonthAppointments.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2 mt-4">
+                                Next Month
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {nextMonthAppointments.map(appointment => (
+                                    <AppointmentCard key={appointment.id} appointment={appointment}/>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {laterAppointments.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white ml-3 mb-2 mt-4">
+                                Later
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {laterAppointments.map(appointment => (
+                                    <AppointmentCard key={appointment.id} appointment={appointment}/>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             );
         } else if (selectedTab === 'past') {
             return (
                 <div>
-                    <h1 className="mt-4 mb-5 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
+                    <h1 className="mt-4 mb-3 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
                         Past meetings
                     </h1>
-                    <p className="text-gray-800 dark:text-neutral-400">Past meetings goes here...</p>
+                    <div className="mb-5">
+                        <label htmlFor="icon" className="sr-only">
+                            Search
+                        </label>
+                        <div className="relative min-w-72 md:min-w-80">
+                            <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-3">
+                                <svg
+                                    className="flex-shrink-0 h-5 w-5 text-gray-400 dark:text-neutral-400"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <circle cx={11} cy={11} r={8}/>
+                                    <path d="m21 21-4.3-4.3"/>
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                id="icon"
+                                name="icon"
+                                className="py-2 pl-10 pr-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                placeholder="Search by booker name"
+                                value={searchQuery}
+                                onChange={this.handleSearchChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {pastAppointments.map(appointment => (
+                            <AppointmentCard key={appointment.id} appointment={appointment}/>
+                        ))}
+                    </div>
                 </div>
             );
         } else if (selectedTab === 'settings') {
@@ -139,6 +223,7 @@ export default class Dashboard extends Component {
 
     render() {
         const { selectedTab } = this.state;
+        const currentDate = dayjs().format('dddd, D MMMM');
 
         return (
             <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent min-h-screen">
@@ -149,7 +234,7 @@ export default class Dashboard extends Component {
                             Hello, <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
                         </h1>
                         <h1 className="ml-4 mb-8 block text-xl font-bold text-gray-800 sm:text-4xl md:text-xl dark:text-white">
-                            Today is friday, 12 June
+                            Today is {currentDate}
                         </h1>
 
                         {/* Sidebar and Main Content */}
@@ -262,3 +347,27 @@ export default class Dashboard extends Component {
         );
     }
 }
+
+const AppointmentCard = ({ appointment }) => (
+    <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
+        <div className="p-4 md:p-6">
+            <span className="block mb-1 text-xs font-semibold uppercase text-blue-600 dark:text-blue-500">
+                {dayjs(appointment.startTime).format('MMMM D, YYYY')}
+            </span>
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white">
+                {appointment.bookerName}
+            </h3>
+            <p className="mt-3 text-gray-500 dark:text-neutral-500">
+                Meeting note? To add - booker should have option to add it
+            </p>
+        </div>
+        <div className="mt-auto flex border-t border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+            <div className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                Start time: {dayjs(appointment.startTime).format('h:mm A')}
+            </div>
+            <div className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                Duration: {dayjs(appointment.endTime).diff(dayjs(appointment.startTime), 'minute')} mins
+            </div>
+        </div>
+    </div>
+);
