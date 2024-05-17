@@ -38,7 +38,7 @@ const CalendarDays = ({ days }) => (
     </div>
 );
 
-const CalendarGrid = ({ dates, selectDate, setSelectDate }) => (
+const CalendarGrid = ({ dates, selectDate, setSelectDate, resetBookingForm }) => (
     <div className="grid grid-cols-7">
         {dates.map(({ date, currentMonth, today }, index) => (
             <div key={index} className="p-2 text-center h-14 grid place-content-center text-sm border-t">
@@ -49,7 +49,10 @@ const CalendarGrid = ({ dates, selectDate, setSelectDate }) => (
                         selectDate.toDate().toDateString() === date.toDate().toDateString() ? "bg-black text-white" : "",
                         "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none"
                     )}
-                    onClick={() => setSelectDate(date)}
+                    onClick={() => {
+                        setSelectDate(date);
+                        resetBookingForm();
+                    }}
                 >
                     {date.date()}
                 </h1>
@@ -206,6 +209,11 @@ const Calendar = () => {
         }
     };
 
+    const resetBookingForm = () => {
+        setShowBookingForm(false);
+        setSelectedTimeSlot(null);
+    };
+
     return (
         <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent">
             <div className="relative overflow-hidden">
@@ -234,7 +242,7 @@ const Calendar = () => {
                             <div className="w-full h-96 flex-1">
                                 <CalendarHeader today={today} setToday={setToday} currentDate={currentDate} />
                                 <CalendarDays days={days} />
-                                <CalendarGrid dates={generateDate(today.month(), today.year())} selectDate={selectDate} setSelectDate={setSelectDate} />
+                                <CalendarGrid dates={generateDate(today.month(), today.year())} selectDate={selectDate} setSelectDate={setSelectDate} resetBookingForm={resetBookingForm}/>
                             </div>
                             <Schedule
                                 selectDate={selectDate}
