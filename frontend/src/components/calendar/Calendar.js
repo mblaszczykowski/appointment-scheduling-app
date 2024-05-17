@@ -194,6 +194,12 @@ const Calendar = () => {
                 bookerName: name,
                 bookerEmail: email
             });
+            await axios.post(`/api/calendar/booking-confirmation`, {
+                sendTo: email,
+                date: startTime,
+                calendarUrl: calendarUrl,
+                bookerName: name
+            })
             navigate('/booking-success');
         } catch (error) {
             console.error('Error booking appointment', error);
