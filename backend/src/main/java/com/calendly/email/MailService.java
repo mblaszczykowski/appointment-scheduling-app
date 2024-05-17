@@ -84,17 +84,42 @@ public class MailService {
         }
     }
 
-    public void sendEmail(BookingMailDTO bookingMailDTO, User calendarOwner) {
+    public void sendEmail(BookingMailDTO bookingMailDTO, User calendarOwner, Boolean isBooker) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = LocalDateTime.parse(bookingMailDTO.date()).format(formatter);
-        String body = String.format("Hello, %s\n\nYour meeting with %s will take place on %s at %s CET.\n\nRegards,\nTeam meetly",
-                bookingMailDTO.sendTo(),
-                calendarOwner.getFullName(),
-                formattedDateTime,
-                calendarOwner.getMeetingLink());
+        String body;
         SimpleMailMessage msg = new SimpleMailMessage();
+        if (isBooker) {
+            body = String.format("""
+                            Hello, %s
+
+                            Your meeting with %s will take place on %s CET at %s .
+
+                            Regards,
+                            Team Meetly""",
+                    bookingMailDTO.bookerName(),
+                    calendarOwner.getFullName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+            msg.setTo(bookingMailDTO.sendTo());
+        }
+        else {
+            body =String.format("""
+                            Hello, %s
+
+                            You have a new meeting with %s on %s CET at %s .
+
+                            You can see all your meetings here: http://localhost:3000/dashboard
+                            Regards,
+                            Team Meetly""",
+                    calendarOwner.getFullName(),
+                    bookingMailDTO.bookerName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+            msg.setTo(calendarOwner.getEmail());
+        }
+
         msg.setFrom("meetly@gmail.com");
-        msg.setTo(bookingMailDTO.sendTo());
         msg.setSubject("Meeting confirmation");
         msg.setText(body);
         try {
