@@ -1,5 +1,6 @@
 package com.calendly.email;
 
+import com.calendly.dtos.BookingMailDTO;
 import com.calendly.entities.PasswordResetToken;
 import com.calendly.entities.User;
 import com.calendly.repositories.TokenResetRepository;
@@ -11,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Component
@@ -46,9 +48,9 @@ public class MailService {
     }
 
     public void sendEmail(User user, String emailType, @Nullable String token) {
-        String path = "";
-        String subject = "";
-        String actionText = "";
+        String path;
+        String subject;
+        String actionText;
 
         switch (emailType.toLowerCase()) {
             case "activate":
@@ -80,5 +82,26 @@ public class MailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendEmail(BookingMailDTO bookingMailDTO, User calendarOwner) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = LocalDateTime.parse(bookingMailDTO.date()).format(formatter);
+        String body = String.format("Hello, %s\n\nYour meeting with %s will take place on %s at %s CET.\n\nRegards,\nTeam meetly",
+                bookingMailDTO.sendTo(),
+                calendarOwner.getFullName(),
+                formattedDateTime,
+                calendarOwner.getMeetingLink());
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom("meetly@gmail.com");
+        msg.setTo(bookingMailDTO.sendTo());
+        msg.setSubject("Meeting confirmation");
+        msg.setText(body);
+        try {
+            javaMailSender.send(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
