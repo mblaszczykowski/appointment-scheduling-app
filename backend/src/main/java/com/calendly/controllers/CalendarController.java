@@ -34,7 +34,8 @@ public class CalendarController {
     public ResponseEntity<?> bookingConfirmation(@RequestBody BookingMailDTO bookingMailDTO) {
         var calendarOwner = userService.getUserIdFromCalendarUrl(bookingMailDTO.calendarUrl());
         try {
-            mailService.sendEmail(bookingMailDTO, calendarOwner);
+            mailService.sendEmail(bookingMailDTO, calendarOwner, true);
+            mailService.sendEmail(bookingMailDTO, calendarOwner, false);
             return ResponseEntity.ok().build();
         }
         catch (Exception e) {
