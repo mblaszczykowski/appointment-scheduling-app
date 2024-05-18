@@ -39,7 +39,8 @@ export default function BookMeetingForm({ onSubmit, onCancel }) {
                 </div>
             </div>
             <button type="submit" value="Submit"
-                    className="mt-4 mr-8 cursor-pointer rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit
+                    className="mt-4 mr-8 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+            >Submit
             </button>
             <button type="button" onClick={onCancel} className="text-sm font-semibold leading-6 text-gray-900">Cancel
             </button>

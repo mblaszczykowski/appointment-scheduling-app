@@ -1,6 +1,7 @@
 package com.calendly.controllers;
 
 import com.calendly.dtos.AppointmentDTO;
+import com.calendly.email.MailService;
 import com.calendly.entities.Appointment;
 import com.calendly.services.AppointmentService;
 import com.calendly.services.UserService;
@@ -21,11 +22,13 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final UserService userService;
+    private final MailService mailService;
 
     @Autowired
-    public AppointmentController(AppointmentService appointmentService, UserService userService) {
+    public AppointmentController(AppointmentService appointmentService, UserService userService, MailService mailService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @PostMapping
@@ -51,6 +54,8 @@ public class AppointmentController {
                 appointmentDTO.bookerEmail(),
                 appointmentDTO.meetingNote()
         );
+        mailService.sendEmail(appointmentDTO, user, true);
+        mailService.sendEmail(appointmentDTO, user, false);
 
         return new ResponseEntity<>("Appointment created successfully", HttpStatus.CREATED);
     }

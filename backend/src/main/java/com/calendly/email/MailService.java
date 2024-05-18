@@ -1,6 +1,6 @@
 package com.calendly.email;
 
-import com.calendly.dtos.BookingMailDTO;
+import com.calendly.dtos.AppointmentDTO;
 import com.calendly.entities.PasswordResetToken;
 import com.calendly.entities.User;
 import com.calendly.repositories.TokenResetRepository;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -86,9 +87,10 @@ public class MailService {
         }
     }
 
-    public void sendEmail(BookingMailDTO bookingMailDTO, User calendarOwner, Boolean isBooker) {
+    @Async
+    public void sendEmail(AppointmentDTO appointmentDTO, User calendarOwner, Boolean isBooker) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDateTime = LocalDateTime.parse(bookingMailDTO.date()).format(formatter);
+        String formattedDateTime = appointmentDTO.startTime().format(formatter);
         String textBody;
         String htmlBody;
 
@@ -103,11 +105,11 @@ public class MailService {
 
                         Regards,
                         Team Meetly""",
-                    bookingMailDTO.bookerName(),
+                    appointmentDTO.bookerName(),
                     calendarOwner.getFullName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    bookingMailDTO.meetingNote());
+                    appointmentDTO.meetingNote());
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -129,11 +131,11 @@ public class MailService {
                         </html>
                         """,
                     getCss(),
-                    bookingMailDTO.bookerName(),
+                    appointmentDTO.bookerName(),
                     calendarOwner.getFullName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    bookingMailDTO.meetingNote());
+                    appointmentDTO.meetingNote());
 
         } else {
             textBody = String.format("""
@@ -148,10 +150,10 @@ public class MailService {
                         Regards,
                         Team Meetly""",
                     calendarOwner.getFullName(),
-                    bookingMailDTO.bookerName(),
+                    appointmentDTO.bookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    bookingMailDTO.meetingNote());
+                    appointmentDTO.meetingNote());
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -175,10 +177,10 @@ public class MailService {
                         """,
                     getCss(),
                     calendarOwner.getFullName(),
-                    bookingMailDTO.bookerName(),
+                    appointmentDTO.bookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    bookingMailDTO.meetingNote());
+                    appointmentDTO.meetingNote());
         }
 
         try {
@@ -186,7 +188,7 @@ public class MailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setFrom("Meetly <app.meetly@gmail.com>");
-            helper.setTo(isBooker ? bookingMailDTO.sendTo() : calendarOwner.getEmail());
+            helper.setTo(isBooker ? appointmentDTO.bookerEmail() : calendarOwner.getEmail());
             helper.setSubject("Meeting confirmation");
             helper.setText(textBody, htmlBody);
 
