@@ -82,13 +82,13 @@ const Schedule = ({
 
     return (
         <div className="h-96 w-full sm:px-5 flex-1">
-            <h1 className="font-semibold mb-3">Schedule for {selectDate.toDate().toDateString()}</h1>
+            <h1 className="font-semibold mb-1">Schedule for {selectDate.toDate().toDateString()}</h1>
             {isPastDate ? (
                 <p className="text-gray-400">Can't book a date in the past.</p>
             ) : showBookingForm ? (
                 <div>
-                    <p className="font-semibold mb-3">
-                        Selected Time: {selectedTimeSlot}:00 - {selectedTimeSlot + 1}:00
+                    <p className="font-medium mb-3 text-sm">
+                        Selected time: {selectedTimeSlot}:00 - {selectedTimeSlot + 1}:00
                     </p>
                     <BookMeetingForm
                         onSubmit={handleFormSubmit}
