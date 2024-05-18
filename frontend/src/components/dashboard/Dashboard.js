@@ -4,7 +4,7 @@ import { getUserIdFromToken, request, setAuthHeader } from '../../util/axios_hel
 import dayjs from 'dayjs';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Dashboard.css'; // Make sure to import the CSS file for animations
-import { HomeIcon, CalendarIcon, UserIcon } from '../Icons';
+import { HomeIcon, CalendarIcon, UserIconDashboard } from '../Icons';
 import UpcomingMeetings from './UpcomingMeetings';
 import PastMeetings from './PastMeetings';
 import SettingsForm from "./SettingsForm";
@@ -77,12 +77,13 @@ export default function Dashboard() {
                 return <PastMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.past} />;
             case 'settings':
                 return (
-                    <div>
+                    <div className="flex flex-col items-center">
                         <h1 className="mt-4 mb-5 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
                             Update your account
                         </h1>
-                        <SettingsForm />
+                        <SettingsForm/>
                     </div>
+
                 );
             default:
                 return null;
@@ -92,8 +93,9 @@ export default function Dashboard() {
     const currentDate = dayjs().format('dddd, D MMMM');
 
 
-        return (
-            <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent min-h-screen">
+    return (
+        <div
+            className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent min-h-screen">
                 <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
                     <div className="max-w-6xl mx-auto">
                         <h1 className="mb-2 ml-4 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-3xl dark:text-white">
@@ -129,7 +131,7 @@ export default function Dashboard() {
                                 onClick={() => setSelectedTab('settings')}
                                 className={`w-full flex items-center gap-x-3.5 py-2 mt-1 md-1 px-2.5 text-md rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${selectedTab === 'settings' ? 'bg-gray-100 dark:bg-neutral-700' : 'text-neutral-700 dark:text-white'}`}
                             >
-                                <UserIcon/>
+                                <UserIconDashboard/>
                                 Profile settings
                             </button>
                             <div className="mb-5"></div>

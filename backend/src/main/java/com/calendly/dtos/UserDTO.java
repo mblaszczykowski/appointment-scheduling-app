@@ -7,12 +7,13 @@ public class UserDTO {
     private final String email;
     private final String password;
     private final String calendarUrl;
+    private final String meetingLink;
     private final Integer availableFromHour;
     private final Integer availableToHour;
     private final String availableDays;
 
     public UserDTO(Integer id, String firstname, String lastname,
-                   String email, String password, String calendarUrl,
+                   String email, String password, String calendarUrl, String meetingLink,
                    Integer availableFromHour, Integer availableToHour, String availableDays) {
         this.id = id;
         this.firstname = firstname;
@@ -20,6 +21,7 @@ public class UserDTO {
         this.email = email;
         this.password = password;
         this.calendarUrl = calendarUrl;
+        this.meetingLink = meetingLink;
         this.availableFromHour = availableFromHour;
         this.availableToHour = availableToHour;
         this.availableDays = availableDays;
@@ -47,6 +49,10 @@ public class UserDTO {
 
     public String getCalendarUrl() {
         return calendarUrl;
+    }
+
+    public String getMeetingLink() {
+        return meetingLink;
     }
 
     public Integer getAvailableFromHour() {

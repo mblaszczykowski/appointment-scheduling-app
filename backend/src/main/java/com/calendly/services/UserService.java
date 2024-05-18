@@ -200,6 +200,12 @@ public class UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Customer with id [%s] not found".formatted(uuid))
                 );
+
+        if (userUpdateRequest.password() != null) {
+            var generatedSecuredPasswordHash = BCrypt.hashpw(userUpdateRequest.password(), BCrypt.gensalt(12));
+            updateIfNotNull(user::setPassword, generatedSecuredPasswordHash);
+        }
+
         updateIfNotNull(user::setFirstname, userUpdateRequest.firstname());
         updateIfNotNull(user::setLastname, userUpdateRequest.lastname());
         updateIfNotNull(user::setEmail, userUpdateRequest.email());
@@ -334,7 +340,7 @@ public class UserService {
         var user = userService.getUserById(uuid);
         var userId = userService.getUserIDFromAccessToken(request);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
-                user.getEmail(), user.getPassword(), user.getCalendarUrl(),
+                user.getEmail(), user.getPassword(), user.getCalendarUrl(), user.getMeetingLink(),
                 user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
