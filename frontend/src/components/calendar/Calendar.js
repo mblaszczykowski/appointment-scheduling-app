@@ -202,7 +202,8 @@ const Calendar = () => {
                 sendTo: email,
                 date: startTime,
                 calendarUrl: calendarUrl,
-                bookerName: name
+                bookerName: name,
+                meetingNote: notes
             });
             navigate('/booking-success');
         } catch (error) {
