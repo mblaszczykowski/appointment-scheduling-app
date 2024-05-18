@@ -119,7 +119,7 @@ public class MailService {
             msg.setTo(calendarOwner.getEmail());
         }
 
-        msg.setFrom("meetly@gmail.com");
+        msg.setFrom("Meetly <app.meetly@gmail.com>");
         msg.setSubject("Meeting confirmation");
         msg.setText(body);
         try {
