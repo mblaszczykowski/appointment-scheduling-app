@@ -39,10 +39,7 @@ public class AppointmentController {
         }
 
         // TODO: check if this date is not already booked
-
-
         // w przyszlosci mozna by najpierw potwierdzic mailem spotkanie i dopiero je zabookować
-
 
         var user = userService.getUserIdFromCalendarUrl(appointmentDTO.calendarUrl());
 
@@ -51,7 +48,8 @@ public class AppointmentController {
                 appointmentDTO.startTime(),
                 appointmentDTO.endTime(),
                 appointmentDTO.bookerName(),
-                appointmentDTO.bookerEmail()
+                appointmentDTO.bookerEmail(),
+                appointmentDTO.meetingNote()
         );
 
         return new ResponseEntity<>("Appointment created successfully", HttpStatus.CREATED);

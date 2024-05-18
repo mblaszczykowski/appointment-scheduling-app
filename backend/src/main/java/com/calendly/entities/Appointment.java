@@ -30,15 +30,19 @@ public class Appointment {
     @Column(nullable = true)
     private LocalDateTime bookedAt = LocalDateTime.now();
 
+    @Column(nullable = true)
+    private String meetingNote;
+
     public Appointment() {
     }
 
-    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime, String bookerName, String bookerEmail) {
+    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime, String bookerName, String bookerEmail, String meetingNote) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
         this.bookerName = bookerName;
         this.bookerEmail = bookerEmail;
+        this.meetingNote = meetingNote;
     }
 
     public Integer getId() {
@@ -95,5 +99,13 @@ public class Appointment {
 
     public void setBookedAt(LocalDateTime bookedAt) {
         this.bookedAt = bookedAt;
+    }
+
+    public String getMeetingNote() {
+        return meetingNote;
+    }
+
+    public void setMeetingNote(String meetingNote) {
+        this.meetingNote = meetingNote;
     }
 }

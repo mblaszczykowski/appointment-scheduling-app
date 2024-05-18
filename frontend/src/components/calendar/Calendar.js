@@ -183,7 +183,7 @@ const Calendar = () => {
         setShowBookingForm(true);
     };
 
-    const handleFormSubmit = async (name, email) => {
+    const handleFormSubmit = async (name, email, notes) => {
         const formatTime = (time) => time.toString().padStart(2, '0');
 
         const startTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot)}:00:00`;
@@ -195,14 +195,15 @@ const Calendar = () => {
                 startTime: startTime,
                 endTime: endTime,
                 bookerName: name,
-                bookerEmail: email
+                bookerEmail: email,
+                meetingNote: notes
             });
             await axios.post(`/api/calendar/booking-confirmation`, {
                 sendTo: email,
                 date: startTime,
                 calendarUrl: calendarUrl,
                 bookerName: name
-            })
+            });
             navigate('/booking-success');
         } catch (error) {
             console.error('Error booking appointment', error);

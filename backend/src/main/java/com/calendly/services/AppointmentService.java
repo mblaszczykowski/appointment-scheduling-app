@@ -30,9 +30,9 @@ public class AppointmentService {
         this.userRepository = userRepository;
     }
 
-    public Appointment createAppointment(Integer userId, LocalDateTime start, LocalDateTime end, String bookerName, String bookerEmail) {
+    public Appointment createAppointment(Integer userId, LocalDateTime start, LocalDateTime end, String bookerName, String bookerEmail, String meetingNote) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Appointment appointment = new Appointment(user, start, end, bookerName, bookerEmail);
+        Appointment appointment = new Appointment(user, start, end, bookerName, bookerEmail, meetingNote);
         return appointmentRepository.save(appointment);
     }
 
