@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import bcrypt from 'bcryptjs';
 import css from '../RegisterForm.module.css';
-import { useNavigate } from "react-router-dom";
-import { getUserIdFromToken, request, setAuthHeader } from "../../util/axios_helper";
+import {useNavigate} from "react-router-dom";
+import {getUserIdFromToken, request} from "../../util/axios_helper";
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -121,8 +121,7 @@ function SettingsForm() {
     }, []);
 
     const validateCurrentPassword = async (password) => {
-        const match = await bcrypt.compare(password, userData.password);
-        return match;
+        return await bcrypt.compare(password, userData.password);
     };
 
     const handleUpdate = (obj) => {

@@ -4,8 +4,8 @@ export const HomeIcon = () => (
     <svg
         className="flex-shrink-0 size-4"
         xmlns="http://www.w3.org/2000/svg"
-        width={20}
-        height={20}
+        width={18}
+        height={18}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -22,8 +22,8 @@ export const CalendarIcon = () => (
     <svg
         className="flex-shrink-0 size-4"
         xmlns="http://www.w3.org/2000/svg"
-        width={20}
-        height={20}
+        width={18}
+        height={18}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -48,8 +48,8 @@ export const UserIconDashboard = () => (
     <svg
         className="flex-shrink-0 mt-0.5 size-4"
         xmlns="http://www.w3.org/2000/svg"
-        width={20}
-        height={20}
+        width={18}
+        height={18}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
