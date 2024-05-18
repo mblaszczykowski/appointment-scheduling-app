@@ -71,7 +71,8 @@ const Schedule = ({
                       handleCancel,
                       selectedTimeSlot,
                       userData,
-                      currentTime
+                      currentTime,
+                      bookingLoading
                   }) => {
     const availableDays = userData.availableDays.split(',').map(day => day.trim());
     const isDateAvailable = availableDays.includes(selectDate.format('dddd'));
@@ -87,20 +88,35 @@ const Schedule = ({
                 <p className="text-gray-400">Can't book a date in the past.</p>
             ) : showBookingForm ? (
                 <div>
-                    <p className="font-semibold mb-3">
-                        Selected Time: {selectedTimeSlot}:00 - {selectedTimeSlot + 1}:00
-                    </p>
-                    <BookMeetingForm
-                        onSubmit={handleFormSubmit}
-                        onCancel={handleCancel}
-                        selectedTimeSlot={selectedTimeSlot}
-                    />
+                    {bookingLoading ? (
+                        <div className="flex justify-center items-center">
+                            <svg className="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span className="ml-2">Booking appointment...</span>
+                        </div>
+                    ) : (
+                        <>
+                            <p className="font-semibold mb-3">
+                                Selected Time: {selectedTimeSlot}:00 - {selectedTimeSlot + 1}:00
+                            </p>
+                            <BookMeetingForm
+                                onSubmit={handleFormSubmit}
+                                onCancel={handleCancel}
+                                selectedTimeSlot={selectedTimeSlot}
+                            />
+                        </>
+                    )}
                 </div>
             ) : isDateAvailable ? (
                 filteredHours.length > 0 ? (
                     <div className="h-full overflow-y-auto">
                         {filteredHours.map((hour, index) => (
-                            <div key={index} className="p-2 border rounded cursor-pointer" onClick={() => handleTimeSlotClick(hour)}>
+                            <div key={index} className="p-2 border rounded cursor-pointer"
+                                 onClick={() => handleTimeSlotClick(hour)}>
                                 {hour}:00 - {hour + 1}:00
                             </div>
                         ))}
@@ -125,6 +141,7 @@ const Calendar = () => {
     const [showBookingForm, setShowBookingForm] = useState(false);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
     const [availableHours, setAvailableHours] = useState([]);
+    const [bookingLoading, setBookingLoading] = useState(false);
     const { calendarUrl } = useParams();
     const navigate = useNavigate();
 
@@ -184,6 +201,7 @@ const Calendar = () => {
     };
 
     const handleFormSubmit = async (name, email, notes) => {
+        setBookingLoading(true);
         const formatTime = (time) => time.toString().padStart(2, '0');
 
         const startTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot)}:00:00`;
@@ -198,16 +216,11 @@ const Calendar = () => {
                 bookerEmail: email,
                 meetingNote: notes
             });
-            await axios.post(`/api/calendar/booking-confirmation`, {
-                sendTo: email,
-                date: startTime,
-                calendarUrl: calendarUrl,
-                bookerName: name,
-                meetingNote: notes
-            });
             navigate('/booking-success');
         } catch (error) {
             console.error('Error booking appointment', error);
+        } finally {
+            setBookingLoading(false);
         }
     };
 
@@ -243,8 +256,9 @@ const Calendar = () => {
                         <div className="flex gap-10 sm:divide-x justify-center w-full sm:w-full mx-auto items-center sm:flex-row flex-col">
                             <div className="w-full h-96 flex-1">
                                 <CalendarHeader today={today} setToday={setToday} currentDate={currentDate} />
-                                <CalendarDays days={days} />
-                                <CalendarGrid dates={generateDate(today.month(), today.year())} selectDate={selectDate} setSelectDate={setSelectDate} resetBookingForm={resetBookingForm}/>
+                                <CalendarDays days={days}/>
+                                <CalendarGrid dates={generateDate(today.month(), today.year())} selectDate={selectDate}
+                                              setSelectDate={setSelectDate} resetBookingForm={resetBookingForm}/>
                             </div>
                             <Schedule
                                 selectDate={selectDate}
@@ -257,6 +271,7 @@ const Calendar = () => {
                                 selectedTimeSlot={selectedTimeSlot}
                                 userData={userData}
                                 currentTime={dayjs()}
+                                bookingLoading={bookingLoading}
                             />
                         </div>
                     </div>
