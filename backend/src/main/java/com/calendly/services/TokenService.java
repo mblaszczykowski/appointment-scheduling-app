@@ -39,12 +39,11 @@ public class TokenService {
     public static String generateToken(long expirationDate, Integer userID) {
         long currentTimeMillis = System.currentTimeMillis();
         Date expirationDateToken = new Date(currentTimeMillis + expirationDate);
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(String.valueOf(userID))
                 .setExpiration(expirationDateToken)
                 .signWith(jwtKey, SignatureAlgorithm.HS512)
                 .compact();
-        return token;
     }
 
     public void addToken(Integer userId, String tokenString) {
@@ -79,7 +78,7 @@ public class TokenService {
                 String cookieValue = String.format("%s=%s; HttpOnly; Path=/", cookie.getName(), cookie.getValue());
                 return ResponseEntity.ok()
                         .header("Set-Cookie", cookieValue)
-                        .body(accessToken);
+                        .body(refreshToken);
             } else {
                 ApiError error = new ApiError("Validation", "Password", "Invalid password");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -95,13 +94,13 @@ public class TokenService {
             try {
                 Claims claims = Jwts.parser().setSigningKey(jwtKey).parseClaimsJws(refreshToken).getBody();
                 // getting userID from refresh token
-                Long userID = Long.parseLong(claims.getSubject());
+                long userID = Long.parseLong(claims.getSubject());
                 // getting refresh token from database
                 Token dataBaseRefreshToken = getTokenByContent(refreshToken);
                 // checking refresh token
-                if (dataBaseRefreshToken.getContent().equals(refreshToken) && dataBaseRefreshToken.getUserID().equals(userID.intValue())) {
+                if (dataBaseRefreshToken.getContent().equals(refreshToken) && dataBaseRefreshToken.getUserID().equals((int) userID)) {
                     // Creating new access token
-                    String accessToken = generateToken(EXPIRATION_TIME_ACCESS, userID.intValue());
+                    String accessToken = generateToken(EXPIRATION_TIME_ACCESS, (int) userID);
                     return ResponseEntity.ok().body(accessToken);
                 } else {
                     ApiError error = new ApiError("Refresh", null, "Invalid token");

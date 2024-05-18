@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("api/auth")
 public class TokenController {
@@ -21,13 +23,13 @@ public class TokenController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest requestBody) {
-        if ((requestBody.email() == null && requestBody.password() == null) || (requestBody.email() == "" && requestBody.password() == "")) {
+        if ((requestBody.email() == null && requestBody.password() == null) || (Objects.equals(requestBody.email(), "") && Objects.equals(requestBody.password(), ""))) {
             ApiError error = new ApiError("Validation", "Both", "Missing data");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        } else if (requestBody.email() == null || requestBody.email() == "") {
+        } else if (requestBody.email() == null || requestBody.email().isEmpty()) {
             ApiError error = new ApiError("Validation", "E-mail", "Missing e-mail");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        } else if (requestBody.password() == null || requestBody.password() == "") {
+        } else if (requestBody.password() == null || requestBody.password().isEmpty()) {
             ApiError error = new ApiError("Validation", "Password", "Missing password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } else {
