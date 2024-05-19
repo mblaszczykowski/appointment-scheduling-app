@@ -19,7 +19,7 @@ const contactSchema = Yup.object().shape({
         .required('Password is required.'),
 });
 
-function LoginForm({onLogin, onToggleForm}) {
+function LoginForm({onToggleForm}) {
     const navigate = useNavigate();
     const handleLogin = (obj) => {
         const {login, password} = obj;
@@ -33,7 +33,6 @@ function LoginForm({onLogin, onToggleForm}) {
             }).then(
             (response) => {
                 setAuthHeader(response.data);
-                onLogin();
                 navigate('/dashboard');
             }).catch(
             (error) => {

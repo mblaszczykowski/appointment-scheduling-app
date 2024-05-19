@@ -3,10 +3,10 @@ import {useEffect, useState} from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
-import { CheckIcon, StarIcon, UserIcon } from './Icons';
+import { CheckIcon, StarIcon } from './Icons';
 import Footer from "./Footer";
 
-export default function WelcomeContent({ onRegister, onLogin, show }) {
+export default function WelcomeContent({ show }) {
     const [showForm, setShowForm] = useState(show);
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ export default function WelcomeContent({ onRegister, onLogin, show }) {
     };
 
     useEffect(() => {
-        let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        let isLoggedIn = localStorage.getItem("auth_token") !== null;
         if(isLoggedIn) {
             navigate("/dashboard");
         }
@@ -103,12 +103,10 @@ export default function WelcomeContent({ onRegister, onLogin, show }) {
                                 <div className="p-4 mt-6 sm:p-7 flex flex-col bg-white rounded-2xl shadow-lg dark:bg-neutral-900">
                                     {showForm !== "login" ? (
                                         <RegisterForm
-                                            onRegister={onRegister}
                                             onToggleForm={handleToggleForm}
                                         />
                                     ) : (
                                         <LoginForm
-                                            onLogin={onLogin}
                                             onToggleForm={handleToggleForm}
                                         />
                                     )}

@@ -15,7 +15,7 @@ export default function Dashboard() {
     const [selectedTab, setSelectedTab] = useState('upcoming');
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const isLoggedIn = localStorage.getItem('auth_token') !== null;
 
     useEffect(()=> {
         if (!isLoggedIn) {

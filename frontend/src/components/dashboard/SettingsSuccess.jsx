@@ -5,7 +5,7 @@ function SettingsSuccess() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!(localStorage.getItem("isLoggedIn") === "true")) {
+        if(!(localStorage.getItem("auth_token") !== null)) {
             navigate("/login");
         }
     }, []);

@@ -1,6 +1,5 @@
 import './App.css';
 import './transitions.css';
-import Footer from "./components/Footer";
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import Calendar from "./components/calendar/Calendar";
 import Header from "./components/Header";
@@ -17,13 +16,8 @@ function App() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogin = () => {
-        localStorage.setItem('isLoggedIn', 'true');
-    };
-
     const handleLogout = () => {
         setAuthHeader(null);
-        localStorage.setItem("isLoggedIn", "false");
         navigate("/login");
     };
 
@@ -32,19 +26,13 @@ function App() {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col">
-                        <Header isLoggedIn={localStorage.getItem("isLoggedIn")==="true"} onLogout={handleLogout}/>
+                        <Header isLoggedIn={localStorage.getItem("auth_token")!==null} onLogout={handleLogout}/>
                         <TransitionGroup>
                             <CSSTransition key={location.key} classNames="fade" timeout={{enter: 500, exit: 0}}>
                                 <Routes location={location}>
-                                    <Route path="/"
-                                           element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin}
-                                                                    show={"register"}/>}/>
-                                    <Route path="/login"
-                                           element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin}
-                                                                    show={"login"}/>}/>
-                                    <Route path="/register"
-                                           element={<WelcomeContent onRegister={handleLogin} onLogin={handleLogin}
-                                                                    show={"register"}/>}/>
+                                    <Route path="/" element={<WelcomeContent show={"register"}/>}/>
+                                    <Route path="/login" element={<WelcomeContent show={"login"}/>}/>
+                                    <Route path="/register" element={<WelcomeContent show={"register"}/>}/>
                                     <Route path="/dashboard" element={<Dashboard/>}/>
                                     <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
                                     <Route path="/settings-success" element={<SettingsSuccess/>}/>

@@ -79,7 +79,7 @@ function SettingsForm() {
     const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
 
     useEffect(() => {
-        if (!(localStorage.getItem("isLoggedIn") === "true")) {
+        if (!(localStorage.getItem("auth_token") !== null)) {
             navigate("/dashboard");
         }
         const handleSettings = () => {
@@ -199,7 +199,7 @@ function SettingsForm() {
 
             validationSchema={currentPasswordValid ? passwordValidationSchema : generalValidationSchema}
 
-            onSubmit={async (values, { setSubmitting, resetForm }) => {
+            onSubmit={async (values, { setSubmitting }) => {
                 handleUpdate(values);
                 setSubmitting(false);
             }}
@@ -295,8 +295,8 @@ function SettingsForm() {
                                                     const isValid = await validateCurrentPassword(values.currentPassword);
                                                     if (isValid) {
                                                         setCurrentPasswordValid(true);
-                                                        validateField('newPassword');
-                                                        validateField('newPassword2');
+                                                        await validateField('newPassword');
+                                                        await validateField('newPassword2');
                                                     } else {
                                                         setFieldError('currentPassword', 'Current password is incorrect.');
                                                     }

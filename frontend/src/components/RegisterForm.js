@@ -60,7 +60,7 @@ const validationSchemas = [
     })
 ];
 
-function RegisterForm({onRegister, onToggleForm}) {
+function RegisterForm({onToggleForm}) {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
 
@@ -92,7 +92,6 @@ function RegisterForm({onRegister, onToggleForm}) {
             }).then(
             (response) => {
                 setAuthHeader(response.data);
-                onRegister();
                 navigate("/dashboard");
             }).catch(
             (error) => {
