@@ -68,14 +68,17 @@ public class UserController {
     }
 
     @PostMapping("/reset-pass")
-    public ResponseEntity<?> initiatePasswordReset(@RequestBody PasswordResetEmail body) {
-        String email = body.email();
-        var user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            mailService.sendEmail(user.get(), "reset", null);
+    public ResponseEntity<?> sendPasswordResetEmail(@RequestBody PasswordResetEmail body) {
+        try {
+            String email = body.email();
+            var user = userRepository.findByEmail(email);
+            mailService.sendPasswordResetEmail(user.get(), "reset");
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PatchMapping("reset-pass/{token}")
@@ -84,9 +87,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords should be the same.");
         }
         String newPassword = body.password();
-        if (!userService.passwordValidator(newPassword, newPassword).equals(ResponseEntity.ok("password is approved."))) {
-            return userService.passwordValidator(newPassword, newPassword);
-        }
         newPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
         PasswordResetToken reset = tokenResetRepository.findByToken(token);
         if (!userService.hasExpired(reset.getExpiryDateTime())) {

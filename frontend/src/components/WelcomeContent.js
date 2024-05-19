@@ -10,6 +10,9 @@ export default function WelcomeContent({ show }) {
     const [showForm, setShowForm] = useState(show);
     const navigate = useNavigate();
 
+    const handleResetForm = () => {
+        navigate('/reset-password');
+    };
     const handleToggleForm = () => {
         setShowForm((prev) => (prev === "login" ? "register" : "login"));
     };
@@ -108,6 +111,7 @@ export default function WelcomeContent({ show }) {
                                     ) : (
                                         <LoginForm
                                             onToggleForm={handleToggleForm}
+                                            onResetForm={handleResetForm}
                                         />
                                     )}
                                 </div>

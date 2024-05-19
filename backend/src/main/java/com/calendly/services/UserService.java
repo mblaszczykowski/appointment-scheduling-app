@@ -80,14 +80,6 @@ public class UserService {
             ApiError error = new ApiError("Validation", "password", "Password length should be between 8 and 32 characters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-        if (!password.matches(".*[a-z].*")) {
-            ApiError error = new ApiError("Validation", "password", "Password should contain at least one lowercase letter");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
-        if (!password.matches(".*[A-Z].*")) {
-            ApiError error = new ApiError("Validation", "password", "Password should contain at least one uppercase letter");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
         if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
             ApiError error = new ApiError("Validation", "password", "Password should contain at least one special character");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -237,8 +229,9 @@ public class UserService {
             return checkAuthorizationResult;
         }
         // Token is valid, proceed to activate and send email
+        // DO POPRAWY - ALBO DODAC NOWA FUNKJCE SENDACTIVATIONMAIL ALBO DOSTOSOWAC OBECNA
         User user = userDetailsService.getUserById(tokenService.getUserIdFromToken(refreshToken));
-        mailService.sendEmail(user, "activate", refreshToken);
+        mailService.sendPasswordResetEmail(user, "activate");
         return ResponseEntity.ok("Activation successful.");
     }
 

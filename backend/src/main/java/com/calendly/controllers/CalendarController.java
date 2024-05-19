@@ -1,5 +1,7 @@
 package com.calendly.controllers;
 
+import com.calendly.dtos.AppointmentDTO;
+import com.calendly.email.MailService;
 import com.calendly.entities.User;
 import com.calendly.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ public class CalendarController {
 
     @Autowired
     private UserService userService;
+    private MailService mailService;
 
     @GetMapping("/{calendarUrl}")
     public ResponseEntity<?> getUserByCalendarUrl(@PathVariable("calendarUrl") String calendarUrl) {
@@ -20,5 +23,19 @@ public class CalendarController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping("/booking-confirmation")
+    public ResponseEntity<?> bookingConfirmation(@RequestBody AppointmentDTO appointmentDTO) {
+        var calendarOwner = userService.getUserIdFromCalendarUrl(appointmentDTO.calendarUrl());
+        try {
+            mailService.sendEmail(appointmentDTO, calendarOwner, true);
+            mailService.sendEmail(appointmentDTO, calendarOwner, false);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

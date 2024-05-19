@@ -11,6 +11,8 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import ErrorPage from "./components/ErrorPage";
 import SettingsSuccess from "./components/dashboard/SettingsSuccess";
 import BookingSuccess from "./components/calendar/BookingSuccess";
+import ResetPasswordMailForm from "./components/dashboard/ResetPasswordMailForm";
+import ResetPassword from "./components/dashboard/ResetPassword";
 
 function App() {
     const navigate = useNavigate();
@@ -36,6 +38,8 @@ function App() {
                                     <Route path="/dashboard" element={<Dashboard/>}/>
                                     <Route path="/calendar/:calendarUrl" element={<Calendar/>}/>
                                     <Route path="/settings-success" element={<SettingsSuccess/>}/>
+                                    <Route path="/reset-password" element={<ResetPasswordMailForm/>}/>
+                                    <Route path="/reset-password/:token" element={<ResetPassword />} />
                                     <Route path="/error" element={<ErrorPage/>}/>
                                     <Route path="/booking-success" element={<BookingSuccess/>}/>
                                 </Routes>

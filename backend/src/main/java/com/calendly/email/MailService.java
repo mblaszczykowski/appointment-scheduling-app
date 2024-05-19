@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -50,40 +51,72 @@ public class MailService {
         return existingToken.getToken();
     }
 
-    public void sendEmail(User user, String emailType, @Nullable String token) {
+    public void sendPasswordResetEmail(User user, String emailType) {
         String path;
         String subject;
         String actionText;
+        String textBody;
+        String htmlBody;
 
-        switch (emailType.toLowerCase()) {
-            case "activate":
-                path = "/activate/";
-                subject = "Account Activation Link";
-                actionText = "activate your account";
-                break;
-            case "reset":
-                path = "/reset-password/";
-                subject = "Password Reset Link";
-                actionText = "reset your password";
-                token = generateResetToken(user);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid email type");
-        }
+        if (emailType.equalsIgnoreCase("activate")) {
+            path = "/activate/";
+            subject = "Account Activation Link";
+            actionText = "activate your account";
+        } else if (emailType.equalsIgnoreCase("reset")) {
+            path = "/reset-password/";
+            var token = generateResetToken(user);
+            String link = baseUrl + path + token;
+            // dodac token do linka
+            textBody = String.format("""
+                        Hello, %s
 
-        String link = baseUrl + path + token;
-        String messageBody = String.format("Hello,\n\nPlease click on this link to %s: %s.\n\nRegards,\nXYZ", actionText, link);
+                        We recently received a request to change your account password.\s
+                        If you would like to change your password, please click the link below:
+                        %s
+                        
 
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom("sender@gmail.com"); // Consider externalizing
-        msg.setTo(user.getEmail());
-        msg.setSubject(subject);
-        msg.setText(messageBody);
+                        Regards,
+                        Team Meetly""",
+            user.getFullName(),
+                    link);
 
-        try {
-            javaMailSender.send(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
+            htmlBody = String.format("""
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                        <style type="text/css">
+                        %s
+                        </style>
+                        </head>
+                        <body>
+                        <div class="container">
+                            <h1>Password Reset</h1>
+                            <p>Hello, %s</p>
+                            <p>We recently received a request to change your account password.<br>
+                             If you would like to change your password, please click the link below:</p><br>
+                             <a href="%s" class="button">Click here to change your password</a><br>
+                            <p>Regards,<br /><strong>Team Meetly</strong></p>
+                        </div>
+                        </body>
+                        </html>
+                        """,
+                    getCss(),
+                    user.getFullName(),
+                    link);
+
+            try {
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+                helper.setFrom("Meetly <app.meetly@gmail.com>");
+                helper.setTo(user.getEmail());
+                helper.setSubject("Password reset");
+                helper.setText(textBody, htmlBody);
+
+                javaMailSender.send(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

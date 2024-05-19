@@ -19,7 +19,7 @@ const contactSchema = Yup.object().shape({
         .required('Password is required.'),
 });
 
-function LoginForm({onToggleForm}) {
+function LoginForm({onToggleForm, onResetForm}) {
     const navigate = useNavigate();
     const handleLogin = (obj) => {
         const {login, password} = obj;
@@ -105,12 +105,21 @@ function LoginForm({onToggleForm}) {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Submit
-                    </button>
+                    <div className="flex justify-between items-center">
+                        <button
+                            type="submit"
+                            className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            Submit
+                        </button>
+                        <a
+                            onClick={onResetForm}
+                            className="text-blue-600 hover:underline dark:text-blue-500 ml-auto"
+                        >
+                            Forgotten your password?
+                        </a>
+                    </div>
+
                 </Form>
             </Formik>
         </div>

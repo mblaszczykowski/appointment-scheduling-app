@@ -77,10 +77,10 @@ export default function Dashboard() {
                 return <PastMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.past} />;
             case 'settings':
                 return (
-                    <div className="flex flex-col items-center">
+                    <div>
                         <h1 className="mt-4 mb-5 block text-xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
                             Update your account
-                        </h1>
+                        </h1><br/>
                         <SettingsForm/>
                     </div>
 
