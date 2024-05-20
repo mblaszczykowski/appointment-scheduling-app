@@ -61,6 +61,35 @@ const CalendarGrid = ({ dates, selectDate, setSelectDate, resetBookingForm }) =>
     </div>
 );
 
+const getAvailableSlots = (fromHour, toHour, duration, bookedSlots) => {
+    const slots = [];
+    let currentHour = fromHour;
+    let currentMinute = 0;
+
+    while (currentHour < toHour || (currentHour === toHour && currentMinute === 0)) {
+        const endMinute = currentMinute + duration;
+        const endHour = currentHour + Math.floor(endMinute / 60);
+
+        if (endHour < toHour || (endHour === toHour && endMinute <= 60)) {
+            const slot = { hour: currentHour, minute: currentMinute };
+            if (!bookedSlots.some(bookedSlot => bookedSlot.hour === slot.hour && bookedSlot.minute === slot.minute)) {
+                slots.push(slot);
+            }
+        }
+
+        currentMinute += duration;
+        if (currentMinute >= 60) {
+            currentHour += Math.floor(currentMinute / 60);
+            currentMinute = currentMinute % 60;
+        }
+
+        if (currentHour >= toHour && currentMinute > 0) {
+            break;
+        }
+    }
+    return slots;
+};
+
 const Schedule = ({
                       selectDate,
                       isPastDate,
@@ -77,8 +106,19 @@ const Schedule = ({
     const availableDays = userData.availableDays.split(',').map(day => day.trim());
     const isDateAvailable = availableDays.includes(selectDate.format('dddd'));
 
-    const filteredHours = selectDate.isSame(dayjs(), 'day')
-        ? availableHours.filter(hour => hour >= currentTime.hour())
+
+    const formatEndTime = (slot, duration) => {
+        let endHour = slot.hour;
+        let endMinute = slot.minute + duration;
+        if (endMinute >= 60) {
+            endHour += Math.floor(endMinute / 60);
+            endMinute = endMinute % 60;
+        }
+        return `${endHour}:${endMinute === 0 ? '00' : endMinute}`;
+    };
+
+    const filteredSlots = selectDate.isSame(dayjs(), 'day')
+        ? availableHours.filter(slot => (slot.hour > currentTime.hour() || (slot.hour === currentTime.hour() && slot.minute >= currentTime.minute())))
         : availableHours;
 
     return (
@@ -101,7 +141,7 @@ const Schedule = ({
                     ) : (
                         <>
                             <p className="font-medium mb-3 text-sm">
-                                Selected time: {selectedTimeSlot}:00 - {selectedTimeSlot + 1}:00
+                                Selected time: {selectedTimeSlot.hour}:{selectedTimeSlot.minute === 0 ? '00' : selectedTimeSlot.minute} - {formatEndTime(selectedTimeSlot, userData.meetingDuration)}
                             </p>
                             <BookMeetingForm
                                 onSubmit={handleFormSubmit}
@@ -112,12 +152,12 @@ const Schedule = ({
                     )}
                 </div>
             ) : isDateAvailable ? (
-                filteredHours.length > 0 ? (
+                filteredSlots.length > 0 ? (
                     <div className="h-full overflow-y-auto">
-                        {filteredHours.map((hour, index) => (
+                        {filteredSlots.map((slot, index) => (
                             <div key={index} className="p-2 mt-1 border rounded cursor-pointer"
-                                 onClick={() => handleTimeSlotClick(hour)}>
-                                {hour}:00 - {hour + 1}:00
+                                 onClick={() => handleTimeSlotClick(slot)}>
+                                {slot.hour}:{slot.minute === 0 ? '00' : slot.minute} - {formatEndTime(slot, userData.meetingDuration)}
                             </div>
                         ))}
                     </div>
@@ -164,14 +204,15 @@ const Calendar = () => {
             const fetchBookedSlots = async () => {
                 try {
                     const response = await axios.get(`/api/appointments/user/${userData.id}?date=${selectDate.format('YYYY-MM-DD')}`);
-                    const bookedSlots = response.data.map(appointment => new Date(appointment.startTime).getHours());
+                    const bookedSlots = response.data.map(appointment => {
+                        const startTime = new Date(appointment.startTime);
+                        return {
+                            hour: startTime.getHours(),
+                            minute: startTime.getMinutes()
+                        };
+                    });
 
-                    const allHours = [];
-                    for (let hour = userData.availableFromHour; hour < userData.availableToHour; hour++) {
-                        allHours.push(hour);
-                    }
-
-                    const available = allHours.filter(hour => !bookedSlots.includes(hour));
+                    const available = getAvailableSlots(userData.availableFromHour, userData.availableToHour, userData.meetingDuration, bookedSlots);
                     setAvailableHours(available);
                 } catch (error) {
                     console.error('Error fetching booked slots', error);
@@ -195,8 +236,8 @@ const Calendar = () => {
         setSelectedTimeSlot(null);
     };
 
-    const handleTimeSlotClick = (hour) => {
-        setSelectedTimeSlot(hour);
+    const handleTimeSlotClick = (slot) => {
+        setSelectedTimeSlot(slot);
         setShowBookingForm(true);
     };
 
@@ -204,9 +245,11 @@ const Calendar = () => {
         setBookingLoading(true);
         const formatTime = (time) => time.toString().padStart(2, '0');
 
-        const startTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot)}:00:00`;
-        const endTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot + 1)}:00:00`;
+        const { hour, minute } = selectedTimeSlot;
+        const startTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(hour)}:${formatTime(minute)}:00`;
 
+        const endTimeMinute = selectedTimeSlot.minute + userData.meetingDuration;
+        const endTime = `${selectDate.format('YYYY-MM-DD')}T${formatTime(selectedTimeSlot.hour + Math.floor(endTimeMinute / 60))}:${formatTime(endTimeMinute % 60)}:00`;
         try {
             await axios.post('/api/appointments', {
                 calendarUrl: calendarUrl,
@@ -216,6 +259,8 @@ const Calendar = () => {
                 bookerEmail: email,
                 meetingNote: notes
             });
+            const updatedSlots = availableHours.filter(slot => !(slot.hour === hour && slot.minute === minute));
+            setAvailableHours(updatedSlots);
             navigate('/booking-success');
         } catch (error) {
             console.error('Error booking appointment', error);
@@ -247,7 +292,7 @@ const Calendar = () => {
                                     {userData.name}
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-neutral-500 text-center">
-                                    60 mins meetings available
+                                    {userData.meetingDuration} mins meetings available
                                 </p>
                             </div>
                         </div>

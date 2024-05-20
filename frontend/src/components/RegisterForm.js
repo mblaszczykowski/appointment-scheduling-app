@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
 import {request, setAuthHeader} from "../util/axios_helper";
+import MeetingDurationSlider from "./MeetingDurationSlider";
 
 const validationSchemas = [
     Yup.object().shape({
@@ -56,7 +57,11 @@ const validationSchemas = [
         availableDays: Yup.array()
             .of(Yup.string().required())
             .min(1, 'At least one day must be selected.')
-            .required('Available days are required.')
+            .required('Available days are required.'),
+        meetingDuration: Yup.number()
+            .min(5, 'Meeting duration must be at least 5 minutes.')
+            .max(120, 'Meeting duration can be at most 2 hours.')
+            .required('Meeting duration is required.'),
     })
 ];
 
@@ -74,7 +79,8 @@ function RegisterForm({onToggleForm}) {
             meetingLink,
             availableFromHour,
             availableToHour,
-            availableDays
+            availableDays,
+            meetingDuration
         } = obj;
         request(
             "POST",
@@ -89,6 +95,7 @@ function RegisterForm({onToggleForm}) {
                 availableFromHour,
                 availableToHour,
                 availableDays,
+                meetingDuration
             }).then(
             (response) => {
                 setAuthHeader(response.data);
@@ -143,6 +150,7 @@ function RegisterForm({onToggleForm}) {
                     availableFromHour: '',
                     availableToHour: '',
                     availableDays: [],
+                    meetingDuration: 60
                 }}
                 validationSchema={validationSchemas[currentStep]}
                 validateOnChange={false}
@@ -310,11 +318,12 @@ function RegisterForm({onToggleForm}) {
                                             <div className="mb-3">
                                                 <h1 className="block text-lg font-bold text-gray-800 dark:text-white">{steps[2].title}</h1>
                                             </div>
-                                            <div className="mb-3">
+                                            <MeetingDurationSlider/>
+                                            <div className="mb-3 mt-5">
                                                 <h1 className="block text-md font-medium text-gray-800 dark:text-white">Available
                                                     hours:</h1>
                                             </div>
-                                            <div className="flex justify-between items-center my-4">
+                                            <div className="flex justify-between items-center my-3">
                                                 <Field as="select" name="availableFromHour"
                                                        className="form-select block w-40 px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                                     {Array.from({length: 24}, (_, i) => (

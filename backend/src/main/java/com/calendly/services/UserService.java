@@ -156,7 +156,8 @@ public class UserService {
                 userRegistrationRequest.meetingLink(),
                 userRegistrationRequest.availableFromHour(),
                 userRegistrationRequest.availableToHour(),
-                userRegistrationRequest.availableDays());
+                userRegistrationRequest.availableDays(),
+                userRegistrationRequest.meetingDuration());
         userDAO.addUser(user);
 
         // logujemy od razu poki co po rejestracji, bez aktywacji
@@ -331,7 +332,6 @@ public class UserService {
             return checkAuthorizationResult;
         }
         var user = userService.getUserById(uuid);
-        var userId = userService.getUserIDFromAccessToken(request);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
                 user.getEmail(), user.getPassword(), user.getCalendarUrl(), user.getMeetingLink(),
                 user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
