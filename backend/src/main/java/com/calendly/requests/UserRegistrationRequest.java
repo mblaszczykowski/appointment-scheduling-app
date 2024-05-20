@@ -9,6 +9,7 @@ public record UserRegistrationRequest(
         String meetingLink,
         Integer availableFromHour,
         Integer availableToHour,
-        String availableDays
+        String availableDays,
+        Integer meetingDuration
 ) {
 }

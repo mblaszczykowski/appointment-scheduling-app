@@ -47,10 +47,13 @@ public class User {
     @Column(name = "availableDays", nullable = false)
     private String availableDays;  // Example: "Monday,Tuesday,Wednesday"
 
+    @Column(name = "meetingDuration", nullable = false)
+    private Integer meetingDuration;
+
     public User() {
     }
 
-    public User(String firstname, String lastname, String email, String password, String calendarUrl, String meetingLink, Integer availableFromHour, Integer availableToHour, String availableDays) {
+    public User(String firstname, String lastname, String email, String password, String calendarUrl, String meetingLink, Integer availableFromHour, Integer availableToHour, String availableDays, Integer meetingDuration) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -60,6 +63,7 @@ public class User {
         this.availableFromHour = availableFromHour;
         this.availableToHour = availableToHour;
         this.availableDays = availableDays;
+        this.meetingDuration = meetingDuration;
     }
 
     public Integer getId() {
