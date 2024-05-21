@@ -13,6 +13,8 @@ import SettingsSuccess from "./components/dashboard/SettingsSuccess";
 import BookingSuccess from "./components/calendar/BookingSuccess";
 import ResetPasswordMailForm from "./components/dashboard/ResetPasswordMailForm";
 import ResetPassword from "./components/dashboard/ResetPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
     const navigate = useNavigate();
@@ -29,6 +31,7 @@ function App() {
                 <div className="row">
                     <div className="col">
                         <Header isLoggedIn={localStorage.getItem("auth_token")!==null} onLogout={handleLogout}/>
+                        <ToastContainer />
                         <TransitionGroup>
                             <CSSTransition key={location.key} classNames="fade" timeout={{enter: 500, exit: 0}}>
                                 <Routes location={location}>

@@ -85,7 +85,7 @@ public class TokenService {
             }
         } catch (ResourceNotFoundException ex) {
             ApiError error = new ApiError("Validation", "E-mail", "Invalid e-mail");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
 
