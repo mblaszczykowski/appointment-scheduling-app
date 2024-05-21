@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
 import {request, setAuthHeader} from "../util/axios_helper";
 import {useNavigate} from "react-router-dom";
+import {Slide, toast} from 'react-toastify';
 
 const contactSchema = Yup.object().shape({
     login: Yup.string()
@@ -18,6 +19,15 @@ const contactSchema = Yup.object().shape({
         .max(20, 'Max length is 20.')
         .required('Password is required.'),
 });
+
+function displayNotification(message, type = "error", duration = 2500,
+                             transition = Slide, position = "top-center") {
+    toast[type](message, {
+        position: position,
+        autoClose: duration,
+        transition: transition
+    });
+}
 
 function LoginForm({onToggleForm, onResetForm}) {
     const navigate = useNavigate();
@@ -37,7 +47,7 @@ function LoginForm({onToggleForm, onResetForm}) {
             }).catch(
             (error) => {
                 setAuthHeader(null);
-                navigate("/");
+                displayNotification('Wrong login or password')
                 console.error("Login error:", error.response || error.message);
             }
         );

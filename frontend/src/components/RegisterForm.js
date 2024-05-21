@@ -6,6 +6,8 @@ import css from './RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
 import {request, setAuthHeader} from "../util/axios_helper";
 import MeetingDurationSlider from "./MeetingDurationSlider";
+import {Slide, toast} from "react-toastify";
+import axios from "axios";
 
 const validationSchemas = [
     Yup.object().shape({
@@ -65,6 +67,15 @@ const validationSchemas = [
     })
 ];
 
+function displayNotification(message, type = "error", duration = 2500,
+                             transition = Slide, position = "top-center") {
+    toast[type](message, {
+        position: position,
+        autoClose: duration,
+        transition: transition
+    });
+}
+
 function RegisterForm({onToggleForm}) {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
@@ -103,18 +114,41 @@ function RegisterForm({onToggleForm}) {
             }).catch(
             (error) => {
                 setAuthHeader(null);
-                navigate("/")
+                displayNotification("Error");
                 console.error("Register error:", error.response || error.message);
             }
         );
     };
 
-    const handleNext = async (validateForm, setTouched) => {
+    const handleNext = async (validateForm, setTouched, values) => {
         const errors = await validateForm();
-        if (Object.keys(errors).length === 0) {
-            setCurrentStep((prev) => prev + 1);
-        } else {
+        if (Object.keys(errors).length > 0) {
             setTouched(errors);
+            displayNotification("Please correct the errors on the form.");
+        }
+
+        const stepConfig = [
+            { path: `/api/users/email/${values.email}`, message: "Email already exists" },
+            { path: `/api/calendar/${values.calendarUrl}`, message: "Calendar URL already exists" }
+        ];
+        if (currentStep < stepConfig.length) {
+            await handleApiRequest(stepConfig[currentStep].path, stepConfig[currentStep].message);
+        } else {
+            setCurrentStep(prev => prev + 1);
+        }
+
+        async function handleApiRequest(apiPath, errorMessage) {
+            try {
+                await axios.get(apiPath);
+                displayNotification(errorMessage);
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    setCurrentStep(prev => prev + 1);
+                } else {
+                    const errorStatus = error.response ? error.response.status : "Network or unknown error";
+                    displayNotification(`Error checking data: ${errorStatus}`);
+                }
+            }
         }
     };
 
@@ -164,7 +198,7 @@ function RegisterForm({onToggleForm}) {
                     setSubmitting(false);
                 }}
             >
-                {({errors, validateForm, setTouched, setFieldValue}) => (
+                {({errors, validateForm, setTouched, setFieldValue, values}) => (
                     <Form className="max-w-sm mx-auto">
                         <TransitionGroup>
                             <CSSTransition
@@ -255,7 +289,7 @@ function RegisterForm({onToggleForm}) {
                                             <div className="relative w-full h-16">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleNext(validateForm, setTouched)}
+                                                    onClick={() => handleNext(validateForm, setTouched, values)}
                                                     className="absolute top-0 right-0 text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                                 >
                                                     Next
@@ -305,7 +339,7 @@ function RegisterForm({onToggleForm}) {
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleNext(validateForm, setTouched)}
+                                                    onClick={() => handleNext(validateForm, setTouched, values)}
                                                     className="absolute top-0 right-0 text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                                 >
                                                     Next
