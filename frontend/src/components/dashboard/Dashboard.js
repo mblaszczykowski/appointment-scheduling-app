@@ -4,11 +4,12 @@ import { getUserIdFromToken, request, setAuthHeader } from '../../util/axios_hel
 import dayjs from 'dayjs';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Dashboard.css'; // Make sure to import the CSS file for animations
-import { HomeIcon, CalendarIcon, UserIconDashboard } from '../Icons';
+import {HomeIcon, CalendarIcon, UserIconDashboard, CancelIcon} from '../Icons';
 import UpcomingMeetings from './UpcomingMeetings';
 import PastMeetings from './PastMeetings';
 import SettingsForm from "./SettingsForm";
 import {useNavigate} from "react-router-dom";
+import CanceledMeetings from "./CanceledMeetings";
 
 export default function Dashboard() {
     const [data, setData] = useState([]);
@@ -23,8 +24,6 @@ export default function Dashboard() {
         }
         request('GET', `/api/appointments/user/${getUserIdFromToken()}`, {})
             .then((response) => {
-                console.log('DATA: ');
-                console.log(response.data);
                 setData(response.data);
             })
             .catch((error) => {
@@ -40,15 +39,18 @@ export default function Dashboard() {
         setSearchQuery( e.target.value );
     }
 
-
     const filterAppointments = () => {
         const now = dayjs();
 
-        const filteredData = data.filter(appointment =>
-            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
+        const filteredDataActual = data.filter(appointment =>
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())&& appointment.isActual
+        );
+        const filteredDataCanceled = data.filter(appointment =>
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())&& !appointment.isActual
         );
 
-        const groupAppointments = (filterFn) => filteredData.filter(filterFn);
+        const groupAppointments = (filterFn) => filteredDataActual.filter(filterFn);
+        const groupAppointmentsCanceled = (filterFn) => filteredDataCanceled.filter(filterFn);
 
         return {
             upcoming: {
@@ -63,6 +65,13 @@ export default function Dashboard() {
                 lastWeek: groupAppointments(appointment => dayjs(appointment.endTime).isAfter(now.subtract(1, 'week').startOf('day')) && dayjs(appointment.endTime).isBefore(now.startOf('day'))),
                 lastMonth: groupAppointments(appointment => dayjs(appointment.endTime).isAfter(now.subtract(1, 'month').startOf('day')) && dayjs(appointment.endTime).isBefore(now.subtract(1, 'week').endOf('day'))),
                 earlier: groupAppointments(appointment => dayjs(appointment.endTime).isBefore(now.subtract(1, 'month').startOf('day')))
+            },
+            canceled: {
+                today: groupAppointmentsCanceled(appointment => dayjs(appointment.startTime).isSame(now, 'day') && dayjs(appointment.endTime).isAfter(now)),
+                thisWeek: groupAppointmentsCanceled(appointment => dayjs(appointment.startTime).isAfter(now, 'day') && dayjs(appointment.startTime).isBefore(now.endOf('week'))),
+                thisMonth: groupAppointmentsCanceled(appointment => dayjs(appointment.startTime).isAfter(now.endOf('week')) && dayjs(appointment.startTime).isBefore(now.endOf('month'))),
+                nextMonth: groupAppointmentsCanceled(appointment => dayjs(appointment.startTime).isAfter(now.endOf('month')) && dayjs(appointment.startTime).isBefore(now.add(1, 'month').endOf('month'))),
+                later: groupAppointmentsCanceled(appointment => dayjs(appointment.startTime).isAfter(now.add(1, 'month').endOf('month')))
             }
         };
     }
@@ -75,6 +84,8 @@ export default function Dashboard() {
                 return <UpcomingMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.upcoming} />;
             case 'past':
                 return <PastMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.past} />;
+            case 'canceled':
+                return <CanceledMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.canceled} />;
             case 'settings':
                 return (
                     <div>
@@ -126,6 +137,13 @@ export default function Dashboard() {
                             >
                                 <CalendarIcon/>
                                 Past meetings
+                            </button>
+                            <button
+                                onClick={() => setSelectedTab('canceled')}
+                                className={`w-full mt-1 mb-2 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${selectedTab === 'canceled' ? 'bg-gray-100 dark:bg-neutral-700' : 'text-neutral-700 dark:text-white'}`}
+                            >
+                                <CancelIcon/>
+                                Canceled meetings
                             </button>
                             <button
                                 onClick={() => setSelectedTab('settings')}

@@ -33,16 +33,21 @@ public class Appointment {
     @Column(nullable = true)
     private String meetingNote;
 
+    @Column(nullable = false)
+    private boolean isActual = true;
+
     public Appointment() {
     }
 
-    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime, String bookerName, String bookerEmail, String meetingNote) {
+    public Appointment(User user, LocalDateTime startTime, LocalDateTime endTime, String bookerName,
+                       String bookerEmail, String meetingNote, boolean isActual) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
         this.bookerName = bookerName;
         this.bookerEmail = bookerEmail;
         this.meetingNote = meetingNote;
+        this.isActual = isActual;
     }
 
     public Integer getId() {
@@ -107,5 +112,13 @@ public class Appointment {
 
     public void setMeetingNote(String meetingNote) {
         this.meetingNote = meetingNote;
+    }
+
+    public boolean getIsActual() {
+        return isActual;
+    }
+
+    public void setIsActual (boolean isActual) {
+        this.isActual=isActual;
     }
 }

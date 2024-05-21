@@ -214,7 +214,8 @@ const Calendar = () => {
                 endTime: endTime,
                 bookerName: name,
                 bookerEmail: email,
-                meetingNote: notes
+                meetingNote: notes,
+                isActual: true,
             });
             navigate('/booking-success');
         } catch (error) {

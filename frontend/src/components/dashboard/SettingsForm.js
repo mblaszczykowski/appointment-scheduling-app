@@ -147,7 +147,6 @@ function SettingsForm() {
             availableDays: availableDays.join(',')
         };
 
-        console.log(updateData);
         request(
             "PUT",
             `api/users/${getUserIdFromToken()}`,

@@ -1,10 +1,10 @@
 package com.calendly.email;
 
 import com.calendly.dtos.AppointmentDTO;
+import com.calendly.entities.Appointment;
 import com.calendly.entities.PasswordResetToken;
 import com.calendly.entities.User;
 import com.calendly.repositories.TokenResetRepository;
-import jakarta.annotation.Nullable;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -230,6 +230,109 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+
+    @Async
+    public void sendCancelAppointmentEmail(Appointment appointment, User calendarOwner, Boolean isBooker) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = appointment.getStartTime().format(formatter);
+        String textBody;
+        String htmlBody;
+
+        if (isBooker) {
+            textBody = String.format("""
+                        Hello, %s
+
+                        Your meeting with %s on %s CET at %s has been canceled.
+                        
+
+                        Regards,
+                        Team Meetly""",
+                    appointment.getBookerName(),
+                    calendarOwner.getFullName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+
+            htmlBody = String.format("""
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                        <style type="text/css">
+                        %s
+                        </style>
+                        </head>
+                        <body>
+                        <div class="container">
+                            <h1>Cancel Meeting Confirmation</h1>
+                            <p>Hello, %s</p>
+                            <p>Your meeting with <strong>%s</strong> on <strong>%s</strong> CET has been canceled.</p>
+                            <p>Regards,<br /><strong>Team Meetly</strong></p>
+                        </div>
+                        </body>
+                        </html>
+                        """,
+                    getCss(),
+                    appointment.getBookerName(),
+                    calendarOwner.getFullName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+
+        } else {
+            textBody = String.format("""
+                        Hello, %s
+                        Your meeting with %s on %s CET at %s has been canceled.
+                        
+
+                        You can see all your meetings here: http://localhost:3000/dashboard
+                        Regards,
+                        Team Meetly""",
+                    calendarOwner.getFullName(),
+                    appointment.getBookerName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+
+            htmlBody = String.format("""
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                        <style type="text/css">
+                        %s
+                        </style>
+                        </head>
+                        <body>
+                        <div class="container">
+                            <h1>Cancel Meeting Confirmation</h1>
+                            <p>Hello, %s</p>
+                            <p>Your meeting with <strong>%s</strong> on <strong>%s</strong> CET has been canceled</p>
+                            <p>You can see all your meetings here: <a href="http://localhost:3000/dashboard" class="button">Dashboard</a></p>
+                            <p>Regards,<br /><strong>Team Meetly</strong></p>
+                        </div>
+                        </body>
+                        </html>
+                        """,
+                    getCss(),
+                    calendarOwner.getFullName(),
+                    appointment.getBookerName(),
+                    formattedDateTime,
+                    calendarOwner.getMeetingLink());
+        }
+
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom("Meetly <app.meetly@gmail.com>");
+            helper.setTo(isBooker ? appointment.getBookerEmail() : calendarOwner.getEmail());
+            helper.setSubject("Cancel Meeting Confirmation");
+            helper.setText(textBody, htmlBody);
+
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public String getCss() {
         return """

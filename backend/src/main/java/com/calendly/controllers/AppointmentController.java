@@ -76,8 +76,26 @@ public class AppointmentController {
         }
     }
 
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelAppointment(@PathVariable Integer id, HttpServletRequest request) {
+        ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
+        if (!authResponse.getStatusCode().is2xxSuccessful()) {
+            return authResponse;
+        }
+        try {
+            appointmentService.cancelAppointment(id);
+            var appointment = appointmentService.getAppointmentById(id);
+            var user = userService.getUserById(appointment.getUser().getId());
+            mailService.sendCancelAppointmentEmail(appointment, user, true);
+            mailService.sendCancelAppointmentEmail(appointment, user, false);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAppointment(@PathVariable UUID id, HttpServletRequest request) {
+    public ResponseEntity<?> deleteAppointment(@PathVariable Integer id, HttpServletRequest request) {
         ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
         if (!authResponse.getStatusCode().is2xxSuccessful()) {
             return authResponse;
