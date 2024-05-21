@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
+public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND a.startTime >= :startOfDay AND a.startTime < :endOfDay")
     List<Appointment> findByUserIdAndDate(Integer userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

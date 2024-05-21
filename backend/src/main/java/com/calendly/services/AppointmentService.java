@@ -32,7 +32,7 @@ public class AppointmentService {
 
     public Appointment createAppointment(Integer userId, LocalDateTime start, LocalDateTime end, String bookerName, String bookerEmail, String meetingNote) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Appointment appointment = new Appointment(user, start, end, bookerName, bookerEmail, meetingNote);
+        Appointment appointment = new Appointment(user, start, end, bookerName, bookerEmail, meetingNote, true);
         return appointmentRepository.save(appointment);
     }
 
@@ -48,11 +48,22 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteAppointment(UUID appointmentId) {
+    public void deleteAppointment(Integer appointmentId) {
         appointmentRepository.deleteById(appointmentId);
+    }
+
+    public void cancelAppointment(Integer appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(
+                () -> new IllegalArgumentException("Appointment not found"));
+        appointment.setIsActual(false);
+        appointmentRepository.save(appointment);
     }
 
     public ResponseEntity<?> checkAuthorization(HttpServletRequest request) {
         return userService.checkAuthorization(request);
     }
+    public Appointment getAppointmentById(Integer id) {
+        return  appointmentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
+    }
+
 }

@@ -257,7 +257,8 @@ const Calendar = () => {
                 endTime: endTime,
                 bookerName: name,
                 bookerEmail: email,
-                meetingNote: notes
+                meetingNote: notes,
+                isActual: true,
             });
             const updatedSlots = availableHours.filter(slot => !(slot.hour === hour && slot.minute === minute));
             setAvailableHours(updatedSlots);
