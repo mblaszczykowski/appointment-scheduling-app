@@ -1,39 +1,38 @@
-## React Frontend
+## Tech stack:
 
-### Uruchomienie
+### Backend
+- Java
+- Spring Boot
+- Spring Data JPA
+- PostgreSQL database
 
-```
-cd frontend
-npm install
-npm start
-```
+### Web
+- React
+- TailwindCSS
 
-Front musi działać na porcie 3000 (domyślnym) aby łączył się z backendem.
+### Mobile
+- React Native
 
-### Resources
 
-- Używamy Tailwind CSS
+## How to run?
 
-- Komponenty, style, klasy bierzemy z <b>preline.co</b> oraz <b>flowbite.com</b>
-
-- Pod względem funkcjonalności można się wzorować na:
-https://github.com/hatchways/team-carbonara
-bądź samym Calendly.com
-
-## Java Backend
-
-### Create a database
-
+#### Backend
+##### Create a database
 ```
 psql -U postgres
 CREATE DATABASE calendly;
 GRANT ALL PRIVILEGES ON DATABASE "calendly" TO postgres;
 ```
 
-Ustawiłem baze danych w application.properties - spring.jpa.hibernate.ddl-auto na create-drop jako ze ciagle sie zmienialy pola poczatkowo, jak chcecie miec zapisany stan to zmiencie na update.
+#### Web
+```
+cd frontend
+npm install
+npm start
+```
+Make sure frontend runs on default port 3000.
 
-
-## React Native
+#### Mobile
 ```
 cd mobile
 npm install -g expo-cli
