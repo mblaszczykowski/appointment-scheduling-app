@@ -157,4 +157,8 @@ public class User {
     public void setMeetingLink(String meetingLink) {
         this.meetingLink = meetingLink;
     }
+
+    public Integer getMeetingDuration() {
+        return meetingDuration;
+    }
 }
