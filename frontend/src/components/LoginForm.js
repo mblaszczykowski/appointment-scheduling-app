@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
 import {request, setAuthHeader} from "../util/axios_helper";
 import {useNavigate} from "react-router-dom";
 import {Slide, toast} from 'react-toastify';
+import EyeButton from "./EyeButton";
 
 const contactSchema = Yup.object().shape({
     login: Yup.string()
@@ -31,6 +32,7 @@ function displayNotification(message, type = "error", duration = 2500,
 
 function LoginForm({onToggleForm, onResetForm}) {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const handleLogin = (obj) => {
         const {login, password} = obj;
         let email = login;
@@ -102,12 +104,15 @@ function LoginForm({onToggleForm, onResetForm}) {
                         />
                     </div>
                     <div className="mb-5">
-                        <Field
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            type="password"
-                            name="password"
-                            placeholder={`Password`}
-                        ></Field>
+                        <div className="relative">
+                            <Field
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                placeholder={`Password`}
+                            ></Field>
+                            <EyeButton showPassword={showPassword} setShowPassword={setShowPassword}/>
+                        </div>
                         <ErrorMessage
                             className={css.error}
                             name="password"
