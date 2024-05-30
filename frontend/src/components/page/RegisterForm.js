@@ -8,7 +8,7 @@ import {request, setAuthHeader} from "../../util/axios_helper";
 import MeetingDurationSlider from "../MeetingDurationSlider";
 import {Slide, toast} from "react-toastify";
 import axios from "axios";
-import EyeButton from "./EyeButton";
+import EyeButton from "../EyeButton";
 
 const validationSchemas = [
     Yup.object().shape({
