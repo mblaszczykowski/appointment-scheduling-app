@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import bcrypt from 'bcryptjs';
-import css from '../RegisterForm.module.css';
+import css from '../page/RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
 import {getUserIdFromToken, request} from "../../util/axios_helper";
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import css from './RegisterForm.module.css';
-import {request, setAuthHeader} from "../util/axios_helper";
+import {request, setAuthHeader} from "../../util/axios_helper";
 import {useNavigate} from "react-router-dom";
 import {Slide, toast} from 'react-toastify';
 

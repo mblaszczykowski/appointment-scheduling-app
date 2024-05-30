@@ -34,8 +34,14 @@ Make sure frontend runs on default port 3000.
 
 #### Mobile
 ```
-cd mobile
 npm install -g expo-cli
+```
+
+Expo SDK 37 needed (we should do an update later):
+https://expo.io/--/api/v2/versions
+
+```
+cd mobile
 npm install
 expo start
 ```

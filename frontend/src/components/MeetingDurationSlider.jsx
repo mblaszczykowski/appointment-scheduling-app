@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, ErrorMessage } from 'formik';
-import css from './RegisterForm.module.css';
+import css from './page/RegisterForm.module.css';
 
 const getDisplayText = (value) => {
     const hours = Math.floor(value / 60);

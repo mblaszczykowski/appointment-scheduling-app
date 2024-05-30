@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import css from "../RegisterForm.module.css";
+import css from "../page/RegisterForm.module.css";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { request, setAuthHeader } from "../../util/axios_helper";

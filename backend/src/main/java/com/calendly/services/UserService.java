@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
-import static com.calendly.services.TokenService.EXPIRATION_TIME_ACCESS;
-import static com.calendly.services.TokenService.generateToken;
+import static com.calendly.services.TokenService.*;
 
 @Service
 public class UserService {
@@ -161,7 +160,7 @@ public class UserService {
         userDAO.addUser(user);
 
         // logujemy od razu poki co po rejestracji, bez aktywacji
-        String accessToken = generateToken(EXPIRATION_TIME_ACCESS, user.getId());
+        String accessToken = generateToken(EXPIRATION_TIME_REFRESH, user.getId());
         return ResponseEntity.ok(accessToken);
     }
 

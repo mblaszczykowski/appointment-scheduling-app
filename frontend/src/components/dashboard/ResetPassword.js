@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { request, setAuthHeader } from "../../util/axios_helper";
-import css from '../RegisterForm.module.css';
+import css from '../page/RegisterForm.module.css';
 
 const validationSchema = Yup.object().shape({
     newPassword: Yup.string()

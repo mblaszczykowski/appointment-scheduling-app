@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
-import { CheckIcon, StarIcon } from './Icons';
+import { CheckIcon, StarIcon } from '../Icons';
 import Footer from "./Footer";
 
 export default function WelcomeContent({ show }) {
