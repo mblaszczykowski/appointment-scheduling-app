@@ -333,7 +333,7 @@ public class UserService {
         var user = userService.getUserById(uuid);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
                 user.getEmail(), user.getPassword(), user.getCalendarUrl(), user.getMeetingLink(),
-                user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays());
+                user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays(), user.getMeetingDuration());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDTO);

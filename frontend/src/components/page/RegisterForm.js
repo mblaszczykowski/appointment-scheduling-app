@@ -8,6 +8,7 @@ import {request, setAuthHeader} from "../../util/axios_helper";
 import MeetingDurationSlider from "../MeetingDurationSlider";
 import {Slide, toast} from "react-toastify";
 import axios from "axios";
+import EyeButton from "./EyeButton";
 
 const validationSchemas = [
     Yup.object().shape({
@@ -79,6 +80,7 @@ function displayNotification(message, type = "error", duration = 2500,
 function RegisterForm({onToggleForm}) {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleRegister = (obj) => {
         const {
@@ -125,11 +127,12 @@ function RegisterForm({onToggleForm}) {
         if (Object.keys(errors).length > 0) {
             setTouched(errors);
             displayNotification("Please correct the errors on the form.");
+            return;
         }
 
         const stepConfig = [
-            { path: `/api/users/email/${values.email}`, message: "Email already exists" },
-            { path: `/api/calendar/${values.calendarUrl}`, message: "Calendar URL already exists" }
+            {path: `/api/users/email/${values.email}`, message: "Email already exists"},
+            {path: `/api/calendar/${values.calendarUrl}`, message: "Calendar URL already exists"}
         ];
         if (currentStep < stepConfig.length) {
             await handleApiRequest(stepConfig[currentStep].path, stepConfig[currentStep].message);
@@ -273,17 +276,23 @@ function RegisterForm({onToggleForm}) {
                                                 />
                                             </div>
                                             <div className={`mb-3 ${errors.password ? "mb-1" : "mb-5"}`}>
-                                                <Field
-                                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                                    type="password"
-                                                    name="password"
-                                                    placeholder={`Password`}
-                                                ></Field>
+
+                                                <div className="relative">
+                                                    <Field
+                                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                        type={showPassword ? "text" : "password"}
+                                                        name="password"
+                                                        placeholder={`Password`}
+                                                    ></Field>
+                                                    <EyeButton showPassword={showPassword}
+                                                               setShowPassword={setShowPassword}/>
+                                                </div>
                                                 <ErrorMessage
                                                     className={css.error}
                                                     name="password"
                                                     component="span"
                                                 />
+
                                             </div>
 
                                             <div className="relative w-full h-16">

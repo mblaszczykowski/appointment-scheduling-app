@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import css from '../page/RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
 import {getUserIdFromToken, request} from "../../util/axios_helper";
+import EyeButton from "../EyeButton";
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -77,6 +78,7 @@ function SettingsForm() {
     });
 
     const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (!(localStorage.getItem("auth_token") !== null)) {
@@ -165,7 +167,7 @@ function SettingsForm() {
         request(
             "PUT",
             `/api/users/${getUserIdFromToken()}`,
-            { password: newPassword }
+            {password: newPassword}
         ).then(
             () => {
                 navigate("/settings-success");
@@ -198,17 +200,18 @@ function SettingsForm() {
 
             validationSchema={currentPasswordValid ? passwordValidationSchema : generalValidationSchema}
 
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, {setSubmitting}) => {
                 handleUpdate(values);
                 setSubmitting(false);
             }}
         >
-            {({ errors, touched, handleBlur, resetForm, values, validateField, setFieldError }) => (
+            {({errors, touched, handleBlur, resetForm, values, validateField, setFieldError}) => (
                 <Form className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
                         <div>
                             <div className="mb-3">
-                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Personal Information</h1>
+                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Personal
+                                    Information</h1>
                             </div>
                             <div className="mb-5 flex items-center">
                                 <label htmlFor="firstname" className="mr-4 text-m font-medium text-gray-700">
@@ -272,16 +275,20 @@ function SettingsForm() {
                             </div>
                             <div className="mt-2 mb-5">
                                 <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Reset your password</h1>
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Reset your
+                                        password</h1>
                                 </div>
                                 {!currentPasswordValid ? (
                                     <div className="mb-5">
-                                        <Field
-                                            type="password"
-                                            name="currentPassword"
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                            placeholder="Enter current password"
-                                        />
+                                        <div className="relative">
+                                            <Field
+                                                type={showPassword ? "text" : "password"}
+                                                name="currentPassword"
+                                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                                placeholder="Enter current password"
+                                            />
+                                            <EyeButton showPassword={showPassword} setShowPassword={setShowPassword}/>
+                                        </div>
                                         <ErrorMessage
                                             name="currentPassword"
                                             component="span"
@@ -378,7 +385,8 @@ function SettingsForm() {
                         <div>
                             <div className="mt-2 mb-5">
                                 <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the calendar name</h1>
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
+                                        calendar name</h1>
                                 </div>
                                 <div className="mb-5">
                                     <Field
@@ -396,7 +404,8 @@ function SettingsForm() {
                             </div>
                             <div className="mt-2 mb-5">
                                 <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the meeting link</h1>
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set the
+                                        meeting link</h1>
                                 </div>
                                 <div className="mb-5">
                                     <Field
@@ -414,7 +423,8 @@ function SettingsForm() {
                             </div>
                             <div className="mt-2 mb-5">
                                 <div className="mb-3">
-                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your availability</h1>
+                                    <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Set your
+                                        availability</h1>
                                 </div>
                                 <div className="mb-3">
                                     <h1 className="block text-md text-gray-800 dark:text-white">Available hours:</h1>
