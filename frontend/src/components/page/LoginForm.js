@@ -5,7 +5,7 @@ import css from './RegisterForm.module.css';
 import {request, setAuthHeader} from "../../util/axios_helper";
 import {useNavigate} from "react-router-dom";
 import {Slide, toast} from 'react-toastify';
-import EyeButton from "./EyeButton";
+import EyeButton from "../EyeButton";
 
 const contactSchema = Yup.object().shape({
     login: Yup.string()
