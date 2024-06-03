@@ -2,10 +2,16 @@ package com.calendly.email;
 
 import com.calendly.dtos.AppointmentDTO;
 import com.calendly.entities.Appointment;
+import com.calendly.entities.CancelMeetingToken;
 import com.calendly.entities.PasswordResetToken;
 import com.calendly.entities.User;
+import com.calendly.repositories.AppointmentRepository;
+import com.calendly.repositories.TokenCancelRepository;
 import com.calendly.repositories.TokenResetRepository;
+import com.calendly.services.AppointmentService;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,6 +19,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +33,14 @@ public class MailService {
     JavaMailSender javaMailSender;
     @Autowired
     TokenResetRepository tokenResetRepository;
+    @Autowired
+    TokenCancelRepository tokenCancelRepository;
+    @Autowired
+    AppointmentRepository appointmentRepository;
     @Value("${mail.baseUrl}")
     private String baseUrl;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public String generateResetToken(User user) {
         UUID uuid = UUID.randomUUID();
@@ -48,6 +61,33 @@ public class MailService {
         }
 
         tokenResetRepository.save(existingToken);
+        return existingToken.getToken();
+    }
+
+    @Transactional
+    public String generateCancelMeetingToken(Appointment appointment) {
+        UUID uuid = UUID.randomUUID();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime expiryDateTime = currentDateTime.plusMinutes(4320);
+
+        // Ensure appointment is managed
+        appointment = appointmentRepository.findById(appointment.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid appointment ID"));
+
+        var existingToken = tokenCancelRepository.findByAppointmentId(appointment.getId());
+
+        if (existingToken != null) {
+            existingToken.setToken(uuid.toString());
+            existingToken.setExpiryDateTime(expiryDateTime);
+        } else {
+            existingToken = new CancelMeetingToken();
+            existingToken.setAppointment(appointment);
+            existingToken.setToken(uuid.toString());
+            existingToken.setExpiryDateTime(expiryDateTime);
+        }
+
+        // Save the token
+        tokenCancelRepository.save(existingToken);
+
         return existingToken.getToken();
     }
 
@@ -121,11 +161,16 @@ public class MailService {
     }
 
     @Async
-    public void sendEmail(AppointmentDTO appointmentDTO, User calendarOwner, Boolean isBooker) {
+    @Transactional
+    public void sendEmail(Appointment appointment, User calendarOwner, Boolean isBooker) {
+        appointment = entityManager.merge(appointment);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDateTime = appointmentDTO.startTime().format(formatter);
+        String formattedDateTime = appointment.getStartTime().format(formatter);
         String textBody;
         String htmlBody;
+        var path = "/cancel-meeting/";
+        var token = generateCancelMeetingToken(appointment);
+        var cancelMeetingLink = baseUrl + path + token;
 
         if (isBooker) {
             textBody = String.format("""
@@ -135,14 +180,18 @@ public class MailService {
                         
                         Meeting note:
                         %s
+                        
+                        To cancel your meeting, please click the link below:
+                        %s
 
                         Regards,
                         Team Meetly""",
-                    appointmentDTO.bookerName(),
+                    appointment.getBookerName(),
                     calendarOwner.getFullName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointmentDTO.meetingNote());
+                    appointment.getMeetingNote(),
+                    cancelMeetingLink);
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -158,17 +207,19 @@ public class MailService {
                             <p>Hello, %s</p>
                             <p>Your meeting with <strong>%s</strong> will take place on <strong>%s</strong> CET at <a href="%s" class="button">this link</a></p>
                             <p><strong>Meeting note:</strong><br />%s</p>
+                            <p>To cancel your meeting, please click the link below:<br/><a href="%s" class="button">Cancel meeting</a></p>
                             <p>Regards,<br /><strong>Team Meetly</strong></p>
                         </div>
                         </body>
                         </html>
                         """,
                     getCss(),
-                    appointmentDTO.bookerName(),
+                    appointment.getBookerName(),
                     calendarOwner.getFullName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointmentDTO.meetingNote());
+                    appointment.getMeetingNote(),
+                    cancelMeetingLink);
 
         } else {
             textBody = String.format("""
@@ -183,10 +234,10 @@ public class MailService {
                         Regards,
                         Team Meetly""",
                     calendarOwner.getFullName(),
-                    appointmentDTO.bookerName(),
+                    appointment.getBookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointmentDTO.meetingNote());
+                    appointment.getMeetingNote());
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -210,10 +261,10 @@ public class MailService {
                         """,
                     getCss(),
                     calendarOwner.getFullName(),
-                    appointmentDTO.bookerName(),
+                    appointment.getBookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointmentDTO.meetingNote());
+                    appointment.getMeetingNote());
         }
 
         try {
@@ -221,7 +272,7 @@ public class MailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setFrom("Meetly <app.meetly@gmail.com>");
-            helper.setTo(isBooker ? appointmentDTO.bookerEmail() : calendarOwner.getEmail());
+            helper.setTo(isBooker ? appointment.getBookerEmail() : calendarOwner.getEmail());
             helper.setSubject("Meeting confirmation");
             helper.setText(textBody, htmlBody);
 
@@ -230,7 +281,6 @@ public class MailService {
             e.printStackTrace();
         }
     }
-
 
     @Async
     public void sendCancelAppointmentEmail(Appointment appointment, User calendarOwner, Boolean isBooker) {
@@ -331,8 +381,6 @@ public class MailService {
             e.printStackTrace();
         }
     }
-
-
 
     public String getCss() {
         return """

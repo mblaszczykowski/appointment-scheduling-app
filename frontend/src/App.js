@@ -15,6 +15,7 @@ import ResetPasswordMailForm from "./components/dashboard/ResetPasswordMailForm"
 import ResetPassword from "./components/dashboard/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CancelMeeting from "./components/dashboard/CancelMeeting";
 
 function App() {
     const navigate = useNavigate();
@@ -43,6 +44,7 @@ function App() {
                                     <Route path="/settings-success" element={<SettingsSuccess/>}/>
                                     <Route path="/reset-password" element={<ResetPasswordMailForm/>}/>
                                     <Route path="/reset-password/:token" element={<ResetPassword />} />
+                                    <Route path="/cancel-meeting/:token" element={<CancelMeeting />} />
                                     <Route path="/error" element={<ErrorPage/>}/>
                                     <Route path="/booking-success" element={<BookingSuccess/>}/>
                                 </Routes>
