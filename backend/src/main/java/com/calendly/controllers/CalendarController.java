@@ -2,6 +2,7 @@ package com.calendly.controllers;
 
 import com.calendly.dtos.AppointmentDTO;
 import com.calendly.email.MailService;
+import com.calendly.entities.Appointment;
 import com.calendly.entities.User;
 import com.calendly.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,10 @@ public class CalendarController {
     @PostMapping("/booking-confirmation")
     public ResponseEntity<?> bookingConfirmation(@RequestBody AppointmentDTO appointmentDTO) {
         var calendarOwner = userService.getUserIdFromCalendarUrl(appointmentDTO.calendarUrl());
+        Appointment appointment = new Appointment();
         try {
-            mailService.sendEmail(appointmentDTO, calendarOwner, true);
-            mailService.sendEmail(appointmentDTO, calendarOwner, false);
+            mailService.sendEmail(appointment, calendarOwner, false);
+            mailService.sendEmail(appointment, calendarOwner, true);
             return ResponseEntity.ok().build();
         }
         catch (Exception e) {

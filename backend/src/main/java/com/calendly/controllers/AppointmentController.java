@@ -7,12 +7,14 @@ import com.calendly.services.AppointmentService;
 import com.calendly.services.UserService;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,27 +54,41 @@ public class AppointmentController {
                 appointmentDTO.endTime(),
                 appointmentDTO.bookerName(),
                 appointmentDTO.bookerEmail(),
-                appointmentDTO.meetingNote()
+                appointmentDTO.meetingNote(),
+                appointmentDTO.isActual()
         );
-        mailService.sendEmail(appointmentDTO, user, true);
-        mailService.sendEmail(appointmentDTO, user, false);
+        var appointmentId = appointmentService.getAppointmentByUserAndDate(user.getId(), appointmentDTO.startTime(), appointmentDTO.endTime()).getId();
+        var appointment = appointmentService.getAppointmentById(appointmentId);
+        mailService.sendEmail(appointment, user, false);
+        mailService.sendEmail(appointment, user, true);
 
         return new ResponseEntity<>("Appointment created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getAppointmentsByUserIdAndDate(@PathVariable Integer userId, @RequestParam @Nullable String date, HttpServletRequest request) {
-        if (date != null) {
-            LocalDate localDate = LocalDate.parse(date);
-            List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
-            return ResponseEntity.ok(appointments);
-        } else {
-            ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
-            if (!authResponse.getStatusCode().is2xxSuccessful()) {
-                return authResponse;
+    public ResponseEntity<?> getAppointmentsByUserIdAndDate(
+            @PathVariable Integer userId,
+            @RequestParam @Nullable String date,
+            HttpServletRequest request) {
+        try {
+            if (date != null) {
+                LocalDate localDate = LocalDate.parse(date);
+                List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
+                return ResponseEntity.ok(appointments);
+            } else {
+                ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
+                if (!authResponse.getStatusCode().is2xxSuccessful()) {
+                    return authResponse;
+                }
+                List<Appointment> appointments = appointmentService.getAppointmentsByUserId(userId);
+                return ResponseEntity.ok(appointments);
             }
-            List<Appointment> appointments = appointmentService.getAppointmentsByUserId(userId);
-            return ResponseEntity.ok(appointments);
+        } catch (DateTimeParseException e) {
+            LoggerFactory.getLogger(this.getClass()).error("Invalid date format: " + date, e);
+            return ResponseEntity.badRequest().body("Invalid date format");
+        } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).error("Error fetching appointments", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching appointments");
         }
     }
 
@@ -85,6 +101,21 @@ public class AppointmentController {
         try {
             appointmentService.cancelAppointment(id);
             var appointment = appointmentService.getAppointmentById(id);
+            var user = userService.getUserById(appointment.getUser().getId());
+            mailService.sendCancelAppointmentEmail(appointment, user, true);
+            mailService.sendCancelAppointmentEmail(appointment, user, false);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/cancelMeeting/{token}")
+    public ResponseEntity<?> cancelAppointmentFromMail(@PathVariable String token, HttpServletRequest request) {
+        try {
+            var appointmentId = appointmentService.getAppointmentIdByToken(token);
+            appointmentService.cancelAppointment(appointmentId);
+            var appointment = appointmentService.getAppointmentById(appointmentId);
             var user = userService.getUserById(appointment.getUser().getId());
             mailService.sendCancelAppointmentEmail(appointment, user, true);
             mailService.sendCancelAppointmentEmail(appointment, user, false);
