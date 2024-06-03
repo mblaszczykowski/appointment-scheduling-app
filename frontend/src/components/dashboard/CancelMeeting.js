@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { request } from "../../util/axios_helper";
-import css from '../RegisterForm.module.css';
 
 function CancelMeeting() {
     const navigate = useNavigate();
