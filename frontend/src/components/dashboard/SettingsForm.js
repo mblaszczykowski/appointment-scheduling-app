@@ -6,6 +6,7 @@ import css from '../page/RegisterForm.module.css';
 import {useNavigate} from "react-router-dom";
 import {getUserIdFromToken, request} from "../../util/axios_helper";
 import EyeButton from "../EyeButton";
+import {Slide, toast} from "react-toastify";
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -61,6 +62,15 @@ const passwordValidationSchema = Yup.object().shape({
         .oneOf([Yup.ref('newPassword')], 'Passwords must match.')
         .required('Confirmation password is required.')
 });
+
+function displayNotification(message, type = "success", duration = 2500,
+                             transition = Slide, position = "top-center") {
+    toast[type](message, {
+        position: position,
+        autoClose: duration,
+        transition: transition
+    });
+}
 
 function SettingsForm() {
     const navigate = useNavigate();
@@ -155,7 +165,7 @@ function SettingsForm() {
             updateData
         ).then(
             () => {
-                navigate("/settings-success");
+                displayNotification('Account successfully updated.')
             }).catch(
             (error) => {
                 console.error("Update error:", error.response || error.message);
@@ -170,7 +180,7 @@ function SettingsForm() {
             {password: newPassword}
         ).then(
             () => {
-                navigate("/settings-success");
+                displayNotification('Account successfully updated.')
             }).catch(
             (error) => {
                 console.error("Password update error:", error.response || error.message);
