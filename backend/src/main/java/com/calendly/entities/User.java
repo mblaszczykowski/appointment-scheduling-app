@@ -50,10 +50,13 @@ public class User {
     @Column(name = "meetingDuration", nullable = false)
     private Integer meetingDuration;
 
+    @Column(name = "profilePicture", nullable = true)
+    private String profilePicture;
+
     public User() {
     }
 
-    public User(String firstname, String lastname, String email, String password, String calendarUrl, String meetingLink, Integer availableFromHour, Integer availableToHour, String availableDays, Integer meetingDuration) {
+    public User(String firstname, String lastname, String email, String password, String calendarUrl, String meetingLink, Integer availableFromHour, Integer availableToHour, String availableDays, Integer meetingDuration, String profilePicture) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -64,6 +67,7 @@ public class User {
         this.availableToHour = availableToHour;
         this.availableDays = availableDays;
         this.meetingDuration = meetingDuration;
+        this.profilePicture = profilePicture;
     }
 
     public Integer getId() {
@@ -160,5 +164,17 @@ public class User {
 
     public Integer getMeetingDuration() {
         return meetingDuration;
+    }
+
+    public void setMeetingDuration(Integer meetingDuration) {
+        this.meetingDuration = meetingDuration;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicturePath) {
+        this.profilePicture = profilePicturePath;
     }
 }

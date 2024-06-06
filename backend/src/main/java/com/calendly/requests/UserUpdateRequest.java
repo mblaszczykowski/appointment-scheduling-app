@@ -1,7 +1,11 @@
 package com.calendly.requests;
 
+import jakarta.annotation.Nullable;
+import org.springframework.web.multipart.MultipartFile;
+
 public record UserUpdateRequest(
         String firstname, String lastname, String email, String password,
-        String calendarUrl, Integer availableFromHour, Integer availableToHour, String availableDays
+        String calendarUrl, Integer availableFromHour, Integer availableToHour, String availableDays,
+        @Nullable MultipartFile profilePicture
 ) {
 }

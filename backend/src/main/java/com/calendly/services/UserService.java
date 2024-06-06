@@ -13,24 +13,33 @@ import com.calendly.requests.UserRegistrationRequest;
 import com.calendly.requests.UserUpdateRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
-import static com.calendly.services.TokenService.*;
+import static com.calendly.services.TokenService.EXPIRATION_TIME_REFRESH;
+import static com.calendly.services.TokenService.generateToken;
 
 @Service
 public class UserService {
     private final UserDAO userDAO;
-    private final String imageBasePath = "src/main/resources/media/prof-pic/";
 
     @Autowired
     JavaMailSender javaMailSender;
@@ -42,6 +51,21 @@ public class UserService {
     MailService mailService;
     @Autowired
     TokenService tokenService;
+
+    @Value("${aws.s3.access-key-id}")
+    private String S3accessKeyId;
+
+    @Value("${aws.s3.secret-access-key}")
+    private String S3SecretAccessKey;
+
+    @Value("${aws.s3.bucket}")
+    private String S3BucketName;
+
+    @Value("${aws.s3.region}")
+    private Region S3Region;
+
+    @Value("${S3profilePicsFolder}")
+    private String S3ProfilePicsFolder;
 
     @Autowired
     public UserService(UserDAO userDAO) {
@@ -156,7 +180,8 @@ public class UserService {
                 userRegistrationRequest.availableFromHour(),
                 userRegistrationRequest.availableToHour(),
                 userRegistrationRequest.availableDays(),
-                userRegistrationRequest.meetingDuration());
+                userRegistrationRequest.meetingDuration(),
+                null);
         userDAO.addUser(user);
 
         // logujemy od razu poki co po rejestracji, bez aktywacji
@@ -205,9 +230,35 @@ public class UserService {
         updateIfNotNull(user::setAvailableFromHour, userUpdateRequest.availableFromHour());
         updateIfNotNull(user::setAvailableToHour, userUpdateRequest.availableToHour());
         updateIfNotNull(user::setAvailableDays, userUpdateRequest.availableDays());
+        MultipartFile profilePicture = userUpdateRequest.profilePicture();
 
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+            String key = S3ProfilePicsFolder + uuid + "/" + profilePicture.getOriginalFilename();
+            handleProfilePicture(profilePicture, user, key);
+            user.setProfilePicture("https://" + S3BucketName + ".s3.amazonaws.com/" + key);
+        }
         userDAO.updateUser(user);
         return ResponseEntity.ok("User updated successfully");
+    }
+
+    private void handleProfilePicture(MultipartFile profilePicture, User user, String key) {
+        try (S3Client s3 = S3Client.builder().credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(S3accessKeyId, S3SecretAccessKey))).region(S3Region).build()) {
+            // Deleting the old image
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(S3BucketName)
+                    .key(user.getProfilePicture().substring(user.getProfilePicture().indexOf(S3ProfilePicsFolder)))
+                    .build();
+            s3.deleteObject(deleteRequest);
+
+            // Uploading the new image
+            PutObjectRequest putRequest = PutObjectRequest.builder()
+                    .bucket(S3BucketName)
+                    .key(key)
+                    .build();
+            s3.putObject(putRequest, RequestBody.fromInputStream(profilePicture.getInputStream(), profilePicture.getSize()));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload profile picture to S3.", e);
+        }
     }
 
     private <T> void updateIfNotNull(Consumer<T> setter, T value) {
@@ -333,7 +384,8 @@ public class UserService {
         var user = userService.getUserById(uuid);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
                 user.getEmail(), user.getPassword(), user.getCalendarUrl(), user.getMeetingLink(),
-                user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays(), user.getMeetingDuration());
+                user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays(), user.getMeetingDuration(),
+                user.getProfilePicture());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDTO);

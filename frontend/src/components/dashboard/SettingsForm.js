@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {getUserIdFromToken, request} from "../../util/axios_helper";
 import EyeButton from "../EyeButton";
 import {Slide, toast} from "react-toastify";
+import ProfilePicture from "./ProfilePicture";
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -85,11 +86,12 @@ function SettingsForm() {
         availableFromHour: '',
         availableToHour: '',
         availableDays: [],
+        profilePicture: null,
     });
 
     const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
+    const [profilePicture, setProfilePicture] = useState(null);
     useEffect(() => {
         if (!(localStorage.getItem("auth_token") !== null)) {
             navigate("/dashboard");
@@ -106,9 +108,9 @@ function SettingsForm() {
                         meetingLink,
                         availableFromHour,
                         availableToHour,
-                        availableDays
+                        availableDays,
+                        profilePicture
                     } = response.data;
-
                     const availableDaysArray = availableDays.split(',');
 
                     setUserData({
@@ -121,6 +123,7 @@ function SettingsForm() {
                         availableFromHour,
                         availableToHour,
                         availableDays: availableDaysArray,
+                        profilePicture
                     });
                     setLoading(false);
                 })
@@ -136,7 +139,7 @@ function SettingsForm() {
         return await bcrypt.compare(password, userData.password);
     };
 
-    const handleUpdate = (obj) => {
+    const handleUpdate = (values) => {
         const {
             firstname,
             lastname,
@@ -145,24 +148,30 @@ function SettingsForm() {
             meetingLink,
             availableFromHour,
             availableToHour,
-            availableDays
-        } = obj;
-
-        const updateData = {
-            firstname,
-            lastname,
-            email,
-            calendarUrl,
-            meetingLink,
-            availableFromHour: parseInt(availableFromHour, 10),
-            availableToHour: parseInt(availableToHour, 10),
-            availableDays: availableDays.join(',')
-        };
-
+            availableDays,
+            profilePicture
+        } = values;
+        const userData = new FormData();
+        userData.append("firstname", firstname);
+        userData.append("lastname", lastname);
+        userData.append("email", email);
+        userData.append("calendarUrl", calendarUrl);
+        userData.append("meetingLink", meetingLink);
+        userData.append("availableFromHour", availableFromHour);
+        userData.append("availableToHour", availableToHour);
+        userData.append("availableDays", availableDays.join(','));
+        if (profilePicture) {
+            userData.append("profilePicture", profilePicture);
+        }
         request(
             "PUT",
             `api/users/${getUserIdFromToken()}`,
-            updateData
+            userData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
         ).then(
             () => {
                 displayNotification('Account successfully updated.')
@@ -206,6 +215,7 @@ function SettingsForm() {
                 availableFromHour: userData.availableFromHour || '',
                 availableToHour: userData.availableToHour || '',
                 availableDays: userData.availableDays || [],
+                profilePicture: profilePicture || null,
             }}
 
             validationSchema={currentPasswordValid ? passwordValidationSchema : generalValidationSchema}
@@ -215,10 +225,19 @@ function SettingsForm() {
                 setSubmitting(false);
             }}
         >
-            {({errors, touched, handleBlur, resetForm, values, validateField, setFieldError}) => (
+            {({errors, touched, handleBlur, resetForm, values, validateField, setFieldError, setFieldValue}) => (
                 <Form className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
                         <div>
+                            <div className="mb-3">
+                                <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Profile
+                                    Picture</h1>
+                            </div>
+                            <div className="mb-5 flex items-center">
+                                <ProfilePicture firstName={userData.firstname} lastName={userData.lastname}
+                                                onProfilePictureChange={(file) => setFieldValue('profilePicture', file)}
+                                                profilePicture={userData.profilePicture}/>
+                            </div>
                             <div className="mb-3">
                                 <h1 className="block text-lg font-bold text-gray-800 dark:text-white">Personal
                                     Information</h1>
@@ -317,7 +336,7 @@ function SettingsForm() {
                                                         setFieldError('currentPassword', 'Current password is incorrect.');
                                                     }
                                                 }}
-                                                className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-3"
+                                                className="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border-2 border-gray-700 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                             >
                                                 Next
                                             </button>
@@ -368,6 +387,7 @@ function SettingsForm() {
                                                             availableFromHour: userData.availableFromHour || '',
                                                             availableToHour: userData.availableToHour || '',
                                                             availableDays: userData.availableDays || [],
+                                                            profilePicture: userData.profilePicture || '',
                                                         },
                                                     });
                                                     setCurrentPasswordValid(false);

@@ -1,10 +1,10 @@
 // Dashboard.js
-import React, { useEffect, useState} from 'react';
-import { getUserIdFromToken, request, setAuthHeader } from '../../util/axios_helper';
+import React, {useEffect, useState} from 'react';
+import {getUserIdFromToken, request, setAuthHeader} from '../../util/axios_helper';
 import dayjs from 'dayjs';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import './Dashboard.css'; // Make sure to import the CSS file for animations
-import {HomeIcon, CalendarIcon, UserIconDashboard, CancelIcon} from '../Icons';
+import {CalendarIcon, CancelIcon, HomeIcon, UserIconDashboard} from '../Icons';
 import UpcomingMeetings from './UpcomingMeetings';
 import PastMeetings from './PastMeetings';
 import SettingsForm from "./SettingsForm";
@@ -18,7 +18,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const isLoggedIn = localStorage.getItem('auth_token') !== null;
 
-    useEffect(()=> {
+    useEffect(() => {
         if (!isLoggedIn) {
             return navigate('/login');
         }
@@ -36,17 +36,17 @@ export default function Dashboard() {
     }, []);
 
     const handleSearchChange = (e) => {
-        setSearchQuery( e.target.value );
+        setSearchQuery(e.target.value);
     }
 
     const filterAppointments = () => {
         const now = dayjs();
 
         const filteredDataActual = data.filter(appointment =>
-            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())&& appointment.isActual
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase()) && appointment.isActual
         );
         const filteredDataCanceled = data.filter(appointment =>
-            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())&& !appointment.isActual
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase()) && !appointment.isActual
         );
 
         const groupAppointments = (filterFn) => filteredDataActual.filter(filterFn);
@@ -81,11 +81,14 @@ export default function Dashboard() {
 
         switch (selectedTab) {
             case 'upcoming':
-                return <UpcomingMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.upcoming} />;
+                return <UpcomingMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange}
+                                         appointments={appointments.upcoming}/>;
             case 'past':
-                return <PastMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.past} />;
+                return <PastMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange}
+                                     appointments={appointments.past}/>;
             case 'canceled':
-                return <CanceledMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange} appointments={appointments.canceled} />;
+                return <CanceledMeetings searchQuery={searchQuery} handleSearchChange={handleSearchChange}
+                                         appointments={appointments.canceled}/>;
             case 'settings':
                 return (
                     <div>
@@ -107,14 +110,15 @@ export default function Dashboard() {
     return (
         <div
             className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent min-h-screen">
-                <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
-                    <div className="max-w-6xl mx-auto">
-                        <h1 className="mb-1 ml-4 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
-                            Hello, <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
-                        </h1>
-                        <h1 className="ml-4 mb-8 block text-sm text-gray-800 sm:text-4xl  md:text-base dark:text-white">
-                            Today is {currentDate}
-                        </h1>
+            <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
+                <div className="max-w-6xl mx-auto">
+                    <h1 className="mb-1 ml-4 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
+                        Hello, <span
+                        className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
+                    </h1>
+                    <h1 className="ml-4 mb-8 block text-sm text-gray-800 sm:text-4xl  md:text-base dark:text-white">
+                        Today is {currentDate}
+                    </h1>
 
                     <div className="flex flex-col md:flex-row md:items-start">
                         <div

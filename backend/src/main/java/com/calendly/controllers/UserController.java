@@ -12,12 +12,14 @@ import com.calendly.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/users")
 public class UserController {
@@ -58,10 +60,10 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PutMapping("{uuid}")
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "{uuid}")
     public ResponseEntity<?> updateUser(
             @PathVariable("uuid") Integer uuid,
-            @RequestBody UserUpdateRequest request,
+            @ModelAttribute UserUpdateRequest request,
             HttpServletRequest httpRequest
     ) {
         return userService.updateUser(uuid, request, httpRequest);

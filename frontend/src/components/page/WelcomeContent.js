@@ -31,7 +31,7 @@ export default function WelcomeContent({ show }) {
                     <div className="grid items-center md:grid-cols-2 lg:mb-8">
                         <div className="max-w-2xl mx-auto p-14">
                             <div className="max-w-2xl">
-                                <h1 className="pb-1 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-3xl md:text-5xl lg:text-5xl dark:from-black dark:to-blue-800">
+                                <h1 className="pb-2 block font-semibold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500 text-3xl md:text-5xl lg:text-5xl dark:from-black dark:to-blue-800">
                                     The Intuitive Appointment<br /> Scheduling
                                 </h1>
                             </div>
