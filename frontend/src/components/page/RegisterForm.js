@@ -407,7 +407,6 @@ function RegisterForm({onToggleForm}) {
                                                     </label>
                                                 ))}
                                             </div>
-                                            <ErrorMessage name="availableDays" component="div" className={css.error}/>
                                             <div className="mt-1 flex space-x-2">
                                                 <button
                                                     type="button"
@@ -416,6 +415,8 @@ function RegisterForm({onToggleForm}) {
                                                 >
                                                     Select Mon-Fri
                                                 </button>
+                                                <ErrorMessage name="availableDays" component="div"
+                                                              className={css.error}/>
                                             </div>
 
                                             <div className="relative w-full h-16 mt-8">

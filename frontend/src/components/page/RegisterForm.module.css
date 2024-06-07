@@ -27,6 +27,9 @@
     margin-bottom: 0;
     font-size: 14px;
     color: orangered;
+    display: flex;
+    align-items: center;
+    height: 30px;
 }
 
 .fade-enter {

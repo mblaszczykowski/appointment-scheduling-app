@@ -12,7 +12,8 @@ import {useNavigate} from "react-router-dom";
 import CanceledMeetings from "./CanceledMeetings";
 
 export default function Dashboard() {
-    const [data, setData] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+    const [username, setUsername] = useState('');
     const [selectedTab, setSelectedTab] = useState('upcoming');
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
@@ -24,13 +25,15 @@ export default function Dashboard() {
         }
         request('GET', `/api/appointments/user/${getUserIdFromToken()}`, {})
             .then((response) => {
-                setData(response.data);
+                console.log(response.data)
+                setAppointments(response.data.appointments);
+                setUsername(response.data.username);
             })
             .catch((error) => {
                 if (error.response && error.response.status === 401) {
                     setAuthHeader(null);
                 } else {
-                    setData(error.response ? error.response.code : 'Unknown error')
+                    setAppointments(error.response ? error.response.code : 'Unknown error')
                 }
             });
     }, []);
@@ -42,10 +45,10 @@ export default function Dashboard() {
     const filterAppointments = () => {
         const now = dayjs();
 
-        const filteredDataActual = data.filter(appointment =>
+        const filteredDataActual = appointments.filter(appointment =>
             appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase()) && appointment.isActual
         );
-        const filteredDataCanceled = data.filter(appointment =>
+        const filteredDataCanceled = appointments.filter(appointment =>
             appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase()) && !appointment.isActual
         );
 
@@ -114,7 +117,7 @@ export default function Dashboard() {
                 <div className="max-w-6xl mx-auto">
                     <h1 className="mb-1 ml-4 block text-3xl font-bold text-gray-800 sm:text-4xl md:text-2xl dark:text-white">
                         Hello, <span
-                        className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">user</span>
+                        className="text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">{username}</span>
                     </h1>
                     <h1 className="ml-4 mb-8 block text-sm text-gray-800 sm:text-4xl  md:text-base dark:text-white">
                         Today is {currentDate}

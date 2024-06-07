@@ -275,6 +275,13 @@ const Calendar = () => {
         setSelectedTimeSlot(null);
     };
 
+    const handleProfilePictureChange = (file) => {
+        setUserData(prevState => ({
+            ...prevState,
+            profilePicture: URL.createObjectURL(file)
+        }));
+    };
+
     return (
         <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent">
             <div className="relative overflow-hidden">
@@ -285,12 +292,12 @@ const Calendar = () => {
                             <span className="text-blue-600">and book the meeting</span>
                         </h1>
                         <div className="mt-6 lg:mt-6 sm:mt-10 flex items-center justify-center">
-                            <div className="flex-shrink-0 w-14 h-14 rounded-full mr-4 shadow-lg flex items-center justify-center bg-gray-100">
-                                <UserIcon />
+                            <div className="flex-shrink-0 mr-4 shadow-lg profile-pic-container">
+                                <img src={userData.profilePicture} alt="Profile"/>
                             </div>
                             <div className="ms-3 sm:ms-4">
                                 <p className="sm:mb-1 font-semibold text-gray-800 dark:text-neutral-200 text-center">
-                                    {userData.name}
+                                    {userData.firstname} {userData.lastname}
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-neutral-500 text-center">
                                     {userData.meetingDuration} mins meetings available
@@ -298,9 +305,11 @@ const Calendar = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="rounded-lg shadow-lg p-6 bg-white pb-14 mt-10 flex sm:divide-x justify-center sm:w-2/3 mx-auto items-center sm:flex-row flex-col">
-                        <div className="flex gap-10 sm:divide-x justify-center w-full sm:w-full mx-auto items-center sm:flex-row flex-col">
-                            <div className="w-full h-96 flex-1">
+                    <div
+                        className="rounded-lg shadow-lg p-6 bg-white pb-14 mt-10 flex sm:divide-x justify-center sm:w-2/3 mx-auto items-center sm:flex-row flex-col">
+                        <div
+                            className="flex gap-10 sm:divide-x justify-center w-full sm:w-full mx-auto items-center sm:flex-row flex-col">
+                        <div className="w-full h-96 flex-1">
                                 <CalendarHeader today={today} setToday={setToday} currentDate={currentDate} />
                                 <CalendarDays days={days}/>
                                 <CalendarGrid dates={generateDate(today.month(), today.year())} selectDate={selectDate}

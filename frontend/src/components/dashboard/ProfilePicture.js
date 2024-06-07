@@ -38,11 +38,12 @@ export default function ProfilePicture({firstName, lastName, onProfilePictureCha
                 onChange={handleImageChange}
             />
             {previewUrl ? (
-                <img
-                    src={previewUrl}
-                    alt="Profile Preview"
-                    className="preview-image round-image"
-                />
+                <div className="round-image">
+                    <img
+                        src={previewUrl}
+                        alt="Profile Preview"
+                    />
+                </div>
             ) : (
                 <Avatar
                     sx={{bgcolor: deepOrange[500], width: 118, height: 118, fontSize: 50, cursor: 'pointer'}}

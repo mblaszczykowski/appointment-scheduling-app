@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -71,18 +73,21 @@ public class AppointmentController {
             @RequestParam @Nullable String date,
             HttpServletRequest request) {
         try {
+            List<Appointment> appointments;
             if (date != null) {
                 LocalDate localDate = LocalDate.parse(date);
-                List<Appointment> appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
-                return ResponseEntity.ok(appointments);
+                appointments = appointmentService.getAppointmentsByUserIdAndDate(userId, localDate);
             } else {
                 ResponseEntity<?> authResponse = appointmentService.checkAuthorization(request);
                 if (!authResponse.getStatusCode().is2xxSuccessful()) {
                     return authResponse;
                 }
-                List<Appointment> appointments = appointmentService.getAppointmentsByUserId(userId);
-                return ResponseEntity.ok(appointments);
+                appointments = appointmentService.getAppointmentsByUserId(userId);
             }
+            Map<String, Object> response = new HashMap<>();
+            response.put("appointments", appointments);
+            response.put("username", userService.getUserById(userId).getFirstname());
+            return ResponseEntity.ok(response);
         } catch (DateTimeParseException e) {
             LoggerFactory.getLogger(this.getClass()).error("Invalid date format: " + date, e);
             return ResponseEntity.badRequest().body("Invalid date format");
