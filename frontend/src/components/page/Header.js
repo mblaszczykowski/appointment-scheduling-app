@@ -1,8 +1,29 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import logo from '../../logo.svg';
+import {request} from "../../util/axios_helper";
 
 export default function Header({isLoggedIn, onLogout}) {
+    const [calendarUrl, setCalendarUrl] = useState('');
+    useEffect(() => {
+        const fetchCalendarUrl = () => {
+            if (!isLoggedIn) {
+                setCalendarUrl('');
+                return;
+            }
+            request('GET', `/api/users`, {})
+                .then((response) => {
+                    setCalendarUrl(response.data.calendarUrl);
+                })
+                .catch((error) => {
+                    console.error("Failed to fetch user's calendarUrl:", error);
+                    setCalendarUrl('');
+                });
+        };
+
+        fetchCalendarUrl();
+    }, [isLoggedIn]);
     return (
         <header className="flex justify-center w-full py-4 z-50">
             <nav className="relative max-w-7xl w-full flex justify-between items-center px-4 md:px-8 mx-auto"
@@ -27,6 +48,11 @@ export default function Header({isLoggedIn, onLogout}) {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
+                            <Link type="Link"
+                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+                                  to={"/calendar/" + calendarUrl}>
+                                My Calendar
+                            </Link>
                             <Link type="Link"
                                   className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
                                   to={"/dashboard"}>

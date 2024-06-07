@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { generateDate, months } from '../../util/calendar';
+import {generateDate, months} from '../../util/calendar';
 import cn from '../../util/cn';
 import BookMeetingForm from './BookMeetingForm';
-import {UserIcon, ArrowRightIcon, ArrowLeftIcon, ArrowRightCircleIcon} from '../Icons';
+import {ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon} from '../Icons';
+import {deepOrange} from "@mui/material/colors";
+import Avatar from "@mui/material/Avatar";
 
 const CalendarHeader = ({ today, setToday, currentDate }) => (
     <div className="flex justify-between items-center">
@@ -204,7 +206,7 @@ const Calendar = () => {
             const fetchBookedSlots = async () => {
                 try {
                     const response = await axios.get(`/api/appointments/user/${userData.id}?date=${selectDate.format('YYYY-MM-DD')}`);
-                    const bookedSlots = response.data.map(appointment => {
+                    const bookedSlots = response.data.appointments.map(appointment => {
                         const startTime = new Date(appointment.startTime);
                         return {
                             hour: startTime.getHours(),
@@ -275,26 +277,35 @@ const Calendar = () => {
         setSelectedTimeSlot(null);
     };
 
-    const handleProfilePictureChange = (file) => {
-        setUserData(prevState => ({
-            ...prevState,
-            profilePicture: URL.createObjectURL(file)
-        }));
-    };
-
     return (
         <div className="relative bg-gradient-to-bl from-blue-100 via-transparent dark:from-blue-950 dark:via-transparent">
             <div className="relative overflow-hidden">
                 <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6">
                     <div className="max-w-2xl text-center mx-auto">
                         <h1 className="block text-2xl font-bold text-gray-800 sm:text-4xl md:text-3xl dark:text-white">
-                            Choose a date that suits you <br />
+                            Choose a date that suits you <br/>
                             <span className="text-blue-600">and book the meeting</span>
                         </h1>
                         <div className="mt-6 lg:mt-6 sm:mt-10 flex items-center justify-center">
-                            <div className="flex-shrink-0 mr-4 shadow-lg profile-pic-container">
-                                <img src={userData.profilePicture} alt="Profile"/>
-                            </div>
+                            {userData.profilePicture ? (
+                                    <div className="flex-shrink-0 mr-4 shadow-lg profile-pic-container">
+                                        <img src={userData.profilePicture} alt="Profile"/>
+                                    </div>
+                                ) :
+                                (
+                                    <Avatar
+                                        sx={{
+                                            bgcolor: deepOrange[500],
+                                            width: 80,
+                                            height: 80,
+                                            fontSize: 40,
+                                            marginRight: 2
+                                        }}
+                                    >
+                                        {userData.firstname.charAt(0).toUpperCase() + userData.lastname.charAt(0).toUpperCase()}
+                                    </Avatar>
+                                )}
+
                             <div className="ms-3 sm:ms-4">
                                 <p className="sm:mb-1 font-semibold text-gray-800 dark:text-neutral-200 text-center">
                                     {userData.firstname} {userData.lastname}

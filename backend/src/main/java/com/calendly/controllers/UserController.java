@@ -43,6 +43,12 @@ public class UserController {
         return userService.getUserDetails(id, userService, httpRequest);
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getUserByToken(HttpServletRequest httpRequest) {
+        var userId = userService.getUserIDFromAccessToken(httpRequest);
+        return userService.getUserDetails(userId, userService, httpRequest);
+    }
+
     @GetMapping("email/{email}")
     public User getUserByEmail(@PathVariable("email") String email) {
         return userService.getUserByEmail(email);
