@@ -24,7 +24,7 @@ const login = async (user) => {
         return response.data;
     } catch (error) {
         console.error('Error logging in:', error.response?.data || error.message);
-        return error.response?.data || { error: 'Login failed' };
+        return error.response?.data || {error: 'Login failed'};
     }
 };
 
@@ -34,7 +34,7 @@ const register = async (user) => {
         return response.data;
     } catch (error) {
         console.error('Error registering:', error.response?.data || error.message);
-        return error.response?.data || { error: 'Registration failed' };
+        return error.response?.data || {error: 'Registration failed'};
     }
 };
 
@@ -46,4 +46,4 @@ const logout = async () => {
     }
 };
 
-export { login, register, logout };
+export {login, register, logout};

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { register } from "../../api/api-auth";
-import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import React, {useState} from "react";
+import {register} from "../../api/api-auth";
+import {ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {MaterialIcons} from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import Slider from "@react-native-community/slider";
 
-const Register = ({ navigation }) => {
+const Register = ({navigation}) => {
     const [formValues, setFormValues] = useState({
         step: 1,
         firstName: "",
@@ -23,15 +23,15 @@ const Register = ({ navigation }) => {
     });
 
     const nextStep = () => {
-        setFormValues(prev => ({ ...prev, step: prev.step + 1 }));
+        setFormValues(prev => ({...prev, step: prev.step + 1}));
     };
 
     const previousStep = () => {
-        setFormValues(prev => ({ ...prev, step: prev.step - 1 }));
+        setFormValues(prev => ({...prev, step: prev.step - 1}));
     };
 
     const handleSignup = () => {
-        setFormValues(prev => ({ ...prev, loading: true, error: "" }));
+        setFormValues(prev => ({...prev, loading: true, error: ""}));
 
         const user = {
             firstname: formValues.firstName || undefined,
@@ -47,10 +47,10 @@ const Register = ({ navigation }) => {
         };
 
         register(user).then(data => {
-            setFormValues(prev => ({ ...prev, loading: false, error: "" }));
+            setFormValues(prev => ({...prev, loading: false, error: ""}));
             if (data && data.error) {
                 console.log(data.error);
-                setFormValues(prev => ({ ...prev, error: data.error }));
+                setFormValues(prev => ({...prev, error: data.error}));
             } else {
                 navigation.navigate("Login");
             }
@@ -74,10 +74,10 @@ const Register = ({ navigation }) => {
     );
 };
 
-const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
+const LoginDetails = ({formValues, setFormValues, nextStep, navigation}) => (
     <Animatable.View animation="fadeIn" duration={1500} className="flex-1 bg-[#3575EF]">
         <View className="flex-grow justify-end items-center">
-            <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")} />
+            <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")}/>
         </View>
         <View className="flex-grow justify-center items-center">
             <TextInput
@@ -86,7 +86,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
                 autoCapitalize="none"
                 placeholderTextColor="#fff"
                 value={formValues.email}
-                onChangeText={val => setFormValues({ ...formValues, email: val })}
+                onChangeText={val => setFormValues({...formValues, email: val})}
             />
             <TextInput
                 className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
@@ -95,7 +95,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
                 placeholderTextColor="#fff"
                 autoCapitalize="none"
                 value={formValues.password}
-                onChangeText={val => setFormValues({ ...formValues, password: val })}
+                onChangeText={val => setFormValues({...formValues, password: val})}
             />
             <TextInput
                 className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
@@ -103,7 +103,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
                 placeholderTextColor="#fff"
                 autoCapitalize="none"
                 value={formValues.firstName}
-                onChangeText={val => setFormValues({ ...formValues, firstName: val })}
+                onChangeText={val => setFormValues({...formValues, firstName: val})}
             />
             <TextInput
                 className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
@@ -111,7 +111,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
                 placeholderTextColor="#fff"
                 autoCapitalize="none"
                 value={formValues.lastName}
-                onChangeText={val => setFormValues({ ...formValues, lastName: val })}
+                onChangeText={val => setFormValues({...formValues, lastName: val})}
             />
             <TouchableOpacity
                 disabled={!formValues.email || !formValues.password}
@@ -119,7 +119,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
                 className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center"
             >
                 <Text className="text-[16px] font-extrabold text-black text-center">Next</Text>
-                <MaterialIcons name="navigate-next" size={24} color="black" />
+                <MaterialIcons name="navigate-next" size={24} color="black"/>
             </TouchableOpacity>
         </View>
         <View className="flex-grow items-end justify-center py-4 flex-row">
@@ -133,18 +133,18 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => (
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep }) => {
+const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}) => {
     const toggleDay = (day) => {
         const updatedDays = formValues.availableDays.includes(day)
             ? formValues.availableDays.filter(d => d !== day)
             : [...formValues.availableDays, day];
-        setFormValues({ ...formValues, availableDays: updatedDays });
+        setFormValues({...formValues, availableDays: updatedDays});
     };
 
     return (
         <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
             <View className="flex-grow justify-end items-center">
-                <Image className="w-[60px] h-[60px] rounded-full" source={require("../assets/logo.jpg")} />
+                <Image className="w-[60px] h-[60px] rounded-full" source={require("../assets/logo.jpg")}/>
             </View>
             <View className="flex-grow justify-center items-center">
                 <TextInput
@@ -152,25 +152,26 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                     placeholder="calendarUrl"
                     placeholderTextColor="#fff"
                     value={formValues.calendarUrl}
-                    onChangeText={val => setFormValues({ ...formValues, calendarUrl: val })}
+                    onChangeText={val => setFormValues({...formValues, calendarUrl: val})}
                 />
                 <TextInput
                     className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
                     placeholder="meetingLink"
                     placeholderTextColor="#fff"
                     value={formValues.meetingLink}
-                    onChangeText={val => setFormValues({ ...formValues, meetingLink: val })}
+                    onChangeText={val => setFormValues({...formValues, meetingLink: val})}
                 />
 
                 <Text className="text-white bg-transparent mt-0.5">Select available hours</Text>
-                <View className="w-[300px] flex-row bg-[#ffffff4d] rounded-[25px] p-0.75 m-2 justify-between items-center">
+                <View
+                    className="w-[300px] flex-row bg-[#ffffff4d] rounded-[25px] p-0.75 m-2 justify-between items-center">
                     <TextInput
                         className="flex-1 h-[50px] text-white bg-transparent text-center"
                         keyboardType="numeric"
                         placeholder="From"
                         placeholderTextColor="#ffffffa0"
                         value={formValues.availableFromHour.toString()}
-                        onChangeText={val => setFormValues({ ...formValues, availableFromHour: val })}
+                        onChangeText={val => setFormValues({...formValues, availableFromHour: val})}
                     />
                     <Text className="text-white mx-2">-</Text>
                     <TextInput
@@ -179,7 +180,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                         placeholder="To"
                         placeholderTextColor="#ffffffa0"
                         value={formValues.availableToHour.toString()}
-                        onChangeText={val => setFormValues({ ...formValues, availableToHour: val })}
+                        onChangeText={val => setFormValues({...formValues, availableToHour: val})}
                     />
                 </View>
 
@@ -205,16 +206,17 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                 </View>
 
                 <View className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 m-3.5">
-                    <Text className="text-white text-center mb-2">Meeting Duration: {formValues.meetingDuration} min</Text>
+                    <Text className="text-white text-center mb-2">Meeting
+                        Duration: {formValues.meetingDuration} min</Text>
                     <Slider
-                        style={{ width: '100%', height: 40 }}
+                        style={{width: '100%', height: 40}}
                         minimumValue={15}
                         maximumValue={120}
                         step={15}
                         minimumTrackTintColor="#FFFFFF"
                         maximumTrackTintColor="#000000"
                         value={formValues.meetingDuration}
-                        onValueChange={val => setFormValues({ ...formValues, meetingDuration: val })}
+                        onValueChange={val => setFormValues({...formValues, meetingDuration: val})}
                     />
                 </View>
 
@@ -227,7 +229,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                     onPress={handleSignup}
                 >
                     {formValues.loading ? (
-                        <ActivityIndicator color="black" />
+                        <ActivityIndicator color="black"/>
                     ) : (
                         <Text className="text-[16px] font-extrabold text-black text-center">Sign Up</Text>
                     )}
@@ -237,7 +239,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                     disabled={formValues.loading}
                     className="m-3.5 p-2.5 flex-row items-center justify-center"
                 >
-                    <MaterialIcons name="navigate-before" size={24} color="white" />
+                    <MaterialIcons name="navigate-before" size={24} color="white"/>
                     <Text className="text-[16px] font-extrabold text-white text-center">Go back</Text>
                 </TouchableOpacity>
             </View>

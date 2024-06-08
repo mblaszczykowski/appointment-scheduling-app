@@ -1,13 +1,13 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import {Image, StyleSheet} from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 
-const OnboardingScreen = ({ navigation }) => {
+const OnboardingScreen = ({navigation}) => {
     let img = (
         <Image
             source={require('../assets/logo.jpg')}
             className="w-24 rounded-full"
-            style={{ height: undefined, aspectRatio: 1 }}
+            style={{height: undefined, aspectRatio: 1}}
             resizeMode="contain"
         />
     );

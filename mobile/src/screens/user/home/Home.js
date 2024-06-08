@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 import {ScrollView, Text, View} from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
-import UserAppointmentCard from "../../components/UserAppointmentCard";
 
 const Home = ({navigation}) => {
     const {
