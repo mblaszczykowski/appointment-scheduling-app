@@ -40,11 +40,11 @@ const OnboardingScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     title: {
-        marginTop: 10, // Adjust the value as needed to reduce spacing
+        marginTop: 10,
         textAlign: 'center',
     },
     subtitle: {
-        marginTop: 5, // Adjust the value as needed to reduce spacing
+        marginTop: 5,
         textAlign: 'center',
     },
 });
