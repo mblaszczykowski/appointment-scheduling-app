@@ -10,11 +10,12 @@ const apiGetRequest = async (url, token) => {
         return response.data;
     } catch (error) {
         /*
-        // jesli token wygasl
-        // zaloguj sie i sprobuj jeszcze raz
-        // bo chyba taki problem wystepuje
-        // albo sztucznie to     await signOut();
-         */
+        jesli token wygasl
+        zaloguj sie i sprobuj jeszcze raz
+        bo chyba taki problem wystepuje
+        albo sztucznie: await signOut();
+        trzeba obsluzyc taka sytuacje
+        */
         console.error(`Error fetching data from ${url}:`, error.response?.data || error.message);
         return error.response?.data || {error: 'Request failed'};
     }
