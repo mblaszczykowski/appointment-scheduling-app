@@ -1,45 +1,32 @@
 {
   "expo": {
-    "name": "DoneWithIt",
-    "slug": "DoneWithIt",
-    "platforms": ["ios", "android", "web"],
+    "name": "Meetly",
+    "slug": "Meetly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
+    "icon": "./src/screens/assets/icon.png",
     "splash": {
-      "image": "./app/assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#e63c4b"
+      "image": "./src/screens/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.codewithmosh.donewithit",
-      "buildNumber": "1.0.0"
+      "supportsTablet": true
     },
     "android": {
-      "package": "com.codewithmosh.donewithit",
-      "versionCode": 1
-    },
-    "description": "A marketplace for selling the stuff you don't need anymore.",
-    "notification": {
-      "iosDisplayInForeground": true
-    },
-    "extra": {
-      "bugsnag": {
-        "apiKey": "1f89967da16ead7f99e7a2ad11c8f9ac"
+      "adaptiveIcon": {
+        "foregroundImage": "./src/screens/assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
       }
     },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "@bugsnag/expo/hooks/post-publish.js",
-          "config": {}
-        }
-      ]
+    "web": {
+      "favicon": "./src/screens/assets/favicon.png"
     }
   }
 }

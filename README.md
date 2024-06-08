@@ -12,6 +12,7 @@
 
 ### Mobile
 - React Native
+- NativeWind
 
 
 ## How to run?
@@ -37,11 +38,8 @@ Make sure frontend runs on default port 3000.
 npm install -g expo-cli
 ```
 
-Expo SDK 37 needed (we should do an update later):
-https://expo.io/--/api/v2/versions
-
 ```
 cd mobile
-npm install
+npm install or npm install --legacy-peer-deps
 expo start
 ```
