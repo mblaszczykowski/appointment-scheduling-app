@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import AuthContext from "../../context/AuthContext";
 import ProfileContext from "../../context/ProfileContext";
-import {appointmentsByUser, getProfile} from "../../api/api-user";
+import {getAppointments, getUser} from "../../api/api-user";
 import {PROFILE_ACTIONS} from "../../context/reducers/profileReducer";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import MainTabs from "./MainTabs";
@@ -39,7 +39,7 @@ const UserHome = () => {
             return decoded ? decoded.sub : null;
         };
 
-        getProfile(
+        getUser(
             {
                 accountId: getUserIdFromToken(state.auth),
             },
@@ -53,7 +53,7 @@ const UserHome = () => {
                         type: PROFILE_ACTIONS.SET_PROFILE,
                         profile: user,
                     });
-                    appointmentsByUser(
+                    getAppointments(
                         {accountId: getUserIdFromToken(state.auth)},
                         {token: state.auth}
                     ).then((appointments) => {

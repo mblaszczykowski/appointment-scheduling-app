@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
 import AuthContext from "../../context/AuthContext";
 import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
-import {signin} from "../../api/api-auth";
+import {login} from "../../api/api-auth";
 
 const Login = ({navigation}) => {
     const [values, setValues] = useState({
@@ -22,7 +22,7 @@ const Login = ({navigation}) => {
             email: values.email || undefined,
             password: values.password || undefined,
         };
-        signin(user).then((data) => {
+        login(user).then((data) => {
             setValues({...values, loading: false});
             if (data && data.error) {
                 setValues({...values, error: data.error});

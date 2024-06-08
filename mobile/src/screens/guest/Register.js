@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signup } from "../../api/api-auth";
+import { register } from "../../api/api-auth";
 import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
@@ -46,7 +46,7 @@ const Register = ({ navigation }) => {
             meetingDuration: formValues.meetingDuration || undefined,
         };
 
-        signup(user).then(data => {
+        register(user).then(data => {
             setFormValues(prev => ({ ...prev, loading: false, error: "" }));
             if (data && data.error) {
                 console.log(data.error);

@@ -1,39 +1,49 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from "../../axios";
+import axios from '../../axios';
 
-const signin = async (user) => {
+const storeToken = async (user) => {
     try {
-        const response = await axios.post("/api/auth/login", user);
-        await storeUser(response.data);
+        await AsyncStorage.setItem('auth', JSON.stringify(user));
+    } catch (error) {
+        console.error('Error storing the auth token:', error);
+    }
+};
+
+const removeToken = async () => {
+    try {
+        await AsyncStorage.removeItem('auth');
+    } catch (error) {
+        console.error('Error removing the auth token:', error);
+    }
+};
+
+const login = async (user) => {
+    try {
+        const response = await axios.post('/api/auth/login', user);
+        await storeToken(response.data);
         return response.data;
     } catch (error) {
-        return error.response.data;
+        console.error('Error logging in:', error.response?.data || error.message);
+        return error.response?.data || { error: 'Login failed' };
     }
 };
 
-const storeUser = async (user) => {
+const register = async (user) => {
     try {
-        await AsyncStorage.setItem("auth", JSON.stringify(user));
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-const signup = async (user) => {
-    try {
-        const response = await axios.post(`/api/users`, user);
+        const response = await axios.post('/api/users', user);
         return response.data;
-    } catch (err) {
-        return err.response.data;
+    } catch (error) {
+        console.error('Error registering:', error.response?.data || error.message);
+        return error.response?.data || { error: 'Registration failed' };
     }
 };
 
-const signOut = async () => {
+const logout = async () => {
     try {
-        await AsyncStorage.removeItem("auth");
-    } catch (err) {
-        console.log(err);
+        await removeToken();
+    } catch (error) {
+        console.error('Error logging out:', error);
     }
 };
 
-export {signin, signOut, signup};
+export { login, register, logout };

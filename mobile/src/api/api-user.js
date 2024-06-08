@@ -1,37 +1,33 @@
-import axios from "../../axios";
+import axios from '../../axios';
 
-const getProfile = async (params, credentials) => {
+const apiGetRequest = async (url, token) => {
     try {
-        const user = await axios.get(`/api/users/${params.accountId}`, {
+        const response = await axios.get(url, {
             headers: {
-                Authorization: `Bearer ${credentials.token}`,
+                Authorization: `Bearer ${token}`,
             },
         });
-        return user.data;
-    } catch (err) {
+        return response.data;
+    } catch (error) {
+        /*
         // jesli token wygasl
         // zaloguj sie i sprobuj jeszcze raz
         // bo chyba taki problem wystepuje
         // albo sztucznie to     await signOut();
-        return err.user.data;
+         */
+        console.error(`Error fetching data from ${url}:`, error.response?.data || error.message);
+        return error.response?.data || { error: 'Request failed' };
     }
 };
 
-const appointmentsByUser = async (params, credentials) => {
-    try {
-        const appointments = await axios.get(
-            `/api/appointments/user/${params.accountId}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${credentials.token}`,
-                },
-            }
-        );
-
-        return appointments.data;
-    } catch (err) {
-        return err.appointments.data;
-    }
+const getUser = async (params, credentials) => {
+    const url = `/api/users/${params.accountId}`;
+    return await apiGetRequest(url, credentials.token);
 };
 
-export {getProfile, appointmentsByUser};
+const getAppointments = async (params, credentials) => {
+    const url = `/api/appointments/user/${params.accountId}`;
+    return await apiGetRequest(url, credentials.token);
+};
+
+export { getUser, getAppointments };

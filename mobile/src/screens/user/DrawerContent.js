@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AuthContext from "../../context/AuthContext";
 import ProfileContext from "../../context/ProfileContext";
 import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
-import {signOut} from "../../api/api-auth";
+import {logout} from "../../api/api-auth";
 
 export function DrawerContent(props) {
     const {state, dispatch} = useContext(AuthContext);
@@ -16,7 +16,7 @@ export function DrawerContent(props) {
 
     const handleSignOut = async () => {
         try {
-            await signOut();
+            await logout();
             dispatch({type: AUTH_ACTIONS.SIGN_OUT});
         } catch (err) {
             console.log("failed to signout");
