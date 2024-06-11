@@ -5,8 +5,8 @@ import SearchBar from './SearchBar';
 const CanceledMeetings = ({ searchQuery, handleSearchChange, appointments }) => {
     const totalAppointments = Object.values(appointments).flat().length;
     const noMeetingsMessage = searchQuery
-        ? "No canceled meetings match your search."
-        : "No canceled meetings.";
+        ? "No cancelled meetings match your search."
+        : "No cancelled meetings.";
 
     return (
         <div>

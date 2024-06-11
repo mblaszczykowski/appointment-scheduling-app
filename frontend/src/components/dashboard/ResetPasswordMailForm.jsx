@@ -50,12 +50,12 @@ function ResetPasswordMailForm() {
                 >
                     {({ setFieldValue }) => (
                         <Form className="max-w-sm mx-auto space-y-6">
-                            <div className="py-5 mt-12 text-center">
+                            <div className="py-5 mt-4 text-center">
                                 <h1 className="block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-700 to-blue-500">
-                                    Do not you remember the password?
+                                    Don't remember the password?
                                 </h1>
-                                <p className="block text-lm mt-2 font-bold text-gray-600 dark:text-white">
-                                    Do not worry. Resetting your password is simple, just enter your registered Meetly email address...
+                                <p className="block text-lm mt-3 font-lg text-gray-600 dark:text-white">
+                                    Don't worry, enter your email used for registration, and we will send you a reset link.
                                 </p>
                             </div>
                             {errorMessage && (
@@ -106,9 +106,9 @@ function ResetPasswordMailForm() {
                             <div className="mt-10 flex items-center justify-center gap-x-6">
                                 <button
                                     type="submit"
-                                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+                                    className="mb-6 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
                                 >
-                                    Send Reset Link
+                                    Send reset link
                                 </button>
                             </div>
                         </Form>

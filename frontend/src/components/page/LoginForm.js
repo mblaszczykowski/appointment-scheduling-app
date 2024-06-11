@@ -129,9 +129,9 @@ function LoginForm({onToggleForm, onResetForm}) {
                         </button>
                         <a
                             onClick={onResetForm}
-                            className="text-blue-600 hover:underline dark:text-blue-500 ml-auto"
+                            className="text-blue-600 text-sm hover:underline dark:text-blue-500 ml-auto"
                         >
-                            Forgotten your password?
+                            Forgot your password?
                         </a>
                     </div>
 
