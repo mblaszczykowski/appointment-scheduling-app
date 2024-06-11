@@ -1,22 +1,13 @@
 import "react-native-gesture-handler";
-import React, { useEffect, useReducer, useMemo } from "react";
+import React, {useEffect, useMemo, useReducer} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import {
-	authReducer,
-	authInitialState,
-	AUTH_ACTIONS,
-} from "./src/context/reducers/authReducer";
-import {
-	profileReducer,
-	profileInitialState,
-	PROFILE_ACTIONS,
-} from "./src/context/reducers/profileReducer";
+import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {AUTH_ACTIONS, authInitialState, authReducer,} from "./src/context/reducers/authReducer";
+import {profileInitialState, profileReducer,} from "./src/context/reducers/profileReducer";
 import AuthContext from "./src/context/AuthContext";
 import ProfileContext from "./src/context/ProfileContext";
 import WelcomeStack from "./src/screens/guest/WelcomeStack";
 import UserScreen from "./src/screens/user/UserScreen";
-import AppLoading from "expo-app-loading";
 
 export default function App() {
 	const [authState, authDispatch] = useReducer(authReducer, authInitialState);

@@ -51,7 +51,7 @@ export function DrawerContent(props) {
                             )}
                             label="Profile"
                             labelStyle={{color: "#000000"}}
-                            onPress={() => props.navigation.navigate("ProfileStack")}
+                            onPress={() => props.navigation.navigate("Profile")}
                         />
 
                         <DrawerItem

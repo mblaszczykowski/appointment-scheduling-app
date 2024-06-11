@@ -68,7 +68,7 @@ const UserHome = () => {
                                 appointments: appointments,
                             });
                         }
-                    });
+                    }).catch((err) => console.log(err));
                 }
             })
             .catch((err) => console.log(err));
@@ -82,8 +82,8 @@ const UserHome = () => {
         <Drawer.Navigator
             drawerContent={(props) => <DrawerContent {...props} />}
         >
-            <Drawer.Screen name="HomeDrawer" component={MainTabs}/>
-            <Drawer.Screen name="ProfileStack" component={ProfileStack}/>
+            <Drawer.Screen name="Home" component={MainTabs}/>
+            <Drawer.Screen name="Profile" component={ProfileStack}/>
         </Drawer.Navigator>
     );
 };

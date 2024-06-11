@@ -1,11 +1,16 @@
-import React, {useContext, useState} from "react";
-import {ScrollView, Text, TouchableOpacity, View} from "react-native";
+import React, {useContext, useEffect, useState} from "react";
+import {ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import AuthContext from "../../../context/AuthContext";
 import {useTheme} from "@react-navigation/native";
 import NewAppointmentModal from "../../NewAppointmentModal";
+import QRCode from "react-native-qrcode-svg";
 
 const Calendar = () => {
+    const [calendarUrl, setCalendarUrl] = useState("");
+    useEffect(() => {
+        setCalendarUrl(profile.calendarUrl);
+    }, []);
     const {colors} = useTheme();
     const {
         profileState: {profile, appointments},
@@ -18,14 +23,20 @@ const Calendar = () => {
     const [openModal, setOpenModal] = useState(false);
 
     return (
-        <View className={`flex-1`} style={{backgroundColor: colors.card}}>
-            <ScrollView className="flex-1 rounded-tl-3xl rounded-tr-3xl bg-white">
-                <Text className="p-5 mt-2.5 text-lg text-gray-700">
+        <View style={[styles.container, { backgroundColor: colors.card }]}>
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+                <Text style={styles.headerText}>
                     QR code to your calendar:
                 </Text>
-                <TouchableOpacity className="m-5 p-3 bg-blue-500 rounded-xl items-center"
+                <QRCode
+                    value={"meetly://calendar/" + calendarUrl}
+                    size={300}
+                    color="black"
+                    backgroundColor="white"
+                />
+                <TouchableOpacity style={styles.button}
                                   onPress={() => setOpenModal(true)}>
-                    <Text className="text-white text-lg">
+                    <Text style={styles.buttonText}>
                         Preview your calendar
                     </Text>
                 </TouchableOpacity>
@@ -35,4 +46,40 @@ const Calendar = () => {
     );
 };
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    contentContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: 'white',
+        paddingTop: 20
+    },
+    headerText: {
+        fontSize: 24,
+        color: 'gray',
+        marginVertical: 10,
+        paddingHorizontal: 20,
+        textAlign: 'center',
+    },
+    qrContainer: {
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    button: {
+        margin: 20,
+        padding: 15,
+        backgroundColor: '#007bff',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 24,
+    },
+});
 export default Calendar;

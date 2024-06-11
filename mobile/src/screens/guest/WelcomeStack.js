@@ -8,7 +8,11 @@ const Stack = createStackNavigator();
 
 const WelcomeStack = () => {
     return (
-        <Stack.Navigator headerMode="none">
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
             <Stack.Screen name="Onboarding" component={Onboarding}/>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="Signup" component={Register}/>

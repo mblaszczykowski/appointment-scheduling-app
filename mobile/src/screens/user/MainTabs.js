@@ -10,7 +10,7 @@ const MainTabs = () => {
     return (
         <Tabs.Navigator initialRouteName="Home">
             <Tabs.Screen
-                name="Home"
+                name="Appointments"
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Home",
@@ -20,7 +20,7 @@ const MainTabs = () => {
                 }}
             />
             <Tabs.Screen
-                name="Calendar"
+                name="Calendar link"
                 component={CalendarStack}
                 options={{
                     tabBarLabel: "My calendar",

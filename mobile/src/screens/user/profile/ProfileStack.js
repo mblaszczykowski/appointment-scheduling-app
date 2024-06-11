@@ -11,7 +11,7 @@ const ProfileStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Profile"
+                name="ProfileStack"
                 component={Profile}
                 options={{
                     title: "",

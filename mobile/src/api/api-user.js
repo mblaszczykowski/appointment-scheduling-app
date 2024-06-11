@@ -1,8 +1,19 @@
 import axios from '../../axios';
+import {Platform} from "react-native";
 
-const apiGetRequest = async (url, token) => {
+
+
+const apiGetRequest = async (calendarUrl, token) => {
+    let baseUrl;
+    if(Platform.OS === "android"){
+        baseUrl ="http://10.0.2.2:8080"
+    }
+    else {
+        baseUrl="http://localhost:8080"
+    }
+    calendarUrl = baseUrl + calendarUrl
     try {
-        const response = await axios.get(url, {
+        const response = await axios.get(calendarUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -15,7 +26,7 @@ const apiGetRequest = async (url, token) => {
         // bo chyba taki problem wystepuje
         // albo sztucznie to     await signOut();
          */
-        console.error(`Error fetching data from ${url}:`, error.response?.data || error.message);
+        console.error(`Error fetching data from ${calendarUrl}:`, error.response?.data || error.message);
         return error.response?.data || { error: 'Request failed' };
     }
 };

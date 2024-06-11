@@ -213,7 +213,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                         step={15}
                         minimumTrackTintColor="#FFFFFF"
                         maximumTrackTintColor="#000000"
-                        value={formValues.meetingDuration}
+                        value={Number(formValues.meetingDuration)}
                         onValueChange={val => setFormValues({ ...formValues, meetingDuration: val })}
                     />
                 </View>
