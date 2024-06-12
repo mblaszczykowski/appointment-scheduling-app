@@ -79,6 +79,11 @@ const Login = ({navigation}) => {
                         <Text className="text-[16px] font-extrabold text-black text-center">Login</Text>
                     )}
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("QrScaner")}
+                    className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5">
+                    <Text className="text-[16px] font-extrabold text-black text-center">ScanQR</Text>
+                </TouchableOpacity>
             </View>
             <View className="flex-grow items-end justify-center py-4 flex-row">
                 <Text className="text-[#ffffffb3] text-[16px] font-light">Don't have an account? </Text>

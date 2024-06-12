@@ -215,6 +215,8 @@ const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}
                         step={15}
                         minimumTrackTintColor="#FFFFFF"
                         maximumTrackTintColor="#000000"
+                        value={Number(formValues.meetingDuration)}
+                        onValueChange={val => setFormValues({ ...formValues, meetingDuration: val })}
                         value={formValues.meetingDuration}
                         onValueChange={val => setFormValues({...formValues, meetingDuration: val})}
                     />

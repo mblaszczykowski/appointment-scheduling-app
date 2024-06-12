@@ -1,6 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../../axios';
+import {Platform} from "react-native";
 
+if(Platform.OS === "android"){
+    axios.defaults.baseURL="http://10.0.2.2:8080"
+}
+else {
+    axios.defaults.baseURL="http://localhost:8080"
+}
 const storeToken = async (user) => {
     try {
         await AsyncStorage.setItem('auth', JSON.stringify(user));
