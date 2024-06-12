@@ -183,10 +183,17 @@ function SettingsForm() {
     };
 
     const handlePasswordUpdate = (newPassword) => {
+        const formData = new FormData();
+        formData.append('password', newPassword);
         request(
             "PUT",
             `/api/users/${getUserIdFromToken()}`,
-            {password: newPassword}
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
         ).then(
             () => {
                 displayNotification('Account successfully updated.')

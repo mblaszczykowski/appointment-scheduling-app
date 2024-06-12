@@ -244,11 +244,15 @@ public class UserService {
     private void handleProfilePicture(MultipartFile profilePicture, User user, String key) {
         try (S3Client s3 = S3Client.builder().credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(S3accessKeyId, S3SecretAccessKey))).region(S3Region).build()) {
             // Deleting the old image
-            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-                    .bucket(S3BucketName)
-                    .key(user.getProfilePicture().substring(user.getProfilePicture().indexOf(S3ProfilePicsFolder)))
-                    .build();
-            s3.deleteObject(deleteRequest);
+            if(user.getProfilePicture() != null)
+            {
+                DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                        .bucket(S3BucketName)
+                        .key(user.getProfilePicture().substring(user.getProfilePicture().indexOf(S3ProfilePicsFolder)))
+                        .build();
+                s3.deleteObject(deleteRequest);
+            }
+
 
             // Uploading the new image
             PutObjectRequest putRequest = PutObjectRequest.builder()
