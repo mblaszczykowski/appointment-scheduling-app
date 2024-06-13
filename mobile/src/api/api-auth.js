@@ -53,4 +53,14 @@ const logout = async () => {
     }
 };
 
-export {login, register, logout};
+const sendResetMail = async (mail) => {
+    try {
+        const response = await axios.post('/api/users/reset-pass', mail);
+        return response.data;
+    } catch (error) {
+        console.error('Error sending mail:', error.response?.data || error.message);
+        return error.response?.data || {error: 'Sending mail failed'};
+    }
+};
+
+export {login, register, logout, sendResetMail};
