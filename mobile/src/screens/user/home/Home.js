@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
 
 const Home = ({ navigation }) => {
     const {
@@ -12,6 +13,7 @@ const Home = ({ navigation }) => {
     const { appointments: appointmentList } = appointments || {};
 
     const [filter, setFilter] = useState("Upcoming");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const actualAppointments = appointmentList?.filter(appointment => appointment.isActual) || [];
     const canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
@@ -20,16 +22,25 @@ const Home = ({ navigation }) => {
     ) || [];
 
     const renderAppointments = () => {
+        let filteredAppointments;
         switch (filter) {
             case "Upcoming":
-                return actualAppointments;
+                filteredAppointments = actualAppointments;
+                break;
             case "Canceled":
-                return canceledAppointments;
+                filteredAppointments = canceledAppointments;
+                break;
             case "Past":
-                return pastAppointments;
+                filteredAppointments = pastAppointments;
+                break;
             default:
-                return [];
+                filteredAppointments = [];
+                break;
         }
+
+        return filteredAppointments.filter(appointment =>
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
     };
 
     return (
@@ -39,11 +50,18 @@ const Home = ({ navigation }) => {
                     <Text className="text-2xl font-medium">
                         Hi, {`${profile?.firstname}`}
                     </Text>
-                    <Text className="text-lg text-gray-700 mt-1.5">
-                        Welcome Back
-                    </Text>
                 </View>
-
+                <View className="p-5">
+                    <View className="flex-row items-center bg-gray-100 p-3 rounded-md">
+                        <EvilIcons name="search" size={30} color="#1c313a" />
+                        <TextInput
+                            placeholder="Search by booker name"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                            className="flex-1 ml-2"
+                        />
+                    </View>
+                </View>
                 <View className="flex-row justify-center items-center p-5">
                     <TouchableOpacity
                         onPress={() => setFilter("Upcoming")}
@@ -63,12 +81,6 @@ const Home = ({ navigation }) => {
                     >
                         <Text>Canceled</Text>
                     </TouchableOpacity>
-                </View>
-
-                <View className="flex-row justify-between items-center p-5">
-                    <Text className="text-sm font-bold">
-                        Your Next Appointment
-                    </Text>
                 </View>
 
                 <View className="p-5">
