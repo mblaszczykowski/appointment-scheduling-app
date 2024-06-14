@@ -22,9 +22,9 @@ const getFilteredTimes = (timeSlots, start, end) => {
     return timeSlots.slice(startIndex, endIndex).filter(slot => !BLOCKED_HOURS.includes(slot.time));
 };
 
-const NewAppointmentModal = ({openModal, setOpenModal, booker}) => {
-    const {state} = useContext(AuthContext);
-    const {profileState, profileDispatch} = useContext(ProfileContext);
+const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
+    const { state } = useContext(AuthContext);
+    const { profileState, profileDispatch } = useContext(ProfileContext);
     const today = new Date().toISOString().split('T')[0];
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,7 +41,6 @@ const NewAppointmentModal = ({openModal, setOpenModal, booker}) => {
         setLoading(true);
         const appointment = {
             user: profileState.profile?._id,
-            booker: booker._id,
             date,
             start_time: selectedTime,
             name,
@@ -137,7 +136,14 @@ const NewAppointmentModal = ({openModal, setOpenModal, booker}) => {
             </TouchableOpacity>
         </View>
     );
-
+    const handleCancel = () => {
+        if (profileState.profile === null) {
+            navigation.navigate("Login");
+        }
+        else {
+            setOpenModal(!openModal);
+        }
+    }
     return (
         <Modal
             onRequestClose={() => setOpenModal(!openModal)}
@@ -147,7 +153,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, booker}) => {
         >
             <View className="flex-1 bg-white mt-16 rounded-t-2xl">
                 <View className="flex-row justify-between mt-5 px-5 rounded-t-2xl">
-                    <TouchableOpacity onPress={() => setOpenModal(!openModal)}>
+                    <TouchableOpacity onPress={() => handleCancel()}>
                         <Text className="text-[#01478F] text-lg font-medium">Cancel</Text>
                     </TouchableOpacity>
                     {currentScreen === 'dateTime' ? (

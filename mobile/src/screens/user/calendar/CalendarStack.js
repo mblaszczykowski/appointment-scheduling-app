@@ -1,8 +1,6 @@
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
 import Calendar from "./Calendar";
-import NotificationsIcon from "../../components/NotificationsIcon";
-import AccountIcon from "../../components/AccountIcon";
 
 const Stack = createStackNavigator();
 
@@ -11,7 +9,7 @@ const CalendarStack = () => {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    elevation: 0, // Android
+                    elevation: 0,
                 },
 
             }}
@@ -20,9 +18,7 @@ const CalendarStack = () => {
                 name="Calendar"
                 component={Calendar}
                 options={{
-                    title: "My calendar",
-                    headerLeft: () => <AccountIcon/>,
-                    headerRight: () => <NotificationsIcon/>,
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {CameraView} from "expo-camera";
-
 export default function QrScaner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -24,7 +22,6 @@ export default function QrScaner({ navigation }) {
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setText(data)
-        console.log('Type: ' + type + '\nData: ' + data);
         navigation.navigate('NewAppointmentModal', { data: data });
     };
 
