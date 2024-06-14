@@ -150,7 +150,7 @@ export default function Dashboard() {
                                 className={`w-full mt-1 mb-2 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${selectedTab === 'canceled' ? 'bg-gray-100 dark:bg-neutral-700' : 'text-neutral-700 dark:text-white'}`}
                             >
                                 <CancelIcon/>
-                                Canceled meetings
+                                Cancelled meetings
                             </button>
                             <button
                                 onClick={() => setSelectedTab('settings')}

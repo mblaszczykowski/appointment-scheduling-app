@@ -1,6 +1,6 @@
 we use nativewind
 
-in case of error:
+in case of:
 Getting Error: "Use process(css).then(cb) to work with async plugins"
 
 ```

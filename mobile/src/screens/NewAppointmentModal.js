@@ -10,10 +10,10 @@ const WORK_HOURS = {
     end: "17:30",
 };
 const BLOCKED_HOURS = ["09:00", "12:30"];
-const TIME_SLOTS = Array.from({ length: 24 * 2 }, (_, i) => {
+const TIME_SLOTS = Array.from({length: 24 * 2}, (_, i) => {
     const hour = String(Math.floor(i / 2)).padStart(2, '0');
     const minute = i % 2 === 0 ? '00' : '30';
-    return { time: `${hour}:${minute}` };
+    return {time: `${hour}:${minute}`};
 });
 
 const getFilteredTimes = (timeSlots, start, end) => {
@@ -66,19 +66,20 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
         */
     };
 
-    const renderTimeSlot = ({ item }) => (
+    const renderTimeSlot = ({item}) => (
         <TouchableOpacity
             onPress={() => setSelectedTime(item.time)}
             className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.time ? "bg-[#00adf5] border-[#00adf5]" : "bg-white border-[#00adf5]"}`}
         >
-            <Text className={`font-normal ${selectedTime === item.time ? "text-white" : "text-[#00adf5]"}`}>{item.time}</Text>
+            <Text
+                className={`font-normal ${selectedTime === item.time ? "text-white" : "text-[#00adf5]"}`}>{item.time}</Text>
         </TouchableOpacity>
     );
 
     const renderDateTimeSelection = () => (
         <>
             <View className="flex-row mx-5 mt-3 mb-2">
-                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")} />
+                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")}/>
                 <View className="ml-5">
                     <Text className="text-lg font-semibold">imie</Text>
                     <Text className="text-base text-gray-500">opis</Text>
@@ -103,7 +104,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                 numColumns={4}
                 renderItem={renderTimeSlot}
                 keyExtractor={(item) => item.time}
-                contentContainerStyle={{ alignItems: "center", paddingBottom: 32 }}
+                contentContainerStyle={{alignItems: "center", paddingBottom: 32}}
             />
         </>
     );
@@ -162,7 +163,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                     ) : (
                         <TouchableOpacity onPress={handleCreateAppointment} disabled={!name || !email || !meetingNote}>
                             {loading ? (
-                                <ActivityIndicator className="mx-3" size="small" color="#01478F" />
+                                <ActivityIndicator className="mx-3" size="small" color="#01478F"/>
                             ) : (
                                 <Text className="text-[#01478F] text-lg font-medium">Confirm</Text>
                             )}

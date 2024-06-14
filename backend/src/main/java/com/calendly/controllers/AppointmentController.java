@@ -45,9 +45,6 @@ public class AppointmentController {
             return new ResponseEntity<>("Invalid request parameters", HttpStatus.BAD_REQUEST);
         }
 
-        // TODO: check if this date is not already booked
-        // w przyszlosci mozna by najpierw potwierdzic mailem spotkanie i dopiero je zabookować
-
         var user = userService.getUserIdFromCalendarUrl(appointmentDTO.calendarUrl());
 
         appointmentService.createAppointment(

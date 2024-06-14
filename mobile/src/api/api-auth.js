@@ -31,7 +31,7 @@ const login = async (user) => {
         return response.data;
     } catch (error) {
         console.error('Error logging in:', error.response?.data || error.message);
-        return error.response?.data || { error: 'Login failed' };
+        return error.response?.data || {error: 'Login failed'};
     }
 };
 
@@ -41,7 +41,7 @@ const register = async (user) => {
         return response.data;
     } catch (error) {
         console.error('Error registering:', error.response?.data || error.message);
-        return error.response?.data || { error: 'Registration failed' };
+        return error.response?.data || {error: 'Registration failed'};
     }
 };
 
@@ -53,4 +53,14 @@ const logout = async () => {
     }
 };
 
-export { login, register, logout };
+const sendResetMail = async (mail) => {
+    try {
+        const response = await axios.post('/api/users/reset-pass', mail);
+        return response.data;
+    } catch (error) {
+        console.error('Error sending mail:', error.response?.data || error.message);
+        return error.response?.data || {error: 'Sending mail failed'};
+    }
+};
+
+export {login, register, logout, sendResetMail};

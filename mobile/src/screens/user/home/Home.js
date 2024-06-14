@@ -1,49 +1,101 @@
-import React, {useContext} from "react";
-import {ScrollView, Text, View} from "react-native";
+import React, { useContext, useState } from "react";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
+import moment from "moment";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
     const {
-        profileState: {profile, appointments},
+        profileState: { profile, appointments },
     } = useContext(ProfileContext);
+
+    const { appointments: appointmentList } = appointments || {};
+
+    const [filter, setFilter] = useState("Upcoming");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const actualAppointments = appointmentList?.filter(appointment => appointment.isActual) || [];
+    const canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
+    const pastAppointments = appointmentList?.filter(appointment =>
+        moment(appointment.startTime).isBefore(moment())
+    ) || [];
+
+    const renderAppointments = () => {
+        let filteredAppointments;
+        switch (filter) {
+            case "Upcoming":
+                filteredAppointments = actualAppointments;
+                break;
+            case "Canceled":
+                filteredAppointments = canceledAppointments;
+                break;
+            case "Past":
+                filteredAppointments = pastAppointments;
+                break;
+            default:
+                filteredAppointments = [];
+                break;
+        }
+
+        return filteredAppointments.filter(appointment =>
+            appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    };
 
     return (
         <View className="flex-1 bg-[#3476EF]">
             <ScrollView className="flex-1 bg-white rounded-t-[25px] pb-5">
                 <View className="p-5 mt-2.5">
                     <Text className="text-2xl font-medium">
-                        Hi, {`${profile?.lastName}`}
-                    </Text>
-                    <Text className="text-lg text-gray-700 mt-1.5">
-                        Welcome Back
+                        Hi, {`${profile?.firstname}`}
                     </Text>
                 </View>
-
-                <View className="flex-row justify-between items-center p-5">
-                    <Text className="text-sm font-bold">
-                        Your Next Appointment
-                    </Text>
+                <View className="p-5">
+                    <View className="flex-row items-center bg-gray-100 p-3 rounded-md">
+                        <EvilIcons name="search" size={30} color="#1c313a" />
+                        <TextInput
+                            placeholder="Search by booker name"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                            className="flex-1 ml-2"
+                        />
+                    </View>
+                </View>
+                <View className="flex-row justify-center items-center p-5">
+                    <TouchableOpacity
+                        onPress={() => setFilter("Upcoming")}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Upcoming" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    >
+                        <Text>Upcoming</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setFilter("Past")}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Past" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    >
+                        <Text>Past</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setFilter("Canceled")}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Canceled" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    >
+                        <Text>Canceled</Text>
+                    </TouchableOpacity>
                 </View>
 
-                {
-                    /*
-                        {appointments.length !== 0 && (
-                            <UserAppointmentCard appointment={appointments[0]}/>
-                        )}
-
-                        {appointments?.map((appointment) => (
+                <View className="p-5">
+                    {renderAppointments().length > 0 ? (
+                        renderAppointments().map((appointment, index) => (
                             <UserAppointmentCard
-                                key={appointment._id}
-                                noFooter
-                                noHeader
+                                key={index}
                                 appointment={appointment}
+                                navigation={navigation}
                             />
-                        ))}
-                     */
-                }
-
-
+                        ))
+                    ) : (
+                        <Text className="text-gray-500">No {filter.toLowerCase()} appointments</Text>
+                    )}
+                </View>
             </ScrollView>
         </View>
     );

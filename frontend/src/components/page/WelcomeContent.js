@@ -129,7 +129,7 @@ export default function WelcomeContent({ show }) {
                                                 +20% this month
                                             </span>
                                         </p>
-                                        <p className="mt-2 sm:mt-3 text-gray-900 dark:text-neutral-500">
+                                        <p className="mt-2 sm:mt-3 sm:mb-3 text-gray-900 dark:text-neutral-500">
                                             Professionals use our app<br /> for scheduling meetings
                                         </p>
                                     </div>

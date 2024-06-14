@@ -79,6 +79,9 @@ const Login = ({navigation}) => {
                         <Text className="text-[16px] font-extrabold text-black text-center">Login</Text>
                     )}
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("PasswordReset")} className="m-3">
+                    <Text style={{color: 'white'}}>Forgot your password?</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("QrScaner")}
                     className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5">

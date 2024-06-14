@@ -14,7 +14,6 @@
 - React Native
 - NativeWind
 
-
 ## How to run?
 
 #### Backend
