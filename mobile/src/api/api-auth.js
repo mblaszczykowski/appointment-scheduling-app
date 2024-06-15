@@ -30,14 +30,15 @@ const login = async (user) => {
         await storeToken(response.data);
         return response.data;
     } catch (error) {
-        console.error('Error logging in:', error.response?.data || error.message);
-        return error.response?.data || {error: 'Login failed'};
+        //console.error('Error logging in:', error.response?.data || error.message);
+        throw error.response?.data || {error: 'Login failed'};
     }
 };
 
 const register = async (user) => {
     try {
         const response = await axios.post('/api/users', user);
+        await storeToken(response.data); // Store token immediately after registration
         return response.data;
     } catch (error) {
         console.error('Error registering:', error.response?.data || error.message);

@@ -4,6 +4,11 @@ import AuthContext from "../../context/AuthContext";
 import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
 import {login} from "../../api/api-auth";
 
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
+
 const Login = ({navigation}) => {
     const [values, setValues] = useState({
         email: "",
@@ -14,28 +19,32 @@ const Login = ({navigation}) => {
 
     const {state, dispatch} = useContext(AuthContext);
 
-    const emptyField = !values.email || !values.password;
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        if (!values.email || !values.password) {
+            setValues({...values, error: "Please provide e-mail and password"});
+            return;
+        }
+        if (!validateEmail(values.email)) {
+            setValues({...values, error: "Invalid email format"});
+            return;
+        }
         setValues({...values, error: "", loading: true});
         const user = {
-            email: values.email || undefined,
-            password: values.password || undefined,
+            email: values.email,
+            password: values.password,
         };
-        login(user).then((data) => {
+        try {
+            const data = await login(user);
             setValues({...values, loading: false});
-            if (data && data.error) {
-                setValues({...values, error: data.error});
-            } else {
-                dispatch({
-                    type: AUTH_ACTIONS.SIGN_IN,
-                    auth: data,
-                    color: "#7bc2ff"
-                });
-            }
-        });
+            dispatch({
+                type: AUTH_ACTIONS.SIGN_IN,
+                auth: data,
+                color: "#7bc2ff"
+            });
+        } catch (error) {
+            setValues({...values, loading: false, error: error.message !== undefined ? "Error occurred during login: " + error.message : 'Login failed. Check your internet connection.'});
+        }
     };
-
 
     return (
         <View className="flex-1 bg-[#3674EF]">
@@ -66,10 +75,9 @@ const Login = ({navigation}) => {
                     placeholderTextColor="#fff"
                 />
                 {values.error !== "" && (
-                    <Text className="text-[rgb(254,92,92)] text-[15px] font-light">{values.error}</Text>
+                    <Text className="text-red-500 text-[15px] font-medium">{values.error}</Text>
                 )}
                 <TouchableOpacity
-                    disabled={values.loading || emptyField}
                     onPress={handleSubmit}
                     className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5"
                 >

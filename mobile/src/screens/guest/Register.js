@@ -1,9 +1,31 @@
-import React, {useState} from "react";
-import {register} from "../../api/api-auth";
+import React, {useState, useContext} from "react";
+import {register, login} from "../../api/api-auth";
 import {ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {MaterialIcons} from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import Slider from "@react-native-community/slider";
+import AuthContext from "../../context/AuthContext";
+import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
+
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const validateUrl = (url) => {
+    const re = /^(ftp|http|https):\/\/[^ "]+$/;
+    return re.test(String(url).toLowerCase());
+};
+
+const isNumberInRange = (value, min, max) => {
+    const number = Number(value);
+    return !isNaN(number) && number >= min && number <= max;
+};
+
+const validatePassword = (password) => {
+    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return re.test(password);
+};
 
 const Register = ({navigation}) => {
     const [formValues, setFormValues] = useState({
@@ -22,8 +44,22 @@ const Register = ({navigation}) => {
         error: "",
     });
 
+    const {dispatch} = useContext(AuthContext);
+
     const nextStep = () => {
-        setFormValues(prev => ({...prev, step: prev.step + 1}));
+        if (!formValues.email || !formValues.password || !formValues.firstName || !formValues.lastName) {
+            setFormValues(prev => ({...prev, error: "All fields are required"}));
+            return;
+        }
+        if (!validateEmail(formValues.email)) {
+            setFormValues(prev => ({...prev, error: "Invalid email format"}));
+            return;
+        }
+        if (!validatePassword(formValues.password)) {
+            setFormValues(prev => ({...prev, error: "Password must be at least 8 characters long and contain at least one letter and one number"}));
+            return;
+        }
+        setFormValues(prev => ({...prev, error: "", step: prev.step + 1}));
     };
 
     const previousStep = () => {
@@ -31,6 +67,23 @@ const Register = ({navigation}) => {
     };
 
     const handleSignup = () => {
+        if (!formValues.calendarUrl || !formValues.meetingLink || !formValues.availableFromHour || !formValues.availableToHour || formValues.availableDays.length === 0 || !formValues.meetingDuration) {
+            setFormValues(prev => ({...prev, error: "All fields are required"}));
+            return;
+        }
+        if (!validateUrl(formValues.meetingLink)) {
+            setFormValues(prev => ({...prev, error: "Invalid meeting link"}));
+            return;
+        }
+        if (!isNumberInRange(formValues.availableFromHour, 0, 24) || !isNumberInRange(formValues.availableToHour, 0, 24)) {
+            setFormValues(prev => ({...prev, error: "Available hours must be between 0 and 24"}));
+            return;
+        }
+        if (Number(formValues.availableToHour) <= Number(formValues.availableFromHour)) {
+            setFormValues(prev => ({...prev, error: "Available 'To' hour must be greater than 'From' hour"}));
+            return;
+        }
+
         setFormValues(prev => ({...prev, loading: true, error: ""}));
 
         const user = {
@@ -46,14 +99,18 @@ const Register = ({navigation}) => {
             meetingDuration: formValues.meetingDuration || undefined,
         };
 
-        register(user).then(data => {
-            setFormValues(prev => ({...prev, loading: false, error: ""}));
+        register(user).then(async data => {
             if (data && data.error) {
-                console.log(data.error);
-                setFormValues(prev => ({...prev, error: data.error}));
+                setFormValues(prev => ({...prev, loading: false, error: data.error}));
             } else {
-                navigation.navigate("Login");
+                const loginData = await login({ email: formValues.email, password: formValues.password });
+                dispatch({
+                    type: AUTH_ACTIONS.SIGN_IN,
+                    auth: loginData,
+                });
             }
+        }).catch(error => {
+            setFormValues(prev => ({...prev, loading: false, error: error.message !== undefined ? "Error occurred during registration: " + error.message : 'Registration failed. Check your internet connection.'}));
         });
     };
 
@@ -113,8 +170,10 @@ const LoginDetails = ({formValues, setFormValues, nextStep, navigation}) => (
                 value={formValues.lastName}
                 onChangeText={val => setFormValues({...formValues, lastName: val})}
             />
+            {formValues.error !== "" && (
+                <Text className="text-red-500 text-[15px] font-medium">{formValues.error}</Text>
+            )}
             <TouchableOpacity
-                disabled={!formValues.email || !formValues.password}
                 onPress={nextStep}
                 className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center"
             >
@@ -217,13 +276,11 @@ const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}
                         maximumTrackTintColor="#000000"
                         value={Number(formValues.meetingDuration)}
                         onValueChange={val => setFormValues({ ...formValues, meetingDuration: val })}
-                        value={formValues.meetingDuration}
-                        onValueChange={val => setFormValues({...formValues, meetingDuration: val})}
                     />
                 </View>
 
                 {formValues.error !== "" && (
-                    <Text className="text-[rgb(254,92,92)] text-[15px] font-light">{formValues.error}</Text>
+                    <Text className="text-red-500 text-[15px] font-medium">{formValues.error}</Text>
                 )}
                 <TouchableOpacity
                     disabled={formValues.loading}
