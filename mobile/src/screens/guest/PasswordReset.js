@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {sendResetMail} from "../../api/api-auth";
 import {MaterialIcons} from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
+import {ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
+
 
 const PasswordReset = ({navigation}) => {
     const [formValues, setFormValues] = useState({
@@ -21,7 +23,7 @@ const PasswordReset = ({navigation}) => {
 
 
     return (
-        <LoginDetails
+        <ResetDetails
             formValues={formValues}
             setFormValues={setFormValues}
             handleSendMail={handleSendMail}
@@ -29,7 +31,7 @@ const PasswordReset = ({navigation}) => {
     )
 };
 
-const LoginDetails = ({formValues, setFormValues, handleSendMail}) => (
+const ResetDetails = ({formValues, setFormValues, handleSendMail}) => (
     <Animatable.View animation="fadeIn" duration={1500} className="flex-1 bg-[#3575EF]">
         <View className="flex-grow justify-end items-center">
             <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")}/>
