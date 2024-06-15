@@ -27,11 +27,12 @@ const PasswordReset = ({navigation}) => {
             formValues={formValues}
             setFormValues={setFormValues}
             handleSendMail={handleSendMail}
+            navigation={navigation}
         />
     )
 };
 
-const ResetDetails = ({formValues, setFormValues, handleSendMail}) => (
+const ResetDetails = ({formValues, setFormValues, handleSendMail, navigation}) => (
     <Animatable.View animation="fadeIn" duration={1500} className="flex-1 bg-[#3575EF]">
         <View className="flex-grow justify-end items-center">
             <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")}/>
