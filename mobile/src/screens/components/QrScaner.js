@@ -25,7 +25,7 @@ export default function QrScaner({ navigation }) {
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setText(data);
-        navigation.navigate('NewAppointmentModal', { data: data });
+        navigation.navigate('NewAppointmentModal', { calendarUrl: data });
     };
 
     // Check permissions and return the screens
