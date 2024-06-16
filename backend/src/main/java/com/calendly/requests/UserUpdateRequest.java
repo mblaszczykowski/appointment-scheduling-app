@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 public record UserUpdateRequest(
         String firstname, String lastname, String email, String password,
         String calendarUrl, Integer availableFromHour, Integer availableToHour, String availableDays,
-        @Nullable MultipartFile profilePicture
+        Integer meetingDuration, @Nullable MultipartFile profilePicture
 ) {
 }

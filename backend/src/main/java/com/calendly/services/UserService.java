@@ -230,6 +230,7 @@ public class UserService {
         updateIfNotNull(user::setAvailableFromHour, userUpdateRequest.availableFromHour());
         updateIfNotNull(user::setAvailableToHour, userUpdateRequest.availableToHour());
         updateIfNotNull(user::setAvailableDays, userUpdateRequest.availableDays());
+        updateIfNotNull(user::setMeetingDuration, userUpdateRequest.meetingDuration());
         MultipartFile profilePicture = userUpdateRequest.profilePicture();
 
         if (profilePicture != null && !profilePicture.isEmpty()) {

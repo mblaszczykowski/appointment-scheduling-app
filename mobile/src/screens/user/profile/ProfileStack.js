@@ -18,7 +18,6 @@ const ProfileStack = () => {
         <Stack.Navigator>
             <Stack.Screen
                 name="ProfileStack"
-                component={(props) => <Profile {...props} isEditing={isEditing} toggleEditing={toggleEditing} />}
                 options={{
                     title: "",
                     headerLeft: () => (
@@ -32,7 +31,7 @@ const ProfileStack = () => {
                     ),
                     headerRight: () => (
                         <MaterialCommunityIcons
-                            name={isEditing ? "check" : "account-edit"}
+                            name={isEditing ? "account-cancel" : "account-edit"}
                             size={30}
                             color="white"
                             style={{ marginHorizontal: 20 }}
@@ -40,7 +39,9 @@ const ProfileStack = () => {
                         />
                     ),
                 }}
-            />
+            >
+                {props => <Profile {...props} isEditing={isEditing} toggleEditing={toggleEditing} />}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };

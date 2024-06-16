@@ -3,8 +3,12 @@ import { ScrollView, Image, Text, TextInput, View, TouchableOpacity } from "reac
 import * as Animatable from "react-native-animatable";
 import ProfileContext from "../../../context/ProfileContext";
 import Slider from "@react-native-community/slider";
+import { Buffer } from "buffer";
+import { setUser } from "../../../api/api-user";
+import AuthContext from "../../../context/AuthContext";
 
 const Profile = ({ toggleEditing, isEditing }) => {
+    const { state } = useContext(AuthContext);
     const { profileState } = useContext(ProfileContext);
 
     const {
@@ -18,28 +22,28 @@ const Profile = ({ toggleEditing, isEditing }) => {
         availableToHour,
         availableDays,
         meetingDuration
-    } = profileState.profile;
+    } = profileState.profile || {};
 
-    const [localFirstname, setLocalFirstname] = useState(firstname);
-    const [localLastname, setLocalLastname] = useState(lastname);
-    const [localEmail, setLocalEmail] = useState(email);
-    const [localCalendarUrl, setLocalCalendarUrl] = useState(calendarUrl);
-    const [localMeetingLink, setLocalMeetingLink] = useState(meetingLink);
-    const [localAvailableFromHour, setLocalAvailableFromHour] = useState(availableFromHour.toString());
-    const [localAvailableToHour, setLocalAvailableToHour] = useState(availableToHour.toString());
-    const [localMeetingDuration, setLocalMeetingDuration] = useState(Number(meetingDuration));
-    const [localAvailableDays, setLocalAvailableDays] = useState(availableDays.split(','));
+    const [localFirstname, setLocalFirstname] = useState(firstname || "");
+    const [localLastname, setLocalLastname] = useState(lastname || "");
+    const [localEmail, setLocalEmail] = useState(email || "");
+    const [localCalendarUrl, setLocalCalendarUrl] = useState(calendarUrl || "");
+    const [localMeetingLink, setLocalMeetingLink] = useState(meetingLink || "");
+    const [localAvailableFromHour, setLocalAvailableFromHour] = useState(availableFromHour?.toString() || "0");
+    const [localAvailableToHour, setLocalAvailableToHour] = useState(availableToHour?.toString() || "0");
+    const [localMeetingDuration, setLocalMeetingDuration] = useState(Number(meetingDuration) || 0);
+    const [localAvailableDays, setLocalAvailableDays] = useState(availableDays ? availableDays.split(',') : []);
 
     useEffect(() => {
-        setLocalFirstname(firstname);
-        setLocalLastname(lastname);
-        setLocalEmail(email);
-        setLocalCalendarUrl(calendarUrl);
-        setLocalMeetingLink(meetingLink);
-        setLocalAvailableFromHour(availableFromHour.toString());
-        setLocalAvailableToHour(availableToHour.toString());
-        setLocalMeetingDuration(Number(meetingDuration));
-        setLocalAvailableDays(availableDays.split(','));
+        setLocalFirstname(firstname || "");
+        setLocalLastname(lastname || "");
+        setLocalEmail(email || "");
+        setLocalCalendarUrl(calendarUrl || "");
+        setLocalMeetingLink(meetingLink || "");
+        setLocalAvailableFromHour(availableFromHour?.toString() || "0");
+        setLocalAvailableToHour(availableToHour?.toString() || "0");
+        setLocalMeetingDuration(Number(meetingDuration) || 0);
+        setLocalAvailableDays(availableDays ? availableDays.split(',') : []);
     }, [profileState]);
 
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -51,10 +55,53 @@ const Profile = ({ toggleEditing, isEditing }) => {
         setLocalAvailableDays(updatedDays);
     };
 
+    const updateProfile = async () => {
+        const decodeJWT = (token) => {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = Buffer.from(base64, 'base64').toString('utf8');
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error("Failed to decode token", error);
+                return null;
+            }
+        };
+
+        const getUserIdFromToken = (token) => {
+            const decoded = decodeJWT(token);
+            return decoded ? decoded.sub : null;
+        };
+
+        const userId = getUserIdFromToken(state.auth);
+        const newUserData = {
+            id: userId,
+            firstname: localFirstname,
+            lastname: localLastname,
+            email: localEmail,
+            calendarUrl: localCalendarUrl,
+            meetingLink: localMeetingLink,
+            availableFromHour: localAvailableFromHour,
+            availableToHour: localAvailableToHour,
+            availableDays: localAvailableDays.join(','),
+            meetingDuration: localMeetingDuration
+        };
+        console.log(newUserData.meetingDuration);
+
+        try {
+            await setUser({ accountId: userId }, newUserData, { token: state.auth });
+            alert('Profile updated successfully');
+            toggleEditing();
+        } catch (error) {
+            console.error("Failed to update profile", error);
+            alert('Failed to update profile');
+        }
+    };
+
     return (
         <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} style={{ width: '100%' }} showsVerticalScrollIndicator={false}>
-                <View className="flex-grow justify-end items-center">
+                <View className="flex-grow justify-end items-center" style={{ marginTop: 20, marginBottom: 20 }}>
                     <Image
                         className="w-[140px] h-[140px] rounded-full"
                         source={{ uri: profilePicture }}
@@ -166,6 +213,22 @@ const Profile = ({ toggleEditing, isEditing }) => {
                             onValueChange={setLocalMeetingDuration}
                             disabled={!isEditing}
                         />
+                    </View>
+
+                    <View style={{ marginBottom: 60 }}>
+                        <TouchableOpacity
+                            onPress={updateProfile}
+                            style={{
+                                backgroundColor: 'white',
+                                paddingVertical: 10,
+                                paddingHorizontal: 20,
+                                borderRadius: 5
+                            }}
+                        >
+                            <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>
+                                Submit
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
