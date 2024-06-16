@@ -86,7 +86,6 @@ const Profile = ({ toggleEditing, isEditing }) => {
             availableDays: localAvailableDays.join(','),
             meetingDuration: localMeetingDuration
         };
-        console.log(newUserData.meetingDuration);
 
         try {
             await setUser({ accountId: userId }, newUserData, { token: state.auth });
@@ -101,7 +100,7 @@ const Profile = ({ toggleEditing, isEditing }) => {
     return (
         <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} style={{ width: '100%' }} showsVerticalScrollIndicator={false}>
-                <View className="flex-grow justify-end items-center" style={{ marginTop: 20, marginBottom: 20 }}>
+                <View className="flex-grow justify-end items-center">
                     <Image
                         className="w-[140px] h-[140px] rounded-full"
                         source={{ uri: profilePicture }}
