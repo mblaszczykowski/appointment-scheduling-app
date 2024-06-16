@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { ScrollView, Image, Text, TextInput, View } from "react-native";
+import React, {useContext} from "react";
+import {Image, ScrollView, Text, TextInput, View} from "react-native";
 import * as Animatable from "react-native-animatable";
 import ProfileContext from "../../../context/ProfileContext";
 import Slider from "@react-native-community/slider";
-import { useColorSchemeContext } from "../../../context/ColorSchemeContext";
+import {useColorSchemeContext} from "../../../context/ColorSchemeContext";
 
 const Profile = () => {
-    const { profileState } = useContext(ProfileContext);
-    const { colorScheme } = useColorSchemeContext();
+    const {profileState} = useContext(ProfileContext);
+    const {colorScheme} = useColorSchemeContext();
 
     const {
         firstname,
@@ -25,12 +25,13 @@ const Profile = () => {
     const daysOfWeek = availableDays.split(',');
 
     return (
-        <Animatable.View animation="fadeInRight" className={`flex-1 ${colorScheme === 'dark' ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Animatable.View animation="fadeInRight"
+                         className={`flex-1 ${colorScheme === 'dark' ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <View className="flex-grow justify-end items-center">
                     <Image
                         className="w-[140px] h-[140px] rounded-full"
-                        source={{ uri: profilePicture }}
+                        source={{uri: profilePicture}}
                     />
                 </View>
                 <View className="flex-grow justify-center items-center">
@@ -71,7 +72,8 @@ const Profile = () => {
                     />
 
                     <Text className="text-white bg-transparent mt-0.5">Available Hours</Text>
-                    <View className={`w-[300px] flex-row ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-0.75 m-2 justify-between items-center`}>
+                    <View
+                        className={`w-[300px] flex-row ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-0.75 m-2 justify-between items-center`}>
                         <TextInput
                             className="flex-1 h-[50px] text-white bg-transparent text-center"
                             placeholder="From"
@@ -90,7 +92,8 @@ const Profile = () => {
                     </View>
 
                     <Text className="text-white bg-transparent mt-2">Available Days</Text>
-                    <View className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start`}>
+                    <View
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start`}>
                         {daysOfWeek.map((day, index) => (
                             <View key={index} className="p-2 m-1 rounded-lg bg-white text-black">
                                 <Text className="text-center text-black">
@@ -100,10 +103,11 @@ const Profile = () => {
                         ))}
                     </View>
 
-                    <View className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-3.5`}>
+                    <View
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-3.5`}>
                         <Text className="text-white text-center mb-2">Meeting Duration: {meetingDuration} min</Text>
                         <Slider
-                            style={{ width: '100%', height: 40 }}
+                            style={{width: '100%', height: 40}}
                             minimumValue={15}
                             maximumValue={120}
                             step={15}

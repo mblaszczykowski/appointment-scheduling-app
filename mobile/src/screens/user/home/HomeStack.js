@@ -1,14 +1,14 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { useTheme } from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import {useTheme} from "@react-navigation/native";
 import Home from "./Home";
-import { useColorSchemeContext } from "../../../context/ColorSchemeContext";
+import {useColorSchemeContext} from "../../../context/ColorSchemeContext";
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
-    const { colors } = useTheme();
-    const { colorScheme } = useColorSchemeContext();
+    const {colors} = useTheme();
+    const {colorScheme} = useColorSchemeContext();
 
     return (
         <Stack.Navigator>

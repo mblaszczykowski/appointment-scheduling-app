@@ -2,14 +2,12 @@ import axios from '../../axios';
 import {Platform} from "react-native";
 
 
-
 const apiGetRequest = async (calendarUrl, token) => {
     let baseUrl;
-    if(Platform.OS === "android"){
+    if (Platform.OS === "android") {
         baseUrl = `${process.env.ANDROID_BASE_URL}`
-    }
-    else {
-        baseUrl="http://localhost:8080"
+    } else {
+        baseUrl = "http://localhost:8080"
     }
     calendarUrl = baseUrl + calendarUrl
     try {
@@ -27,7 +25,7 @@ const apiGetRequest = async (calendarUrl, token) => {
         // albo sztucznie to     await signOut();
          */
         console.error(`Error fetching data from ${calendarUrl}:`, error.response?.data || error.message);
-        return error.response?.data || { error: 'Request failed' };
+        return error.response?.data || {error: 'Request failed'};
     }
 };
 
@@ -41,4 +39,4 @@ const getAppointments = async (params, credentials) => {
     return await apiGetRequest(url, credentials.token);
 };
 
-export { getUser, getAppointments };
+export {getUser, getAppointments};

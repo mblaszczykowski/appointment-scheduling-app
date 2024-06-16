@@ -1,19 +1,19 @@
-import React, { useContext, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Calendar } from "react-native-calendars";
+import React, {useContext, useState} from "react";
+import {ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Calendar} from "react-native-calendars";
 import AuthContext from "../context/AuthContext";
 import ProfileContext from "../context/ProfileContext";
-import { useColorSchemeContext } from "../context/ColorSchemeContext";
+import {useColorSchemeContext} from "../context/ColorSchemeContext";
 
 const WORK_HOURS = {
     start: "07:30",
     end: "17:30",
 };
 const BLOCKED_HOURS = ["09:00", "12:30"];
-const TIME_SLOTS = Array.from({ length: 24 * 2 }, (_, i) => {
+const TIME_SLOTS = Array.from({length: 24 * 2}, (_, i) => {
     const hour = String(Math.floor(i / 2)).padStart(2, '0');
     const minute = i % 2 === 0 ? '00' : '30';
-    return { time: `${hour}:${minute}` };
+    return {time: `${hour}:${minute}`};
 });
 
 const getFilteredTimes = (timeSlots, start, end) => {
@@ -22,10 +22,10 @@ const getFilteredTimes = (timeSlots, start, end) => {
     return timeSlots.slice(startIndex, endIndex).filter(slot => !BLOCKED_HOURS.includes(slot.time));
 };
 
-const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
-    const { state } = useContext(AuthContext);
-    const { profileState, profileDispatch } = useContext(ProfileContext);
-    const { colorScheme } = useColorSchemeContext();
+const NewAppointmentModal = ({openModal, setOpenModal, user, navigation}) => {
+    const {state} = useContext(AuthContext);
+    const {profileState, profileDispatch} = useContext(ProfileContext);
+    const {colorScheme} = useColorSchemeContext();
     const today = new Date().toISOString().split('T')[0];
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
@@ -67,7 +67,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
         */
     };
 
-    const renderTimeSlot = ({ item }) => (
+    const renderTimeSlot = ({item}) => (
         <TouchableOpacity
             onPress={() => setSelectedTime(item.time)}
             className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.time ? "bg-[#00adf5] border-[#00adf5]" : "bg-white dark:bg-gray-800 border-[#00adf5]"}`}
@@ -80,13 +80,16 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
     const renderDateTimeSelection = () => (
         <>
             <View className="flex-row mx-5 mt-3 mb-2">
-                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")} />
+                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")}/>
                 <View className="ml-5">
-                    <Text className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>imie</Text>
-                    <Text className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>opis</Text>
+                    <Text
+                        className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>imie</Text>
+                    <Text
+                        className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>opis</Text>
                 </View>
             </View>
-            <View className={`mx-5 p-1 mb-2 border ${colorScheme === 'dark' ? 'border-gray-600' : 'border-blue-400'} rounded-2xl`}>
+            <View
+                className={`mx-5 p-1 mb-2 border ${colorScheme === 'dark' ? 'border-gray-600' : 'border-blue-400'} rounded-2xl`}>
                 <Calendar
                     minDate={today}
                     onDayPress={selectDay}
@@ -120,21 +123,25 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                     }}
                 />
             </View>
-            <Text className={`text-md font-medium ml-6 mt-2 mb-1 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Available hours:</Text>
+            <Text
+                className={`text-md font-medium ml-6 mt-2 mb-1 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Available
+                hours:</Text>
             <FlatList
                 data={workingHours}
                 numColumns={4}
                 renderItem={renderTimeSlot}
                 keyExtractor={(item) => item.time}
-                contentContainerStyle={{ alignItems: "center", paddingBottom: 32 }}
+                contentContainerStyle={{alignItems: "center", paddingBottom: 32}}
             />
         </>
     );
 
     const renderDetailsInput = () => (
         <View className="mx-5 mt-3">
-            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected Date: {date}</Text>
-            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected Time: {selectedTime}</Text>
+            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected
+                Date: {date}</Text>
+            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected
+                Time: {selectedTime}</Text>
             <TextInput
                 className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
                 placeholder="Name"
@@ -165,8 +172,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
     const handleCancel = () => {
         if (profileState.profile === null) {
             navigation.navigate("Login");
-        }
-        else {
+        } else {
             setOpenModal(!openModal);
         }
     }
@@ -190,7 +196,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                     ) : (
                         <TouchableOpacity onPress={handleCreateAppointment} disabled={!name || !email || !meetingNote}>
                             {loading ? (
-                                <ActivityIndicator className="mx-3" size="small" color="#01478F" />
+                                <ActivityIndicator className="mx-3" size="small" color="#01478F"/>
                             ) : (
                                 <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">Confirm</Text>
                             )}

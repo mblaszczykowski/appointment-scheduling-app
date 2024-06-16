@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {createContext, useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useColorScheme} from 'nativewind';
 
@@ -6,8 +6,8 @@ const ColorSchemeContext = createContext();
 
 export const useColorSchemeContext = () => useContext(ColorSchemeContext);
 
-export const ColorSchemeProvider = ({ children }) => {
-    const { colorScheme, toggleColorScheme, setColorScheme } = useColorScheme();
+export const ColorSchemeProvider = ({children}) => {
+    const {colorScheme, toggleColorScheme, setColorScheme} = useColorScheme();
 
     useEffect(() => {
         const loadStoredTheme = async () => {
@@ -23,7 +23,7 @@ export const ColorSchemeProvider = ({ children }) => {
     };
 
     return (
-        <ColorSchemeContext.Provider value={{ colorScheme, toggleColorSchemeMethod }}>
+        <ColorSchemeContext.Provider value={{colorScheme, toggleColorSchemeMethod}}>
             {children}
         </ColorSchemeContext.Provider>
     );

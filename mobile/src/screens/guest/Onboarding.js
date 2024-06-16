@@ -1,12 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { styled } from 'nativewind';
-import { useColorSchemeContext } from '../../context/ColorSchemeContext';
+import React, {useRef, useState} from 'react';
+import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {useColorSchemeContext} from '../../context/ColorSchemeContext';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-const OnboardingScreen = ({ navigation }) => {
-    const { colorScheme } = useColorSchemeContext();
+const OnboardingScreen = ({navigation}) => {
+    const {colorScheme} = useColorSchemeContext();
     const isDarkMode = colorScheme === 'dark';
 
     const slides = [
@@ -27,15 +26,15 @@ const OnboardingScreen = ({ navigation }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const ref = useRef(null);
 
-    const renderItem = ({ item }) => (
-        <View className="flex-1 items-center justify-center p-5" style={{ backgroundColor: item.backgroundColor, width }}>
-            <Image source={item.image} className="w-24 h-24 mb-12 rounded-full" resizeMode="contain" />
+    const renderItem = ({item}) => (
+        <View className="flex-1 items-center justify-center p-5" style={{backgroundColor: item.backgroundColor, width}}>
+            <Image source={item.image} className="w-24 h-24 mb-12 rounded-full" resizeMode="contain"/>
             <Text className="text-2xl text-center dark:text-gray-200 text-white">{item.title}</Text>
             <Text className="text-lg text-center px-5 mt-2 dark:text-gray-400 text-white">{item.subtitle}</Text>
         </View>
     );
 
-    const updateIndex = ({ viewableItems }) => {
+    const updateIndex = ({viewableItems}) => {
         setCurrentIndex(viewableItems[0].index);
     };
 
@@ -45,7 +44,7 @@ const OnboardingScreen = ({ navigation }) => {
 
     const handleNext = () => {
         if (currentIndex < slides.length - 1) {
-            ref.current.scrollToIndex({ index: currentIndex + 1 });
+            ref.current.scrollToIndex({index: currentIndex + 1});
         } else {
             skipToEnd();
         }
@@ -66,7 +65,7 @@ const OnboardingScreen = ({ navigation }) => {
                     viewAreaCoveragePercentThreshold: 50,
                 }}
                 getItemLayout={(data, index) => (
-                    { length: width, offset: width * index, index }
+                    {length: width, offset: width * index, index}
                 )}
             />
             <View className="flex-row justify-between items-center pb-5 pt-2 bg-blue-700 dark:bg-gray-800">
@@ -79,7 +78,8 @@ const OnboardingScreen = ({ navigation }) => {
 
                 <View className="flex-row flex-1 justify-center items-center">
                     {slides.map((_, index) => (
-                        <View key={index} className={`h-2 w-2 rounded-full mx-1 ${currentIndex === index ? 'bg-white' : 'bg-white/50'}`} />
+                        <View key={index}
+                              className={`h-2 w-2 rounded-full mx-1 ${currentIndex === index ? 'bg-white' : 'bg-white/50'}`}/>
                     ))}
                 </View>
                 <View className="flex-1 justify-center items-center">

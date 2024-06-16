@@ -1,16 +1,16 @@
-import React, { useContext, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, {useContext, useState} from "react";
+import {ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
     const {
-        profileState: { profile, appointments },
+        profileState: {profile, appointments},
     } = useContext(ProfileContext);
 
-    const { appointments: appointmentList } = appointments || {};
+    const {appointments: appointmentList} = appointments || {};
 
     const [filter, setFilter] = useState("Upcoming");
     const [searchQuery, setSearchQuery] = useState("");
@@ -53,7 +53,7 @@ const Home = ({ navigation }) => {
                 </View>
                 <View className="p-5">
                     <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
-                        <EvilIcons name="search" size={30} color="#1c313a" />
+                        <EvilIcons name="search" size={30} color="#1c313a"/>
                         <TextInput
                             placeholder="Search by booker name"
                             placeholderTextColor="gray"

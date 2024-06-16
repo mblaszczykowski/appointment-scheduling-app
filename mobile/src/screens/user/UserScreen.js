@@ -1,23 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import AuthContext from "../../context/AuthContext";
 import ProfileContext from "../../context/ProfileContext";
-import { getAppointments, getUser } from "../../api/api-user";
-import { PROFILE_ACTIONS } from "../../context/reducers/profileReducer";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {getAppointments, getUser} from "../../api/api-user";
+import {PROFILE_ACTIONS} from "../../context/reducers/profileReducer";
+import {createDrawerNavigator} from "@react-navigation/drawer";
 import MainTabs from "./MainTabs";
-import { DrawerContent } from "./DrawerContent";
+import {DrawerContent} from "./DrawerContent";
 import ProfileStack from "./profile/ProfileStack";
-import { Buffer } from 'buffer';
+import {Buffer} from 'buffer';
 import LoadingScreen from "./LoadingScreen";
-import { useColorSchemeContext } from "../../context/ColorSchemeContext";
+import {useColorSchemeContext} from "../../context/ColorSchemeContext";
 
 const Drawer = createDrawerNavigator();
 
 const UserHome = () => {
-    const { state } = useContext(AuthContext);
-    const { profileDispatch } = useContext(ProfileContext);
+    const {state} = useContext(AuthContext);
+    const {profileDispatch} = useContext(ProfileContext);
     const [loading, setLoading] = useState(true);
-    const { colorScheme, toggleColorSchemeMethod } = useColorSchemeContext();
+    const {colorScheme, toggleColorSchemeMethod} = useColorSchemeContext();
 
     useEffect(() => {
         getUserProfile();
@@ -45,7 +45,7 @@ const UserHome = () => {
             {
                 accountId: getUserIdFromToken(state.auth),
             },
-            { token: state.auth }
+            {token: state.auth}
         )
             .then((user) => {
                 if (user && user.error) {
@@ -56,8 +56,8 @@ const UserHome = () => {
                         profile: user,
                     });
                     getAppointments(
-                        { accountId: getUserIdFromToken(state.auth) },
-                        { token: state.auth }
+                        {accountId: getUserIdFromToken(state.auth)},
+                        {token: state.auth}
                     ).then((appointments) => {
                         setLoading(false);
                         if (appointments && appointments.error) {
@@ -77,7 +77,7 @@ const UserHome = () => {
     };
 
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen/>;
     }
 
     return (
