@@ -9,7 +9,7 @@ const apiGetRequest = async (calendarUrl, token) => {
         baseUrl = `${process.env.ANDROID_BASE_URL}`
     }
     else {
-        baseUrl="http://localhost:8080"
+        baseUrl = `${process.env.IOS_BASE_URL}`
     }
     calendarUrl = baseUrl + calendarUrl
     try {

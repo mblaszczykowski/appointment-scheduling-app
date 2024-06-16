@@ -5,7 +5,7 @@ import {Platform} from "react-native";
 if (Platform.OS === "android") {
     axios.defaults.baseURL = `${process.env.ANDROID_BASE_URL}`
 } else {
-    axios.defaults.baseURL = "http://localhost:8080"
+    axios.defaults.baseURL = `${process.env.IOS_BASE_URL}`
 }
 const storeToken = async (user) => {
     try {

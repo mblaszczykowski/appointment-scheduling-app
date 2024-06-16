@@ -53,7 +53,7 @@ const Profile = ({ toggleEditing, isEditing }) => {
 
     return (
         <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} style={{ width: '100%' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} style={{ width: '100%' }} showsVerticalScrollIndicator={false}>
                 <View className="flex-grow justify-end items-center">
                     <Image
                         className="w-[140px] h-[140px] rounded-full"
