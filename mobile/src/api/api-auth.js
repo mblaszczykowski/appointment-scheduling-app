@@ -2,11 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../../axios';
 import {Platform} from "react-native";
 
-if(Platform.OS === "android"){
-    axios.defaults.baseURL="http://10.0.2.2:8080"
-}
-else {
-    axios.defaults.baseURL="http://localhost:8080"
+if (Platform.OS === "android") {
+    axios.defaults.baseURL = `${process.env.ANDROID_BASE_URL}`
+} else {
+    axios.defaults.baseURL = "http://localhost:8080"
 }
 const storeToken = async (user) => {
     try {
@@ -30,14 +29,15 @@ const login = async (user) => {
         await storeToken(response.data);
         return response.data;
     } catch (error) {
-        console.error('Error logging in:', error.response?.data || error.message);
-        return error.response?.data || {error: 'Login failed'};
+        //console.error('Error logging in:', error.response?.data || error.message);
+        throw error.response?.data || {error: 'Login failed'};
     }
 };
 
 const register = async (user) => {
     try {
         const response = await axios.post('/api/users', user);
+        await storeToken(response.data); // Store token immediately after registration
         return response.data;
     } catch (error) {
         console.error('Error registering:', error.response?.data || error.message);

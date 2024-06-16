@@ -39,6 +39,6 @@ npm install -g expo-cli
 
 ```
 cd mobile
-npm install or npm install --legacy-peer-deps
-expo start
+npm install
+npm start
 ```

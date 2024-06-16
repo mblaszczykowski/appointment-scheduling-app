@@ -6,7 +6,7 @@ import {Platform} from "react-native";
 const apiGetRequest = async (calendarUrl, token) => {
     let baseUrl;
     if(Platform.OS === "android"){
-        baseUrl ="http://10.0.2.2:8080"
+        baseUrl = `${process.env.ANDROID_BASE_URL}`
     }
     else {
         baseUrl="http://localhost:8080"
