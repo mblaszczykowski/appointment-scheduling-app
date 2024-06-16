@@ -117,6 +117,12 @@
         "home": "Strona główna",
         "calendar": "Mój kalendarz"
       }
+    },
+    "drawer": {
+      "profile": "Profil",
+      "settings": "Ustawienia",
+      "darkMode": "Tryb ciemny",
+      "signOut": "Wyloguj się"
     }
   }
 }

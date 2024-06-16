@@ -9,6 +9,7 @@ import { AUTH_ACTIONS } from "../../context/reducers/authReducer";
 import { logout } from "../../api/api-auth";
 import { useColorSchemeContext } from "../../context/ColorSchemeContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { useTranslation } from 'react-i18next';
 
 export function DrawerContent({ navigation }) {
     const { state, dispatch } = useContext(AuthContext);
@@ -16,6 +17,7 @@ export function DrawerContent({ navigation }) {
         profileState: { profile },
     } = useContext(ProfileContext);
     const { colorScheme, toggleColorSchemeMethod } = useColorSchemeContext();
+    const { t } = useTranslation();
 
     const handleSignOut = async () => {
         try {
@@ -37,10 +39,10 @@ export function DrawerContent({ navigation }) {
                     />
                     <View className="ml-4 flex-column">
                         <Title className="text-xl mt-1 font-semibold text-black dark:text-white">
-                            Name
+                            {profile?.firstname} {profile?.lastname}
                         </Title>
                         <Caption className="text-base leading-4 text-black dark:text-white">
-                            Lastname
+                            {profile?.email}
                         </Caption>
                     </View>
                 </View>
@@ -52,7 +54,7 @@ export function DrawerContent({ navigation }) {
                             icon={({ color, size }) => (
                                 <Icon name="account-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"} size={size} />
                             )}
-                            label="Profile"
+                            label={t('screens.drawer.profile')}
                             labelStyle={{ color: colorScheme === "dark" ? "#FFFFFF" : "#000000" }}
                             onPress={() => navigation.navigate("Profile")}
                         />
@@ -61,13 +63,13 @@ export function DrawerContent({ navigation }) {
                             icon={({ color, size }) => (
                                 <Icon name="cog-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"} size={size} />
                             )}
-                            label="Settings"
+                            label={t('screens.drawer.settings')}
                             labelStyle={{ color: colorScheme === "dark" ? "#FFFFFF" : "#000000" }}
                         />
                     </View>
                     <View className="flex-1 flex justify-center mt-6">
                         <View className="flex-row justify-center items-center space-x-2">
-                            <Text className="text-md font-medium text-black dark:text-white">Dark Mode</Text>
+                            <Text className="text-md font-medium text-black dark:text-white">{t('screens.drawer.darkMode')}</Text>
                             <Switch value={colorScheme === 'dark'} onValueChange={toggleColorSchemeMethod} />
                         </View>
                     </View>
@@ -79,7 +81,7 @@ export function DrawerContent({ navigation }) {
                     icon={({ color, size }) => (
                         <Icon name="exit-to-app" color="#ED2939" size={size} />
                     )}
-                    label="Sign out"
+                    label={t('screens.drawer.signOut')}
                     labelStyle={{ fontWeight: "bold", color: "#ED2939" }}
                     onPress={handleSignOut}
                 />

@@ -117,6 +117,12 @@
         "home": "Home",
         "calendar": "My calendar"
       }
+    },
+    "drawer": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "darkMode": "Dark Mode",
+      "signOut": "Sign out"
     }
   }
 }
