@@ -123,6 +123,29 @@
       "settings": "Settings",
       "darkMode": "Dark Mode",
       "signOut": "Sign out"
+    },
+    "newAppointmentModal": {
+      "title": "New Appointment",
+      "text": {
+        "cancel": "Cancel",
+        "next": "Next",
+        "confirm": "Confirm",
+        "back": "Back",
+        "availableHours": "Available hours:",
+        "selectedDate": "Selected Date",
+        "selectedTime": "Selected Time",
+        "namePlaceholder": "Name",
+        "emailPlaceholder": "Email",
+        "meetingNotePlaceholder": "Meeting Note",
+        "dateTime": {
+          "header": "Select Date & Time",
+          "profileName": "Name",
+          "profileDescription": "Description"
+        },
+        "details": {
+          "header": "Enter Details"
+        }
+      }
     }
   }
 }

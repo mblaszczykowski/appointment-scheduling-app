@@ -123,6 +123,29 @@
       "settings": "Ustawienia",
       "darkMode": "Tryb ciemny",
       "signOut": "Wyloguj się"
+    },
+    "newAppointmentModal": {
+      "title": "Nowa wizyta",
+      "text": {
+        "cancel": "Anuluj",
+        "next": "Dalej",
+        "confirm": "Potwierdź",
+        "back": "Wstecz",
+        "availableHours": "Dostępne godziny:",
+        "selectedDate": "Wybrana data",
+        "selectedTime": "Wybrany czas",
+        "namePlaceholder": "Imię",
+        "emailPlaceholder": "Email",
+        "meetingNotePlaceholder": "Notatka ze spotkania",
+        "dateTime": {
+          "header": "Wybierz datę i godzinę",
+          "profileName": "Imię",
+          "profileDescription": "Opis"
+        },
+        "details": {
+          "header": "Wprowadź szczegóły"
+        }
+      }
     }
   }
 }
