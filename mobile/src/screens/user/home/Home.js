@@ -1,16 +1,18 @@
-import React, {useContext, useState} from "react";
-import {ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, { useContext, useState } from "react";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+import { useTranslation } from "react-i18next";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
     const {
-        profileState: {profile, appointments},
+        profileState: { profile, appointments },
     } = useContext(ProfileContext);
 
-    const {appointments: appointmentList} = appointments || {};
+    const { appointments: appointmentList } = appointments || {};
+    const { t } = useTranslation();
 
     const [filter, setFilter] = useState("Upcoming");
     const [searchQuery, setSearchQuery] = useState("");
@@ -48,14 +50,14 @@ const Home = ({navigation}) => {
             <ScrollView className="flex-1 bg-white dark:bg-gray-800 rounded-t-[25px] pb-5">
                 <View className="p-5 mt-2.5">
                     <Text className="text-2xl font-medium text-black dark:text-white">
-                        Hi, {`${profile?.firstname}`}
+                        {t('screens.home.hi')}, {`${profile?.firstname}`}
                     </Text>
                 </View>
                 <View className="p-5">
                     <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
-                        <EvilIcons name="search" size={30} color="#1c313a"/>
+                        <EvilIcons name="search" size={30} color="#1c313a" />
                         <TextInput
-                            placeholder="Search by booker name"
+                            placeholder={t('screens.home.searchPlaceholder')}
                             placeholderTextColor="gray"
                             value={searchQuery}
                             onChangeText={setSearchQuery}
@@ -68,19 +70,19 @@ const Home = ({navigation}) => {
                         onPress={() => setFilter("Upcoming")}
                         className={`px-3 py-1 mx-1 rounded-full ${filter === "Upcoming" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
-                        <Text>Upcoming</Text>
+                        <Text>{t('screens.home.upcoming')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setFilter("Past")}
                         className={`px-3 py-1 mx-1 rounded-full ${filter === "Past" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
-                        <Text>Past</Text>
+                        <Text>{t('screens.home.past')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setFilter("Canceled")}
                         className={`px-3 py-1 mx-1 rounded-full ${filter === "Canceled" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
-                        <Text>Canceled</Text>
+                        <Text>{t('screens.home.canceled')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -94,7 +96,9 @@ const Home = ({navigation}) => {
                             />
                         ))
                     ) : (
-                        <Text className="text-gray-500 dark:text-gray-300">No {filter.toLowerCase()} appointments</Text>
+                        <Text className="text-gray-500 dark:text-gray-300">
+                            {t('screens.home.noAppointments')}
+                        </Text>
                     )}
                 </View>
             </ScrollView>

@@ -1,0 +1,122 @@
+{
+  "language": "Polski",
+  "screens": {
+    "login": {
+      "title": "Zaloguj się",
+      "text": {
+        "login": "Zaloguj się",
+        "emailAddress": "Adres e-mail",
+        "password": "Hasło",
+        "continue": "Kontynuuj",
+        "createAccount": "Utwórz konto",
+        "forgotPassword": "Zapomniałeś hasła?",
+        "invalidEmail": "Nieprawidłowy format e-maila",
+        "provideEmailPassword": "Proszę podać e-mail i hasło",
+        "errorOccurred": "Wystąpił błąd podczas logowania: ",
+        "loginFailed": "Logowanie nie powiodło się. Sprawdź swoje połączenie z Internetem.",
+        "dontHaveAccount": "Nie masz konta?",
+        "signup": "Zarejestruj się",
+        "scanQr": "Skanuj QR"
+      }
+    },
+    "register": {
+      "title": "Zarejestruj się",
+      "text": {
+        "email": "E-mail",
+        "password": "Hasło",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "next": "Dalej",
+        "signin": "Zaloguj się",
+        "calendarUrl": "URL kalendarza",
+        "meetingLink": "Link do spotkania",
+        "selectAvailableHours": "Wybierz dostępne godziny",
+        "from": "Od",
+        "to": "Do",
+        "selectBusinessHours": "Wybierz 9-17",
+        "selectAvailableDays": "Wybierz dostępne dni",
+        "selectWeekdays": "Wybierz pon-pt",
+        "meetingDuration": "Czas trwania spotkania",
+        "signUp": "Zarejestruj się",
+        "goBack": "Wróć",
+        "alreadyHaveAccount": "Masz już konto?",
+        "invalidEmail": "Nieprawidłowy format e-maila",
+        "allFieldsRequired": "Wszystkie pola są wymagane",
+        "invalidMeetingLink": "Nieprawidłowy link do spotkania",
+        "hoursBetween0and24": "Dostępne godziny muszą być między 0 a 24",
+        "availableToGreaterThanFrom": "Dostępna godzina 'Do' musi być większa niż godzina 'Od'",
+        "passwordRequirements": "Hasło musi mieć co najmniej 8 znaków i zawierać co najmniej jedną literę i jedną cyfrę",
+        "registrationFailed": "Rejestracja nie powiodła się. Sprawdź swoje połączenie z Internetem.",
+        "errorOccurred": "Wystąpił błąd podczas rejestracji: "
+      }
+    },
+    "onboarding": {
+      "slides": [
+        {
+          "title": "Intuicyjne\nPlanowanie spotkań",
+          "subtitle": "Meetly to platforma zaprojektowana do usprawnienia\nplanowania spotkań i umawiania się na wizyty."
+        },
+        {
+          "title": "Co oferujemy",
+          "subtitle": "Uprość swoje planowanie\nz łatwą konfiguracją kalendarza. Pozwól innym rezerwować Twoje dostępne terminy\nw zaledwie kilka kliknięć. Otrzymuj automatyczne przypomnienia e-mail\nna wszystkie spotkania."
+        }
+      ],
+      "skip": "Pomiń",
+      "next": "Dalej",
+      "start": "Start"
+    },
+    "passwordReset": {
+      "title": "Zapomniałeś hasła?",
+      "text": {
+        "forgotPassword": "Zapomniałeś hasła?",
+        "dontWorry": "Nie martw się, wpisz swój adres e-mail.",
+        "email": "Email",
+        "next": "Dalej",
+        "rememberedPassword": "Przypomniałeś sobie hasło?",
+        "signIn": "Zaloguj się"
+      }
+    },
+    "languageSwitcher": {
+      "title": "Język:",
+      "english": "Angielski",
+      "polish": "Polski"
+    },
+    "qrScanner": {
+      "title": "Skaner QR",
+      "text": {
+        "requestingPermission": "Prośba o dostęp do kamery",
+        "noAccess": "Brak dostępu do kamery",
+        "allowCamera": "Zezwól na dostęp do kamery",
+        "notYetScanned": "Jeszcze nie zeskanowano",
+        "scanAgain": "Skanuj ponownie?"
+      }
+    },
+    "calendar": {
+      "title": "Kalendarz",
+      "text": {
+        "qrCodeToYourCalendar": "Kod QR do twojego kalendarza:",
+        "previewYourCalendar": "Podgląd twojego kalendarza"
+      }
+    },
+    "calendarStack": {
+      "title": "Kalendarz"
+    },
+    "homeStack": {
+      "title": "Strona główna"
+    },
+    "home": {
+      "hi": "Cześć",
+      "searchPlaceholder": "Szukaj po imieniu rezerwującego",
+      "upcoming": "Nadchodzące",
+      "past": "Przeszłe",
+      "canceled": "Anulowane",
+      "noAppointments": "Brak spotkań"
+    },
+    "tabs": {
+      "labels": {
+        "home": "Strona główna",
+        "calendar": "Mój kalendarz"
+      }
+    }
+  }
+}

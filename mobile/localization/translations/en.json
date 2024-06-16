@@ -1,0 +1,122 @@
+{
+  "language": "English",
+  "screens": {
+    "login": {
+      "title": "Sign in",
+      "text": {
+        "login": "Login",
+        "emailAddress": "Email address",
+        "password": "Password",
+        "continue": "Continue",
+        "createAccount": "Create an Account",
+        "forgotPassword": "Forgotten password?",
+        "invalidEmail": "Invalid email format",
+        "provideEmailPassword": "Please provide e-mail and password",
+        "errorOccurred": "Error occurred during login: ",
+        "loginFailed": "Login failed. Check your internet connection.",
+        "dontHaveAccount": "Don't have an account?",
+        "signup": "Signup",
+        "scanQr": "ScanQR"
+      }
+    },
+    "register": {
+      "title": "Register",
+      "text": {
+        "email": "Email",
+        "password": "Password",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "next": "Next",
+        "signin": "Signin",
+        "calendarUrl": "Calendar URL",
+        "meetingLink": "Meeting Link",
+        "selectAvailableHours": "Select available hours",
+        "from": "From",
+        "to": "To",
+        "selectBusinessHours": "Select 9-17",
+        "selectAvailableDays": "Select available days",
+        "selectWeekdays": "Select Mon-Fri",
+        "meetingDuration": "Meeting Duration",
+        "signUp": "Sign Up",
+        "goBack": "Go back",
+        "alreadyHaveAccount": "Already have an account?",
+        "invalidEmail": "Invalid email format",
+        "allFieldsRequired": "All fields are required",
+        "invalidMeetingLink": "Invalid meeting link",
+        "hoursBetween0and24": "Available hours must be between 0 and 24",
+        "availableToGreaterThanFrom": "Available 'To' hour must be greater than 'From' hour",
+        "passwordRequirements": "Password must be at least 8 characters long and contain at least one letter and one number",
+        "registrationFailed": "Registration failed. Check your internet connection.",
+        "errorOccurred": "Error occurred during registration: "
+      }
+    },
+    "onboarding": {
+      "slides": [
+        {
+          "title": "The Intuitive\nAppointment Scheduling",
+          "subtitle": "Meetly is a platform designed to streamline\nmeeting and appointment scheduling effortlessly."
+        },
+        {
+          "title": "What do we offer",
+          "subtitle": "Simplify your scheduling\nwith easy calendar setup. Allow others to book your available slots\nin just a few clicks. Get automatic email reminders\nfor all appointments."
+        }
+      ],
+      "skip": "Skip",
+      "next": "Next",
+      "start": "Start"
+    },
+    "passwordReset": {
+      "title": "Forgot your password?",
+      "text": {
+        "forgotPassword": "Forgot your password?",
+        "dontWorry": "Don't worry, enter your email address.",
+        "email": "Email",
+        "next": "Next",
+        "rememberedPassword": "Remembered your password?",
+        "signIn": "Sign in"
+      }
+    },
+    "languageSwitcher": {
+      "title": "Language:",
+      "english": "English",
+      "polish": "Polish"
+    },
+    "qrScanner": {
+      "title": "QR Scanner",
+      "text": {
+        "requestingPermission": "Requesting for camera permission",
+        "noAccess": "No access to camera",
+        "allowCamera": "Allow Camera",
+        "notYetScanned": "Not yet scanned",
+        "scanAgain": "Scan again?"
+      }
+    },
+    "calendar": {
+      "title": "Calendar",
+      "text": {
+        "qrCodeToYourCalendar": "QR code to your calendar:",
+        "previewYourCalendar": "Preview your calendar"
+      }
+    },
+    "calendarStack": {
+      "title": "Calendar"
+    },
+    "homeStack": {
+      "title": "Home"
+    },
+    "home": {
+      "hi": "Hi",
+      "searchPlaceholder": "Search by booker name",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "canceled": "Canceled",
+      "noAppointments": "No appointments"
+    },
+    "tabs": {
+      "labels": {
+        "home": "Home",
+        "calendar": "My calendar"
+      }
+    }
+  }
+}

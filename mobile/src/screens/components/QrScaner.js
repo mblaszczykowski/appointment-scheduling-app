@@ -1,18 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {BarCodeScanner} from 'expo-barcode-scanner';
+import React, { useEffect, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useTranslation } from 'react-i18next';
 
-export default function QrScaner({navigation}) {
+export default function QrScaner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const [text, setText] = useState('Not yet scanned')
+    const [text, setText] = useState('Not yet scanned');
+    const { t } = useTranslation();
 
     const askForCameraPermission = () => {
         (async () => {
-            const {status} = await BarCodeScanner.requestPermissionsAsync();
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
-        })()
-    }
+        })();
+    };
 
     // Request Camera Permission
     useEffect(() => {
@@ -20,25 +22,27 @@ export default function QrScaner({navigation}) {
     }, []);
 
     // What happens when we scan the bar code
-    const handleBarCodeScanned = ({type, data}) => {
+    const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        setText(data)
-        navigation.navigate('NewAppointmentModal', {data: data});
+        setText(data);
+        navigation.navigate('NewAppointmentModal', { data: data });
     };
 
     // Check permissions and return the screens
     if (hasPermission === null) {
         return (
             <View style={styles.container}>
-                <Text>Requesting for camera permission</Text>
-            </View>)
+                <Text>{t('screens.qrScanner.text.requestingPermission')}</Text>
+            </View>
+        );
     }
     if (hasPermission === false) {
         return (
             <View style={styles.container}>
-                <Text style={{margin: 10}}>No access to camera</Text>
-                <Button title={'Allow Camera'} onPress={() => askForCameraPermission()}/>
-            </View>)
+                <Text style={{ margin: 10 }}>{t('screens.qrScanner.text.noAccess')}</Text>
+                <Button title={t('screens.qrScanner.text.allowCamera')} onPress={() => askForCameraPermission()} />
+            </View>
+        );
     }
 
     // Return the View
@@ -47,11 +51,12 @@ export default function QrScaner({navigation}) {
             <View style={styles.barcodebox}>
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={{height: 400, width: 400}}/>
+                    style={{ height: 400, width: 400 }}
+                />
             </View>
             <Text style={styles.maintext}>{text}</Text>
 
-            {scanned && <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato'/>}
+            {scanned && <Button title={t('screens.qrScanner.text.scanAgain')} onPress={() => setScanned(false)} color='tomato' />}
         </View>
     );
 }

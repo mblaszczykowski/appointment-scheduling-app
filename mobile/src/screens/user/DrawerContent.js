@@ -1,25 +1,26 @@
-import React, {useContext} from "react";
-import {Switch, Text, View} from "react-native";
-import {DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
-import {Avatar, Caption, Title} from "react-native-paper";
+import React, { useContext } from "react";
+import { Switch, Text, View } from "react-native";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { Avatar, Caption, Title } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AuthContext from "../../context/AuthContext";
 import ProfileContext from "../../context/ProfileContext";
-import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
-import {logout} from "../../api/api-auth";
-import {useColorSchemeContext} from "../../context/ColorSchemeContext";
+import { AUTH_ACTIONS } from "../../context/reducers/authReducer";
+import { logout } from "../../api/api-auth";
+import { useColorSchemeContext } from "../../context/ColorSchemeContext";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
-export function DrawerContent({navigation}) {
-    const {state, dispatch} = useContext(AuthContext);
+export function DrawerContent({ navigation }) {
+    const { state, dispatch } = useContext(AuthContext);
     const {
-        profileState: {profile},
+        profileState: { profile },
     } = useContext(ProfileContext);
-    const {colorScheme, toggleColorSchemeMethod} = useColorSchemeContext();
+    const { colorScheme, toggleColorSchemeMethod } = useColorSchemeContext();
 
     const handleSignOut = async () => {
         try {
             await logout();
-            dispatch({type: AUTH_ACTIONS.SIGN_OUT});
+            dispatch({ type: AUTH_ACTIONS.SIGN_OUT });
         } catch (err) {
             console.log("failed to sign out");
         }
@@ -48,39 +49,38 @@ export function DrawerContent({navigation}) {
                 <View>
                     <View className="mt-4">
                         <DrawerItem
-                            icon={({color, size}) => (
-                                <Icon name="account-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"}
-                                      size={size}/>
+                            icon={({ color, size }) => (
+                                <Icon name="account-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"} size={size} />
                             )}
                             label="Profile"
-                            labelStyle={{color: colorScheme === "dark" ? "#FFFFFF" : "#000000"}}
+                            labelStyle={{ color: colorScheme === "dark" ? "#FFFFFF" : "#000000" }}
                             onPress={() => navigation.navigate("Profile")}
                         />
 
                         <DrawerItem
-                            icon={({color, size}) => (
-                                <Icon name="cog-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"}
-                                      size={size}/>
+                            icon={({ color, size }) => (
+                                <Icon name="cog-outline" color={colorScheme === "dark" ? "#FFFFFF" : "#000000"} size={size} />
                             )}
                             label="Settings"
-                            labelStyle={{color: colorScheme === "dark" ? "#FFFFFF" : "#000000"}}
+                            labelStyle={{ color: colorScheme === "dark" ? "#FFFFFF" : "#000000" }}
                         />
                     </View>
                     <View className="flex-1 flex justify-center mt-6">
                         <View className="flex-row justify-center items-center space-x-2">
                             <Text className="text-md font-medium text-black dark:text-white">Dark Mode</Text>
-                            <Switch value={colorScheme === 'dark'} onValueChange={toggleColorSchemeMethod}/>
+                            <Switch value={colorScheme === 'dark'} onValueChange={toggleColorSchemeMethod} />
                         </View>
                     </View>
+                    <LanguageSwitcher />
                 </View>
             </DrawerContentScrollView>
             <View className="mb-4">
                 <DrawerItem
-                    icon={({color, size}) => (
-                        <Icon name="exit-to-app" color="#ED2939" size={size}/>
+                    icon={({ color, size }) => (
+                        <Icon name="exit-to-app" color="#ED2939" size={size} />
                     )}
                     label="Sign out"
-                    labelStyle={{fontWeight: "bold", color: "#ED2939"}}
+                    labelStyle={{ fontWeight: "bold", color: "#ED2939" }}
                     onPress={handleSignOut}
                 />
             </View>

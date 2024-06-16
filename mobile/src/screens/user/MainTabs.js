@@ -1,16 +1,18 @@
 import React from "react";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {FontAwesome, Fontisto} from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { FontAwesome, Fontisto } from "@expo/vector-icons";
 import HomeStack from "./home/HomeStack";
 import CalendarStack from "./calendar/CalendarStack";
 import AccountIcon from "../components/AccountIcon";
 import NotificationsIcon from "../components/NotificationsIcon";
-import {useColorSchemeContext} from "../../context/ColorSchemeContext";
+import { useColorSchemeContext } from "../../context/ColorSchemeContext";
+import { useTranslation } from 'react-i18next';
 
 const Tabs = createBottomTabNavigator();
 
 const MainTabs = () => {
-    const {colorScheme} = useColorSchemeContext();
+    const { colorScheme } = useColorSchemeContext();
+    const { t } = useTranslation();
 
     return (
         <Tabs.Navigator
@@ -21,17 +23,17 @@ const MainTabs = () => {
                 headerTitleStyle: {
                     color: colorScheme !== 'dark' ? '#ffffff' : '#000000',
                 },
-                headerLeft: () => <AccountIcon/>,
-                headerRight: () => <NotificationsIcon/>,
+                headerLeft: () => <AccountIcon />,
+                headerRight: () => <NotificationsIcon />,
             }}
         >
             <Tabs.Screen
                 name="Appointments"
                 component={HomeStack}
                 options={{
-                    tabBarLabel: "Home",
-                    tabBarIcon: ({color, size}) => (
-                        <FontAwesome name="home" size={size} color={color}/>
+                    tabBarLabel: t('screens.tabs.labels.home'),
+                    tabBarIcon: ({ color, size }) => (
+                        <FontAwesome name="home" size={size} color={color} />
                     ),
                 }}
             />
@@ -39,9 +41,9 @@ const MainTabs = () => {
                 name="Calendar link"
                 component={CalendarStack}
                 options={{
-                    tabBarLabel: "My calendar",
-                    tabBarIcon: ({color, size}) => (
-                        <Fontisto name="date" size={size} color={color}/>
+                    tabBarLabel: t('screens.tabs.labels.calendar'),
+                    tabBarIcon: ({ color, size }) => (
+                        <Fontisto name="date" size={size} color={color} />
                     ),
                 }}
             />
