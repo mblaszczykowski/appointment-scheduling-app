@@ -140,13 +140,13 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
     const isDarkMode = colorScheme === 'dark';
 
     return (
-        <Animatable.View animation="fadeIn" duration={1500} className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+        <Animatable.View animation="fadeIn" duration={1500} className={`flex-1 bg-[#3575EF] dark:bg-gray-900`}>
             <View className="flex-grow justify-end items-center">
                 <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")} />
             </View>
             <View className="flex-grow justify-center items-center">
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Email"
                     autoCapitalize="none"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
@@ -154,7 +154,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
                     onChangeText={val => setFormValues({ ...formValues, email: val })}
                 />
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Password"
                     secureTextEntry
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
@@ -163,7 +163,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
                     onChangeText={val => setFormValues({ ...formValues, password: val })}
                 />
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="First Name"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     autoCapitalize="none"
@@ -171,7 +171,7 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
                     onChangeText={val => setFormValues({ ...formValues, firstName: val })}
                 />
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Last Name"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     autoCapitalize="none"
@@ -183,16 +183,16 @@ const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
                 )}
                 <TouchableOpacity
                     onPress={nextStep}
-                    className={`bg-${isDarkMode ? 'gray-300' : 'white'} w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center`}
+                    className="bg-[#fff] dark:bg-gray-300 w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center"
                 >
-                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Next</Text>
-                    <MaterialIcons name="navigate-next" size={24} color={isDarkMode ? 'black' : 'black'} />
+                    <Text className="text-[16px] font-extrabold text-center text-black">Next</Text>
+                    <MaterialIcons name="navigate-next" size={24} color="black" />
                 </TouchableOpacity>
             </View>
             <View className="flex-grow items-end justify-center py-4 flex-row">
-                <Text className={`text-[16px] font-light ${isDarkMode ? 'text-gray-300' : 'text-[#ffffffb3]'}`}>Already have an account? </Text>
+                <Text className="text-[16px] font-light text-[#ffffffb3] dark:text-gray-300">Already have an account? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Signin</Text>
+                    <Text className="text-white dark:text-gray-300">Signin</Text>
                 </TouchableOpacity>
             </View>
         </Animatable.View>
@@ -221,28 +221,27 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
     };
 
     return (
-        <Animatable.View animation="fadeInRight" className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+        <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF] dark:bg-gray-900">
             <View className="flex-grow justify-center items-center mt-8">
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Calendar URL"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     value={formValues.calendarUrl}
                     onChangeText={val => setFormValues({ ...formValues, calendarUrl: val })}
                 />
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Meeting link"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     value={formValues.meetingLink}
                     onChangeText={val => setFormValues({ ...formValues, meetingLink: val })}
                 />
 
-                <Text className={`text-white bg-transparent mt-0.5 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Select available hours</Text>
-                <View
-                    className={`w-[300px] flex-row rounded-[25px] p-0.75 m-2 justify-between items-center ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
+                <Text className="text-white bg-transparent mt-0.5 dark:text-gray-300">Select available hours</Text>
+                <View className="w-[300px] flex-row rounded-[25px] p-0.75 m-2 justify-between items-center bg-[#ffffff4d] dark:bg-gray-700">
                     <TextInput
-                        className={`flex-1 h-[50px] bg-transparent text-center ${isDarkMode ? 'text-white' : 'text-white'}`}
+                        className="flex-1 h-[50px] bg-transparent text-center text-white"
                         keyboardType="numeric"
                         placeholder="From"
                         placeholderTextColor={isDarkMode ? '#aaa' : '#ffffffa0'}
@@ -251,7 +250,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                     />
                     <Text className="text-white mx-2">-</Text>
                     <TextInput
-                        className={`flex-1 h-[50px] bg-transparent text-center ${isDarkMode ? 'text-white' : 'text-white'}`}
+                        className="flex-1 h-[50px] bg-transparent text-center text-white"
                         keyboardType="numeric"
                         placeholder="To"
                         placeholderTextColor={isDarkMode ? '#aaa' : '#ffffffa0'}
@@ -261,13 +260,13 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                 </View>
                 <TouchableOpacity
                     onPress={selectBusinessHours}
-                    className={`bg-${isDarkMode ? 'gray-400' : 'white'} w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center`}
+                    className="bg-white dark:bg-gray-400 w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center"
                 >
-                    <Text className={`text-[15px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Select 9-17</Text>
+                    <Text className="text-[15px] font-extrabold text-center text-black">Select 9-17</Text>
                 </TouchableOpacity>
 
-                <Text className={`text-white bg-transparent mt-2 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Select available days</Text>
-                <View className={`w-[300px] rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
+                <Text className="text-white bg-transparent mt-2 dark:text-gray-300">Select available days</Text>
+                <View className="w-[300px] rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start bg-[#ffffff4d] dark:bg-gray-700">
                     {daysOfWeek.map((day) => (
                         <TouchableOpacity
                             key={day}
@@ -282,13 +281,13 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                 </View>
                 <TouchableOpacity
                     onPress={selectWeekdays}
-                    className={`bg-${isDarkMode ? 'gray-400' : 'white'} w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center`}
+                    className="bg-white dark:bg-gray-400 w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center"
                 >
-                    <Text className={`text-[15px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Select Mon-Fri</Text>
+                    <Text className="text-[15px] font-extrabold text-center text-black">Select Mon-Fri</Text>
                 </TouchableOpacity>
 
-                <View className={`w-[300px] rounded-[25px] p-3 m-3.5 ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
-                    <Text className={`text-center mb-2 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Meeting Duration: {formValues.meetingDuration} min</Text>
+                <View className="w-[300px] rounded-[25px] p-3 m-3.5 bg-[#ffffff4d] dark:bg-gray-700">
+                    <Text className="text-center mb-2 text-white dark:text-gray-300">Meeting Duration: {formValues.meetingDuration} min</Text>
                     <Slider
                         style={{ width: '100%', height: 40 }}
                         minimumValue={15}
@@ -306,13 +305,13 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                 )}
                 <TouchableOpacity
                     disabled={formValues.loading}
-                    className={`w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center ${isDarkMode ? 'bg-gray-300' : 'bg-white'}`}
+                    className="w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center bg-[#fff] dark:bg-gray-300"
                     onPress={handleSignup}
                 >
                     {formValues.loading ? (
                         <ActivityIndicator color={isDarkMode ? "black" : "black"} />
                     ) : (
-                        <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Sign Up</Text>
+                        <Text className="text-[16px] font-extrabold text-center text-black">Sign Up</Text>
                     )}
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -321,7 +320,7 @@ const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep
                     className="m-3.5 p-2.5 flex-row items-center justify-center"
                 >
                     <MaterialIcons name="navigate-before" size={24} color="white" />
-                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-white' : 'text-white'}`}>Go back</Text>
+                    <Text className="text-[16px] font-extrabold text-center text-white">Go back</Text>
                 </TouchableOpacity>
             </View>
         </Animatable.View>

@@ -51,7 +51,7 @@ const Login = ({ navigation }) => {
     };
 
     return (
-        <View className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3674EF]'}`}>
+        <View className={`flex-1 bg-[#3674EF] dark:bg-gray-900`}>
             <View className="flex-grow justify-end items-center">
                 <Image
                     className="w-[75px] h-[75px] rounded-full"
@@ -60,7 +60,7 @@ const Login = ({ navigation }) => {
             </View>
             <View className="flex-grow justify-center items-center">
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     value={values.email}
                     autoCapitalize="none"
                     onChangeText={(emailValue) => setValues({ ...values, email: emailValue })}
@@ -69,7 +69,7 @@ const Login = ({ navigation }) => {
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                 />
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     value={values.password}
                     autoCapitalize="none"
                     onChangeText={(passwordValue) => setValues({ ...values, password: passwordValue })}
@@ -83,28 +83,28 @@ const Login = ({ navigation }) => {
                 )}
                 <TouchableOpacity
                     onPress={handleSubmit}
-                    className={`w-[300px] rounded-[25px] m-3.5 p-2.5 ${isDarkMode ? 'bg-gray-300' : 'bg-[#fff]'}`}
+                    className="w-[300px] rounded-[25px] m-3.5 p-2.5 bg-[#fff] dark:bg-gray-300"
                 >
                     {values.loading ? (
                         <ActivityIndicator color={isDarkMode ? "white" : "black"} />
                     ) : (
-                        <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Login</Text>
+                        <Text className="text-[16px] font-extrabold text-center text-black dark:text-black">Login</Text>
                     )}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("PasswordReset")} className="m-3">
-                    <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Forgot your password?</Text>
+                    <Text className="text-white dark:text-gray-300">Forgot your password?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("QrScaner")}
-                    className={`w-[300px] rounded-[25px] m-3.5 p-2.5 ${isDarkMode ? 'bg-gray-300' : 'bg-[#fff]'}`}
+                    className="w-[300px] rounded-[25px] m-3.5 p-2.5 bg-[#fff] dark:bg-gray-300"
                 >
-                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>ScanQR</Text>
+                    <Text className="text-[16px] font-extrabold text-center text-black dark:text-black">ScanQR</Text>
                 </TouchableOpacity>
             </View>
             <View className="flex-grow items-end justify-center py-4 flex-row">
-                <Text className={`text-[16px] font-light ${isDarkMode ? 'text-gray-300' : 'text-[#ffffffb3]'}`}>Don't have an account? </Text>
+                <Text className="text-[16px] font-light text-[#ffffffb3] dark:text-gray-300">Don't have an account? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                    <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Signup</Text>
+                    <Text className="text-white dark:text-gray-300">Signup</Text>
                 </TouchableOpacity>
             </View>
         </View>

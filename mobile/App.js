@@ -8,9 +8,8 @@ import AuthContext from "./src/context/AuthContext";
 import ProfileContext from "./src/context/ProfileContext";
 import WelcomeStack from "./src/screens/guest/WelcomeStack";
 import UserScreen from "./src/screens/user/UserScreen";
-import { useColorScheme } from 'nativewind';
 import { NativeWindStyleSheet } from "nativewind";
-import { ColorSchemeProvider } from "./src/context/ColorSchemeContext";
+import { ColorSchemeProvider, useColorSchemeContext } from "./src/context/ColorSchemeContext";
 
 NativeWindStyleSheet.setOutput({
 	default: "native",
@@ -19,7 +18,6 @@ NativeWindStyleSheet.setOutput({
 export default function App() {
 	const [authState, authDispatch] = useReducer(authReducer, authInitialState);
 	const [profileState, profileDispatch] = useReducer(profileReducer, profileInitialState);
-	const { colorScheme, toggleColorScheme } = useColorScheme();
 
 	const MyTheme = {
 		...DefaultTheme,
@@ -62,7 +60,7 @@ export default function App() {
 	return (
 		<AuthContext.Provider value={authContextValue}>
 			<ProfileContext.Provider value={profileContextValue}>
-				<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+				<ColorSchemeProvider>
 					<NavigationContainer theme={MyTheme}>
 						{authState.auth == null ? (
 							<WelcomeStack />

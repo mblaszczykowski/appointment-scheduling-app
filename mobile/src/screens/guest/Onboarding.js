@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { styled } from 'nativewind';
-import { useColorSchemeContext } from '../../context/ColorSchemeContext'; // Update with actual path
+import { useColorSchemeContext } from '../../context/ColorSchemeContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,8 +30,8 @@ const OnboardingScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <View className="flex-1 items-center justify-center p-5" style={{ backgroundColor: item.backgroundColor, width }}>
             <Image source={item.image} className="w-24 h-24 mb-12 rounded-full" resizeMode="contain" />
-            <Text className={`text-2xl text-center ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>{item.title}</Text>
-            <Text className={`text-lg text-center px-5 mt-2 ${isDarkMode ? 'text-gray-400' : 'text-white'}`}>{item.subtitle}</Text>
+            <Text className="text-2xl text-center dark:text-gray-200 text-white">{item.title}</Text>
+            <Text className="text-lg text-center px-5 mt-2 dark:text-gray-400 text-white">{item.subtitle}</Text>
         </View>
     );
 
@@ -52,7 +52,7 @@ const OnboardingScreen = ({ navigation }) => {
     };
 
     return (
-        <View className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <View className="flex-1 bg-white dark:bg-gray-900">
             <FlatList
                 data={slides}
                 renderItem={renderItem}
@@ -69,10 +69,10 @@ const OnboardingScreen = ({ navigation }) => {
                     { length: width, offset: width * index, index }
                 )}
             />
-            <View className={`flex-row justify-between items-center pb-5 pt-2 ${isDarkMode ? 'bg-gray-800' : 'bg-blue-700'}`}>
+            <View className="flex-row justify-between items-center pb-5 pt-2 bg-blue-700 dark:bg-gray-800">
                 <View className="flex-1 justify-center items-center">
                     {currentIndex === 0 && (
-                        <TouchableOpacity onPress={skipToEnd} className={`py-2 px-4 rounded`}>
+                        <TouchableOpacity onPress={skipToEnd} className="py-2 px-4 rounded">
                             <Text className="text-white text-lg">Skip</Text>
                         </TouchableOpacity>)}
                 </View>
@@ -84,11 +84,11 @@ const OnboardingScreen = ({ navigation }) => {
                 </View>
                 <View className="flex-1 justify-center items-center">
                     {currentIndex === slides.length - 1 ? (
-                        <TouchableOpacity onPress={skipToEnd} className={`py-2 px-4 rounded`}>
+                        <TouchableOpacity onPress={skipToEnd} className="py-2 px-4 rounded">
                             <Text className="text-white text-lg">Start</Text>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity onPress={handleNext} className={`py-2 px-4 rounded`}>
+                        <TouchableOpacity onPress={handleNext} className="py-2 px-4 rounded">
                             <Text className="text-white text-lg">Next</Text>
                         </TouchableOpacity>
                     )}

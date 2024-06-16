@@ -17,7 +17,7 @@ const UserHome = () => {
     const { state } = useContext(AuthContext);
     const { profileDispatch } = useContext(ProfileContext);
     const [loading, setLoading] = useState(true);
-    const { colorScheme, toggleColorScheme } = useColorSchemeContext();
+    const { colorScheme, toggleColorSchemeMethod } = useColorSchemeContext();
 
     useEffect(() => {
         getUserProfile();

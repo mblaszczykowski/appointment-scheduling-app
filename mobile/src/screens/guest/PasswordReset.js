@@ -35,16 +35,16 @@ const ResetDetails = ({ formValues, setFormValues, handleSendMail, navigation })
     const isDarkMode = colorScheme === 'dark';
 
     return (
-        <Animatable.View animation="fadeIn" duration={1500} className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+        <Animatable.View animation="fadeIn" duration={1500} className="flex-1 bg-[#3575EF] dark:bg-gray-900">
             <View className="flex-grow justify-end items-center">
                 <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")} />
             </View>
 
             <View className="justify-center items-center mt-14">
-                <Text className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-white'}`}>Forgot your password?</Text>
-                <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Don't worry, enter your email address.</Text>
+                <Text className="text-2xl font-bold mb-2 text-white">Forgot your password?</Text>
+                <Text className="text-white dark:text-gray-300">Don't worry, enter your email address.</Text>
                 <TextInput
-                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    className="w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light bg-[#ffffff4d] dark:bg-gray-700 text-white dark:text-white"
                     placeholder="Email"
                     autoCapitalize="none"
                     placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
@@ -53,17 +53,17 @@ const ResetDetails = ({ formValues, setFormValues, handleSendMail, navigation })
                 />
                 <TouchableOpacity
                     disabled={!formValues.email}
-                    className={`w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center ${isDarkMode ? 'bg-gray-300' : 'bg-white'}`}
+                    className="w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center bg-white dark:bg-gray-300"
                     onPress={handleSendMail}
                 >
-                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Next</Text>
-                    <MaterialIcons name="navigate-next" size={24} color={isDarkMode ? 'black' : 'black'} />
+                    <Text className="text-[16px] font-extrabold text-center text-black">Next</Text>
+                    <MaterialIcons name="navigate-next" size={24} color="black" />
                 </TouchableOpacity>
             </View>
             <View className="flex-grow items-end justify-center py-4 flex-row">
-                <Text className={`text-[16px] font-light ${isDarkMode ? 'text-gray-300' : 'text-[#ffffffb3]'}`}>Remembered your password? </Text>
+                <Text className="text-[16px] font-light text-[#ffffffb3] dark:text-gray-300">Remembered your password? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Sign in</Text>
+                    <Text className="text-white dark:text-gray-300">Sign in</Text>
                 </TouchableOpacity>
             </View>
         </Animatable.View>

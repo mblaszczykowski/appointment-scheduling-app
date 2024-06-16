@@ -14,7 +14,7 @@ export function DrawerContent({ navigation }) {
     const {
         profileState: { profile },
     } = useContext(ProfileContext);
-    const { colorScheme, toggleColorScheme } = useColorSchemeContext();
+    const { colorScheme, toggleColorSchemeMethod } = useColorSchemeContext();
 
     const handleSignOut = async () => {
         try {
@@ -67,7 +67,7 @@ export function DrawerContent({ navigation }) {
                     <View className="flex-1 flex justify-center mt-6">
                         <View className="flex-row justify-center items-center space-x-2">
                             <Text className="text-md font-medium text-black dark:text-white">Dark Mode</Text>
-                            <Switch value={colorScheme === 'dark'} onValueChange={toggleColorScheme} />
+                            <Switch value={colorScheme === 'dark'} onValueChange={toggleColorSchemeMethod} />
                         </View>
                     </View>
                 </View>

@@ -3,6 +3,7 @@ import moment from "moment";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
+import {useColorSchemeContext} from "../../context/ColorSchemeContext";
 
 const UserAppointmentCard = ({ appointment, navigation }) => {
     const date = moment(appointment.startTime).format("ddd MMM Do YYYY");
@@ -10,6 +11,9 @@ const UserAppointmentCard = ({ appointment, navigation }) => {
     const endTime = moment(appointment.endTime).format("HH:mm");
     const bookerName = appointment.bookerName;
     const meetingNote = appointment.meetingNote;
+
+    const { colorScheme } = useColorSchemeContext();
+    const isDarkMode = colorScheme === 'dark';
 
     return (
         <View className="p-4">
@@ -28,19 +32,19 @@ const UserAppointmentCard = ({ appointment, navigation }) => {
                                 {date}
                             </Text>
                             <View className="flex-row items-center mt-2">
-                                <EvilIcons name="clock" size={16} color="#1c313a" />
+                                <EvilIcons name="clock" size={16} color={isDarkMode ? "#888" : "#1c313a"} />
                                 <Text className="text-sm font-extrabold ml-1 text-gray-800 dark:text-neutral-300">
                                     {startTime} - {endTime}
                                 </Text>
                             </View>
                             <View className="flex-row items-center mt-2">
-                                <EvilIcons name="comment" size={16} color="#1c313a" />
+                                <EvilIcons name="comment" size={16} color={isDarkMode ? "#888" : "#1c313a"} />
                                 <Text className="text-sm font-extrabold ml-1 text-gray-800 dark:text-neutral-300">
                                     {meetingNote}
                                 </Text>
                             </View>
                             <View className="absolute bottom-0 right-0 p-2">
-                                <MaterialIcons name="read-more" size={24} color="#1c313a" />
+                                <MaterialIcons name="read-more" size={24} color={isDarkMode ? "#888" : "#1c313a"} />
                             </View>
                         </View>
                     </View>
