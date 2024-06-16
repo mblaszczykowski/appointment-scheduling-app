@@ -1,18 +1,21 @@
 import React from "react";
-import {createStackNavigator} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import Profile from "./Profile";
-import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {useNavigation} from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useColorSchemeContext } from "../../../context/ColorSchemeContext";
 
 const Stack = createStackNavigator();
 
 const ProfileStack = () => {
     const navigation = useNavigation();
+    const { colorScheme } = useColorSchemeContext();
+
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name="ProfileStack"
-                component={Profile}
+                children={(props) => <Profile {...props} />}
                 options={{
                     title: "",
                     headerLeft: () => (
@@ -20,7 +23,7 @@ const ProfileStack = () => {
                             name="chevron-back-circle"
                             size={30}
                             color="white"
-                            style={{marginHorizontal: 20}}
+                            style={{ marginHorizontal: 20 }}
                             onPress={() => navigation.goBack()}
                         />
                     ),
@@ -29,7 +32,7 @@ const ProfileStack = () => {
                             name="account-edit"
                             size={30}
                             color="white"
-                            style={{marginHorizontal: 20}}
+                            style={{ marginHorizontal: 20 }}
                         />
                     ),
                 }}

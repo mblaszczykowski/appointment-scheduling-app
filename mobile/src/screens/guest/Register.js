@@ -1,11 +1,12 @@
-import React, {useState, useContext} from "react";
-import {register, login} from "../../api/api-auth";
-import {ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {MaterialIcons} from "@expo/vector-icons";
+import React, { useState, useContext } from "react";
+import { register, login } from "../../api/api-auth";
+import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import Slider from "@react-native-community/slider";
 import AuthContext from "../../context/AuthContext";
-import {AUTH_ACTIONS} from "../../context/reducers/authReducer";
+import { AUTH_ACTIONS } from "../../context/reducers/authReducer";
+import { useColorSchemeContext } from "../../context/ColorSchemeContext";
 
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,7 +28,10 @@ const validatePassword = (password) => {
     return re.test(password);
 };
 
-const Register = ({navigation}) => {
+const Register = ({ navigation }) => {
+    const { colorScheme } = useColorSchemeContext();
+    const isDarkMode = colorScheme === 'dark';
+
     const [formValues, setFormValues] = useState({
         step: 1,
         firstName: "",
@@ -44,47 +48,47 @@ const Register = ({navigation}) => {
         error: "",
     });
 
-    const {dispatch} = useContext(AuthContext);
+    const { dispatch } = useContext(AuthContext);
 
     const nextStep = () => {
         if (!formValues.email || !formValues.password || !formValues.firstName || !formValues.lastName) {
-            setFormValues(prev => ({...prev, error: "All fields are required"}));
+            setFormValues(prev => ({ ...prev, error: "All fields are required" }));
             return;
         }
         if (!validateEmail(formValues.email)) {
-            setFormValues(prev => ({...prev, error: "Invalid email format"}));
+            setFormValues(prev => ({ ...prev, error: "Invalid email format" }));
             return;
         }
         if (!validatePassword(formValues.password)) {
-            setFormValues(prev => ({...prev, error: "Password must be at least 8 characters long and contain at least one letter and one number"}));
+            setFormValues(prev => ({ ...prev, error: "Password must be at least 8 characters long and contain at least one letter and one number" }));
             return;
         }
-        setFormValues(prev => ({...prev, error: "", step: prev.step + 1}));
+        setFormValues(prev => ({ ...prev, error: "", step: prev.step + 1 }));
     };
 
     const previousStep = () => {
-        setFormValues(prev => ({...prev, step: prev.step - 1}));
+        setFormValues(prev => ({ ...prev, step: prev.step - 1 }));
     };
 
     const handleSignup = () => {
         if (!formValues.calendarUrl || !formValues.meetingLink || !formValues.availableFromHour || !formValues.availableToHour || formValues.availableDays.length === 0 || !formValues.meetingDuration) {
-            setFormValues(prev => ({...prev, error: "All fields are required"}));
+            setFormValues(prev => ({ ...prev, error: "All fields are required" }));
             return;
         }
         if (!validateUrl(formValues.meetingLink)) {
-            setFormValues(prev => ({...prev, error: "Invalid meeting link"}));
+            setFormValues(prev => ({ ...prev, error: "Invalid meeting link" }));
             return;
         }
         if (!isNumberInRange(formValues.availableFromHour, 0, 24) || !isNumberInRange(formValues.availableToHour, 0, 24)) {
-            setFormValues(prev => ({...prev, error: "Available hours must be between 0 and 24"}));
+            setFormValues(prev => ({ ...prev, error: "Available hours must be between 0 and 24" }));
             return;
         }
         if (Number(formValues.availableToHour) <= Number(formValues.availableFromHour)) {
-            setFormValues(prev => ({...prev, error: "Available 'To' hour must be greater than 'From' hour"}));
+            setFormValues(prev => ({ ...prev, error: "Available 'To' hour must be greater than 'From' hour" }));
             return;
         }
 
-        setFormValues(prev => ({...prev, loading: true, error: ""}));
+        setFormValues(prev => ({ ...prev, loading: true, error: "" }));
 
         const user = {
             firstname: formValues.firstName || undefined,
@@ -101,7 +105,7 @@ const Register = ({navigation}) => {
 
         register(user).then(async data => {
             if (data && data.error) {
-                setFormValues(prev => ({...prev, loading: false, error: data.error}));
+                setFormValues(prev => ({ ...prev, loading: false, error: data.error }));
             } else {
                 const loginData = await login({ email: formValues.email, password: formValues.password });
                 dispatch({
@@ -110,7 +114,7 @@ const Register = ({navigation}) => {
                 });
             }
         }).catch(error => {
-            setFormValues(prev => ({...prev, loading: false, error: error.message !== undefined ? "Error occurred during registration: " + error.message : 'Registration failed. Check your internet connection.'}));
+            setFormValues(prev => ({ ...prev, loading: false, error: error.message !== undefined ? "Error occurred during registration: " + error.message : 'Registration failed. Check your internet connection.' }));
         });
     };
 
@@ -131,144 +135,162 @@ const Register = ({navigation}) => {
     );
 };
 
-const LoginDetails = ({formValues, setFormValues, nextStep, navigation}) => (
-    <Animatable.View animation="fadeIn" duration={1500} className="flex-1 bg-[#3575EF]">
-        <View className="flex-grow justify-end items-center">
-            <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")}/>
-        </View>
-        <View className="flex-grow justify-center items-center">
-            <TextInput
-                className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                placeholder="Email"
-                autoCapitalize="none"
-                placeholderTextColor="#fff"
-                value={formValues.email}
-                onChangeText={val => setFormValues({...formValues, email: val})}
-            />
-            <TextInput
-                className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                placeholder="Password"
-                secureTextEntry
-                placeholderTextColor="#fff"
-                autoCapitalize="none"
-                value={formValues.password}
-                onChangeText={val => setFormValues({...formValues, password: val})}
-            />
-            <TextInput
-                className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                placeholder="First Name"
-                placeholderTextColor="#fff"
-                autoCapitalize="none"
-                value={formValues.firstName}
-                onChangeText={val => setFormValues({...formValues, firstName: val})}
-            />
-            <TextInput
-                className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                placeholder="Last Name"
-                placeholderTextColor="#fff"
-                autoCapitalize="none"
-                value={formValues.lastName}
-                onChangeText={val => setFormValues({...formValues, lastName: val})}
-            />
-            {formValues.error !== "" && (
-                <Text className="text-red-500 text-[15px] font-medium">{formValues.error}</Text>
-            )}
-            <TouchableOpacity
-                onPress={nextStep}
-                className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center"
-            >
-                <Text className="text-[16px] font-extrabold text-black text-center">Next</Text>
-                <MaterialIcons name="navigate-next" size={24} color="black"/>
-            </TouchableOpacity>
-        </View>
-        <View className="flex-grow items-end justify-center py-4 flex-row">
-            <Text className="text-[#ffffffb3] text-[16px] font-light">Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text className="text-white text-[16px] font-semibold">Signin</Text>
-            </TouchableOpacity>
-        </View>
-    </Animatable.View>
-);
+const LoginDetails = ({ formValues, setFormValues, nextStep, navigation }) => {
+    const { colorScheme } = useColorSchemeContext();
+    const isDarkMode = colorScheme === 'dark';
+
+    return (
+        <Animatable.View animation="fadeIn" duration={1500} className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+            <View className="flex-grow justify-end items-center">
+                <Image className="w-[75px] h-[75px] rounded-full" source={require("../assets/logo.jpg")} />
+            </View>
+            <View className="flex-grow justify-center items-center">
+                <TextInput
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                    value={formValues.email}
+                    onChangeText={val => setFormValues({ ...formValues, email: val })}
+                />
+                <TextInput
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="Password"
+                    secureTextEntry
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                    autoCapitalize="none"
+                    value={formValues.password}
+                    onChangeText={val => setFormValues({ ...formValues, password: val })}
+                />
+                <TextInput
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="First Name"
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                    autoCapitalize="none"
+                    value={formValues.firstName}
+                    onChangeText={val => setFormValues({ ...formValues, firstName: val })}
+                />
+                <TextInput
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="Last Name"
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                    autoCapitalize="none"
+                    value={formValues.lastName}
+                    onChangeText={val => setFormValues({ ...formValues, lastName: val })}
+                />
+                {formValues.error !== "" && (
+                    <Text className="text-red-500 text-[15px] font-medium">{formValues.error}</Text>
+                )}
+                <TouchableOpacity
+                    onPress={nextStep}
+                    className={`bg-${isDarkMode ? 'gray-300' : 'white'} w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center`}
+                >
+                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Next</Text>
+                    <MaterialIcons name="navigate-next" size={24} color={isDarkMode ? 'black' : 'black'} />
+                </TouchableOpacity>
+            </View>
+            <View className="flex-grow items-end justify-center py-4 flex-row">
+                <Text className={`text-[16px] font-light ${isDarkMode ? 'text-gray-300' : 'text-[#ffffffb3]'}`}>Already have an account? </Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                    <Text className={isDarkMode ? 'text-gray-300' : 'text-white'}>Signin</Text>
+                </TouchableOpacity>
+            </View>
+        </Animatable.View>
+    );
+};
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}) => {
+const PersonalDetails = ({ formValues, setFormValues, handleSignup, previousStep }) => {
+    const { colorScheme } = useColorSchemeContext();
+    const isDarkMode = colorScheme === 'dark';
+
     const toggleDay = (day) => {
         const updatedDays = formValues.availableDays.includes(day)
             ? formValues.availableDays.filter(d => d !== day)
             : [...formValues.availableDays, day];
-        setFormValues({...formValues, availableDays: updatedDays});
+        setFormValues({ ...formValues, availableDays: updatedDays });
+    };
+
+    const selectBusinessHours = () => {
+        setFormValues({ ...formValues, availableFromHour: "9", availableToHour: "17" });
+    };
+
+    const selectWeekdays = () => {
+        setFormValues({ ...formValues, availableDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] });
     };
 
     return (
-        <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
-            <View className="flex-grow justify-end items-center">
-                <Image className="w-[60px] h-[60px] rounded-full" source={require("../assets/logo.jpg")}/>
-            </View>
-            <View className="flex-grow justify-center items-center">
+        <Animatable.View animation="fadeInRight" className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
+            <View className="flex-grow justify-center items-center mt-8">
                 <TextInput
-                    className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                    placeholder="calendarUrl"
-                    placeholderTextColor="#fff"
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="Calendar URL"
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     value={formValues.calendarUrl}
-                    onChangeText={val => setFormValues({...formValues, calendarUrl: val})}
+                    onChangeText={val => setFormValues({ ...formValues, calendarUrl: val })}
                 />
                 <TextInput
-                    className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
-                    placeholder="meetingLink"
-                    placeholderTextColor="#fff"
+                    className={`w-[300px] rounded-[25px] p-3 text-[16px] m-3.5 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-[#ffffff4d] text-white'}`}
+                    placeholder="Meeting link"
+                    placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                     value={formValues.meetingLink}
-                    onChangeText={val => setFormValues({...formValues, meetingLink: val})}
+                    onChangeText={val => setFormValues({ ...formValues, meetingLink: val })}
                 />
 
-                <Text className="text-white bg-transparent mt-0.5">Select available hours</Text>
+                <Text className={`text-white bg-transparent mt-0.5 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Select available hours</Text>
                 <View
-                    className="w-[300px] flex-row bg-[#ffffff4d] rounded-[25px] p-0.75 m-2 justify-between items-center">
+                    className={`w-[300px] flex-row rounded-[25px] p-0.75 m-2 justify-between items-center ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
                     <TextInput
-                        className="flex-1 h-[50px] text-white bg-transparent text-center"
+                        className={`flex-1 h-[50px] bg-transparent text-center ${isDarkMode ? 'text-white' : 'text-white'}`}
                         keyboardType="numeric"
                         placeholder="From"
-                        placeholderTextColor="#ffffffa0"
+                        placeholderTextColor={isDarkMode ? '#aaa' : '#ffffffa0'}
                         value={formValues.availableFromHour.toString()}
-                        onChangeText={val => setFormValues({...formValues, availableFromHour: val})}
+                        onChangeText={val => setFormValues({ ...formValues, availableFromHour: val })}
                     />
                     <Text className="text-white mx-2">-</Text>
                     <TextInput
-                        className="flex-1 h-[50px] text-white bg-transparent text-center"
+                        className={`flex-1 h-[50px] bg-transparent text-center ${isDarkMode ? 'text-white' : 'text-white'}`}
                         keyboardType="numeric"
                         placeholder="To"
-                        placeholderTextColor="#ffffffa0"
+                        placeholderTextColor={isDarkMode ? '#aaa' : '#ffffffa0'}
                         value={formValues.availableToHour.toString()}
-                        onChangeText={val => setFormValues({...formValues, availableToHour: val})}
+                        onChangeText={val => setFormValues({ ...formValues, availableToHour: val })}
                     />
                 </View>
+                <TouchableOpacity
+                    onPress={selectBusinessHours}
+                    className={`bg-${isDarkMode ? 'gray-400' : 'white'} w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center`}
+                >
+                    <Text className={`text-[15px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Select 9-17</Text>
+                </TouchableOpacity>
 
-                <Text className="text-white bg-transparent mt-2">Select available days</Text>
-                <View className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start">
+                <Text className={`text-white bg-transparent mt-2 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Select available days</Text>
+                <View className={`w-[300px] rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
                     {daysOfWeek.map((day) => (
                         <TouchableOpacity
                             key={day}
-                            className={`p-2 m-1 rounded-lg ${
-                                formValues.availableDays.includes(day) ? 'bg-white text-black' : 'bg-transparent text-white'
-                            }`}
+                            className={`p-2 m-1 rounded-lg ${formValues.availableDays.includes(day) ? 'bg-white text-black' : 'bg-transparent text-white'}`}
                             onPress={() => toggleDay(day)}
                         >
-                            <Text
-                                className={`text-center ${
-                                    formValues.availableDays.includes(day) ? 'text-black' : 'text-white'
-                                }`}
-                            >
+                            <Text className={`text-center ${formValues.availableDays.includes(day) ? 'text-black' : 'text-white'}`}>
                                 {day}
                             </Text>
                         </TouchableOpacity>
                     ))}
                 </View>
+                <TouchableOpacity
+                    onPress={selectWeekdays}
+                    className={`bg-${isDarkMode ? 'gray-400' : 'white'} w-[300px] rounded-[25px] mb-3.5 p-2.5 flex-row items-center justify-center`}
+                >
+                    <Text className={`text-[15px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Select Mon-Fri</Text>
+                </TouchableOpacity>
 
-                <View className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 m-3.5">
-                    <Text className="text-white text-center mb-2">Meeting
-                        Duration: {formValues.meetingDuration} min</Text>
+                <View className={`w-[300px] rounded-[25px] p-3 m-3.5 ${isDarkMode ? 'bg-gray-700' : 'bg-[#ffffff4d]'}`}>
+                    <Text className={`text-center mb-2 ${isDarkMode ? 'text-gray-300' : 'text-white'}`}>Meeting Duration: {formValues.meetingDuration} min</Text>
                     <Slider
-                        style={{width: '100%', height: 40}}
+                        style={{ width: '100%', height: 40 }}
                         minimumValue={15}
                         maximumValue={120}
                         step={15}
@@ -284,13 +306,13 @@ const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}
                 )}
                 <TouchableOpacity
                     disabled={formValues.loading}
-                    className="bg-[#fff] w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center"
+                    className={`w-[300px] rounded-[25px] m-3.5 p-2.5 flex-row items-center justify-center ${isDarkMode ? 'bg-gray-300' : 'bg-white'}`}
                     onPress={handleSignup}
                 >
                     {formValues.loading ? (
-                        <ActivityIndicator color="black"/>
+                        <ActivityIndicator color={isDarkMode ? "black" : "black"} />
                     ) : (
-                        <Text className="text-[16px] font-extrabold text-black text-center">Sign Up</Text>
+                        <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-black' : 'text-black'}`}>Sign Up</Text>
                     )}
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -298,8 +320,8 @@ const PersonalDetails = ({formValues, setFormValues, handleSignup, previousStep}
                     disabled={formValues.loading}
                     className="m-3.5 p-2.5 flex-row items-center justify-center"
                 >
-                    <MaterialIcons name="navigate-before" size={24} color="white"/>
-                    <Text className="text-[16px] font-extrabold text-white text-center">Go back</Text>
+                    <MaterialIcons name="navigate-before" size={24} color="white" />
+                    <Text className={`text-[16px] font-extrabold text-center ${isDarkMode ? 'text-white' : 'text-white'}`}>Go back</Text>
                 </TouchableOpacity>
             </View>
         </Animatable.View>

@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState} from "react";
-import {ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import AuthContext from "../../../context/AuthContext";
-import {useTheme} from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import NewAppointmentModal from "../../NewAppointmentModal";
 import QRCode from "react-native-qrcode-svg";
 
@@ -11,75 +11,43 @@ const Calendar = () => {
     useEffect(() => {
         setCalendarUrl(profile.calendarUrl);
     }, []);
-    const {colors} = useTheme();
+    const { colors } = useTheme();
     const {
-        profileState: {profile, appointments},
+        profileState: { profile, appointments },
     } = useContext(ProfileContext);
     const {
         state: {
-            auth: {token},
+            auth: { token },
         },
     } = useContext(AuthContext);
     const [openModal, setOpenModal] = useState(false);
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.card }]}>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                <Text style={styles.headerText}>
+        <View className="flex-1 bg-[#3476EF]">
+            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} className="bg-white dark:bg-gray-800 rounded-t-[25px] pt-5">
+                <Text className="text-xl text-gray-600 dark:text-white my-2 text-center px-5">
                     QR code to your calendar:
                 </Text>
-                <QRCode
-                    value={"meetly://calendar/" + calendarUrl}
-                    size={300}
-                    color="black"
-                    backgroundColor="white"
-                />
-                <TouchableOpacity style={styles.button}
-                                  onPress={() => setOpenModal(true)}>
-                    <Text style={styles.buttonText}>
+                <View className="my-5">
+                    <QRCode
+                        value={"meetly://calendar/" + calendarUrl}
+                        size={300}
+                        color="black"
+                        backgroundColor="white"
+                    />
+                </View>
+                <TouchableOpacity
+                    className="m-4 p-2 bg-blue-500 rounded-lg items-center"
+                    onPress={() => setOpenModal(true)}
+                >
+                    <Text className="text-white text-lg dark:text-black">
                         Preview your calendar
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
-            <NewAppointmentModal openModal={openModal} setOpenModal={setOpenModal} user={profile}/>
+            <NewAppointmentModal openModal={openModal} setOpenModal={setOpenModal} user={profile} />
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    contentContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        backgroundColor: 'white',
-        paddingTop: 20
-    },
-    headerText: {
-        fontSize: 24,
-        color: 'gray',
-        marginVertical: 10,
-        paddingHorizontal: 20,
-        textAlign: 'center',
-    },
-    qrContainer: {
-        alignItems: 'center',
-        marginVertical: 20,
-    },
-    button: {
-        margin: 20,
-        padding: 15,
-        backgroundColor: '#007bff',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 24,
-    },
-});
 export default Calendar;

@@ -1,19 +1,19 @@
-import React, {useContext, useState} from "react";
-import {ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {Calendar} from "react-native-calendars";
+import React, { useContext, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Calendar } from "react-native-calendars";
 import AuthContext from "../context/AuthContext";
 import ProfileContext from "../context/ProfileContext";
+import { useColorSchemeContext } from "../context/ColorSchemeContext";
 
-// Constants for testing
 const WORK_HOURS = {
     start: "07:30",
     end: "17:30",
 };
 const BLOCKED_HOURS = ["09:00", "12:30"];
-const TIME_SLOTS = Array.from({length: 24 * 2}, (_, i) => {
+const TIME_SLOTS = Array.from({ length: 24 * 2 }, (_, i) => {
     const hour = String(Math.floor(i / 2)).padStart(2, '0');
     const minute = i % 2 === 0 ? '00' : '30';
-    return {time: `${hour}:${minute}`};
+    return { time: `${hour}:${minute}` };
 });
 
 const getFilteredTimes = (timeSlots, start, end) => {
@@ -25,12 +25,13 @@ const getFilteredTimes = (timeSlots, start, end) => {
 const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
     const { state } = useContext(AuthContext);
     const { profileState, profileDispatch } = useContext(ProfileContext);
+    const { colorScheme } = useColorSchemeContext();
     const today = new Date().toISOString().split('T')[0];
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [workingHours, setWorkingHours] = useState(getFilteredTimes(TIME_SLOTS, WORK_HOURS.start, WORK_HOURS.end));
     const [selectedTime, setSelectedTime] = useState("");
-    const [currentScreen, setCurrentScreen] = useState('dateTime'); // New state to manage screen transitions
+    const [currentScreen, setCurrentScreen] = useState('dateTime');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [meetingNote, setMeetingNote] = useState('');
@@ -66,26 +67,26 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
         */
     };
 
-    const renderTimeSlot = ({item}) => (
+    const renderTimeSlot = ({ item }) => (
         <TouchableOpacity
             onPress={() => setSelectedTime(item.time)}
-            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.time ? "bg-[#00adf5] border-[#00adf5]" : "bg-white border-[#00adf5]"}`}
+            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.time ? "bg-[#00adf5] border-[#00adf5]" : "bg-white dark:bg-gray-800 border-[#00adf5]"}`}
         >
             <Text
-                className={`font-normal ${selectedTime === item.time ? "text-white" : "text-[#00adf5]"}`}>{item.time}</Text>
+                className={`font-normal ${selectedTime === item.time ? "text-white" : "text-[#00adf5] dark:text-white"}`}>{item.time}</Text>
         </TouchableOpacity>
     );
 
     const renderDateTimeSelection = () => (
         <>
             <View className="flex-row mx-5 mt-3 mb-2">
-                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")}/>
+                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")} />
                 <View className="ml-5">
-                    <Text className="text-lg font-semibold">imie</Text>
-                    <Text className="text-base text-gray-500">opis</Text>
+                    <Text className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>imie</Text>
+                    <Text className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>opis</Text>
                 </View>
             </View>
-            <View className="mx-5 p-1 mb-2 border border-blue-400 rounded-2xl">
+            <View className={`mx-5 p-1 mb-2 border ${colorScheme === 'dark' ? 'border-gray-600' : 'border-blue-400'} rounded-2xl`}>
                 <Calendar
                     minDate={today}
                     onDayPress={selectDay}
@@ -96,46 +97,71 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                             textColor: "#fff",
                         },
                     }}
+                    theme={{
+                        backgroundColor: colorScheme === 'dark' ? '#333333' : '#ffffff',
+                        calendarBackground: colorScheme === 'dark' ? '#333333' : '#ffffff',
+                        textSectionTitleColor: colorScheme === 'dark' ? '#b6c1cd' : '#b6c1cd',
+                        selectedDayBackgroundColor: '#00adf5',
+                        selectedDayTextColor: '#ffffff',
+                        todayTextColor: '#00adf5',
+                        dayTextColor: colorScheme === 'dark' ? '#d9e1e8' : '#2d4150',
+                        textDisabledColor: colorScheme === 'dark' ? '#d9e1e8' : '#d9e1e8',
+                        dotColor: '#00adf5',
+                        selectedDotColor: '#ffffff',
+                        arrowColor: colorScheme === 'dark' ? 'white' : 'orange',
+                        monthTextColor: colorScheme === 'dark' ? 'white' : 'blue',
+                        indicatorColor: colorScheme === 'dark' ? 'white' : 'blue',
+                        textDayFontWeight: '300',
+                        textMonthFontWeight: 'bold',
+                        textDayHeaderFontWeight: '300',
+                        textDayFontSize: 16,
+                        textMonthFontSize: 16,
+                        textDayHeaderFontSize: 16,
+                    }}
                 />
             </View>
-            <Text className="text-md font-medium ml-6 mt-2 mb-1">Available hours:</Text>
+            <Text className={`text-md font-medium ml-6 mt-2 mb-1 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Available hours:</Text>
             <FlatList
                 data={workingHours}
                 numColumns={4}
                 renderItem={renderTimeSlot}
                 keyExtractor={(item) => item.time}
-                contentContainerStyle={{alignItems: "center", paddingBottom: 32}}
+                contentContainerStyle={{ alignItems: "center", paddingBottom: 32 }}
             />
         </>
     );
 
     const renderDetailsInput = () => (
         <View className="mx-5 mt-3">
-            <Text className="text-md font-medium mb-2">Selected Date: {date}</Text>
-            <Text className="text-md font-medium mb-2">Selected Time: {selectedTime}</Text>
+            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected Date: {date}</Text>
+            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>Selected Time: {selectedTime}</Text>
             <TextInput
-                className="border border-gray-300 rounded-lg p-2 mb-3"
+                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
                 placeholder="Name"
+                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
                 value={name}
                 onChangeText={setName}
             />
             <TextInput
-                className="border border-gray-300 rounded-lg p-2 mb-3"
+                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
                 placeholder="Email"
+                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                className="border border-gray-300 rounded-lg p-2 mb-3"
+                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
                 placeholder="Meeting Note"
+                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
                 value={meetingNote}
                 onChangeText={setMeetingNote}
             />
             <TouchableOpacity onPress={() => setCurrentScreen('dateTime')}>
-                <Text className="text-[#01478F] text-lg font-medium">Back</Text>
+                <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">Back</Text>
             </TouchableOpacity>
         </View>
     );
+
     const handleCancel = () => {
         if (profileState.profile === null) {
             navigation.navigate("Login");
@@ -144,6 +170,7 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
             setOpenModal(!openModal);
         }
     }
+
     return (
         <Modal
             onRequestClose={() => setOpenModal(!openModal)}
@@ -151,21 +178,21 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
             transparent
             visible={openModal}
         >
-            <View className="flex-1 bg-white mt-16 rounded-t-2xl">
+            <View className={`flex-1 bg-${colorScheme === 'dark' ? 'gray-900' : 'white'} mt-16 rounded-t-2xl`}>
                 <View className="flex-row justify-between mt-5 px-5 rounded-t-2xl">
                     <TouchableOpacity onPress={() => handleCancel()}>
-                        <Text className="text-[#01478F] text-lg font-medium">Cancel</Text>
+                        <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">Cancel</Text>
                     </TouchableOpacity>
                     {currentScreen === 'dateTime' ? (
                         <TouchableOpacity onPress={() => setCurrentScreen('details')} disabled={!selectedTime || !date}>
-                            <Text className="text-[#01478F] text-lg font-medium">Next</Text>
+                            <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">Next</Text>
                         </TouchableOpacity>
                     ) : (
                         <TouchableOpacity onPress={handleCreateAppointment} disabled={!name || !email || !meetingNote}>
                             {loading ? (
-                                <ActivityIndicator className="mx-3" size="small" color="#01478F"/>
+                                <ActivityIndicator className="mx-3" size="small" color="#01478F" />
                             ) : (
-                                <Text className="text-[#01478F] text-lg font-medium">Confirm</Text>
+                                <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">Confirm</Text>
                             )}
                         </TouchableOpacity>
                     )}

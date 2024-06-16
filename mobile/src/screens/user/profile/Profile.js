@@ -3,9 +3,11 @@ import { ScrollView, Image, Text, TextInput, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import ProfileContext from "../../../context/ProfileContext";
 import Slider from "@react-native-community/slider";
+import { useColorSchemeContext } from "../../../context/ColorSchemeContext";
 
 const Profile = () => {
     const { profileState } = useContext(ProfileContext);
+    const { colorScheme } = useColorSchemeContext();
 
     const {
         firstname,
@@ -23,7 +25,7 @@ const Profile = () => {
     const daysOfWeek = availableDays.split(',');
 
     return (
-        <Animatable.View animation="fadeInRight" className="flex-1 bg-[#3575EF]">
+        <Animatable.View animation="fadeInRight" className={`flex-1 ${colorScheme === 'dark' ? 'bg-gray-900' : 'bg-[#3575EF]'}`}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View className="flex-grow justify-end items-center">
                     <Image
@@ -33,43 +35,43 @@ const Profile = () => {
                 </View>
                 <View className="flex-grow justify-center items-center">
                     <TextInput
-                        className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
                         placeholder="First Name"
-                        placeholderTextColor="#fff"
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={firstname}
                         editable={false}
                     />
                     <TextInput
-                        className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
                         placeholder="Last Name"
-                        placeholderTextColor="#fff"
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={lastname}
                         editable={false}
                     />
                     <TextInput
-                        className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
                         placeholder="Email"
-                        placeholderTextColor="#fff"
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={email}
                         editable={false}
                     />
                     <TextInput
-                        className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
                         placeholder="Calendar URL"
-                        placeholderTextColor="#fff"
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={calendarUrl}
                         editable={false}
                     />
                     <TextInput
-                        className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 text-[16px] text-white m-3.5 font-light"
+                        className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
                         placeholder="Meeting Link"
-                        placeholderTextColor="#fff"
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={meetingLink}
                         editable={false}
                     />
 
                     <Text className="text-white bg-transparent mt-0.5">Available Hours</Text>
-                    <View className="w-[300px] flex-row bg-[#ffffff4d] rounded-[25px] p-0.75 m-2 justify-between items-center">
+                    <View className={`w-[300px] flex-row ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-0.75 m-2 justify-between items-center`}>
                         <TextInput
                             className="flex-1 h-[50px] text-white bg-transparent text-center"
                             placeholder="From"
@@ -88,7 +90,7 @@ const Profile = () => {
                     </View>
 
                     <Text className="text-white bg-transparent mt-2">Available Days</Text>
-                    <View className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start">
+                    <View className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start`}>
                         {daysOfWeek.map((day, index) => (
                             <View key={index} className="p-2 m-1 rounded-lg bg-white text-black">
                                 <Text className="text-center text-black">
@@ -98,7 +100,7 @@ const Profile = () => {
                         ))}
                     </View>
 
-                    <View className="w-[300px] bg-[#ffffff4d] rounded-[25px] p-3 m-3.5">
+                    <View className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-3.5`}>
                         <Text className="text-white text-center mb-2">Meeting Duration: {meetingDuration} min</Text>
                         <Slider
                             style={{ width: '100%', height: 40 }}

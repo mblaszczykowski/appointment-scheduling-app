@@ -1,18 +1,23 @@
-import React, {useRef, useState} from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { styled } from 'nativewind';
+import { useColorSchemeContext } from '../../context/ColorSchemeContext'; // Update with actual path
 
-const {width} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const OnboardingScreen = ({navigation}) => {
+const OnboardingScreen = ({ navigation }) => {
+    const { colorScheme } = useColorSchemeContext();
+    const isDarkMode = colorScheme === 'dark';
+
     const slides = [
         {
-            backgroundColor: "#3674EF",
+            backgroundColor: isDarkMode ? "#1F2937" : "#3674EF",
             image: require('../assets/logo.jpg'),
             title: "The Intuitive\nAppointment Scheduling",
             subtitle: "Meetly is a platform designed to streamline\nmeeting and appointment scheduling effortlessly.",
         },
         {
-            backgroundColor: "#508aff",
+            backgroundColor: isDarkMode ? "#374151" : "#508aff",
             image: require('../assets/logo.jpg'),
             title: "What do we offer",
             subtitle: "Simplify your scheduling\nwith easy calendar setup. Allow others to book your available slots\nin just a few clicks. Get automatic email reminders\nfor all appointments.",
@@ -22,15 +27,15 @@ const OnboardingScreen = ({navigation}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const ref = useRef(null);
 
-    const renderItem = ({item}) => (
-        <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
-            <Image source={item.image} style={styles.image} resizeMode="contain"/>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>{item.subtitle}</Text>
+    const renderItem = ({ item }) => (
+        <View className="flex-1 items-center justify-center p-5" style={{ backgroundColor: item.backgroundColor, width }}>
+            <Image source={item.image} className="w-24 h-24 mb-12 rounded-full" resizeMode="contain" />
+            <Text className={`text-2xl text-center ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>{item.title}</Text>
+            <Text className={`text-lg text-center px-5 mt-2 ${isDarkMode ? 'text-gray-400' : 'text-white'}`}>{item.subtitle}</Text>
         </View>
     );
 
-    const updateIndex = ({viewableItems}) => {
+    const updateIndex = ({ viewableItems }) => {
         setCurrentIndex(viewableItems[0].index);
     };
 
@@ -38,8 +43,16 @@ const OnboardingScreen = ({navigation}) => {
         navigation.replace("Login");
     };
 
+    const handleNext = () => {
+        if (currentIndex < slides.length - 1) {
+            ref.current.scrollToIndex({ index: currentIndex + 1 });
+        } else {
+            skipToEnd();
+        }
+    };
+
     return (
-        <View style={{flex: 1}}>
+        <View className={`flex-1 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
             <FlatList
                 data={slides}
                 renderItem={renderItem}
@@ -49,28 +62,34 @@ const OnboardingScreen = ({navigation}) => {
                 onViewableItemsChanged={updateIndex}
                 keyExtractor={(item, index) => index.toString()}
                 ref={ref}
+                viewabilityConfig={{
+                    viewAreaCoveragePercentThreshold: 50,
+                }}
+                getItemLayout={(data, index) => (
+                    { length: width, offset: width * index, index }
+                )}
             />
-            <View style={styles.footerContainer}>
-                <View style={styles.buttonWrapper}>
+            <View className={`flex-row justify-between items-center pb-5 pt-2 ${isDarkMode ? 'bg-gray-800' : 'bg-blue-700'}`}>
+                <View className="flex-1 justify-center items-center">
                     {currentIndex === 0 && (
-                        <TouchableOpacity onPress={skipToEnd} style={styles.button}>
-                            <Text style={styles.buttonText}>Skip</Text>
+                        <TouchableOpacity onPress={skipToEnd} className={`py-2 px-4 rounded`}>
+                            <Text className="text-white text-lg">Skip</Text>
                         </TouchableOpacity>)}
                 </View>
 
-                <View style={styles.paginationContainer}>
+                <View className="flex-row flex-1 justify-center items-center">
                     {slides.map((_, index) => (
-                        <View key={index} style={[styles.dot, currentIndex === index && styles.activeDot]}/>
+                        <View key={index} className={`h-2 w-2 rounded-full mx-1 ${currentIndex === index ? 'bg-white' : 'bg-white/50'}`} />
                     ))}
                 </View>
-                <View style={styles.buttonWrapper}>
+                <View className="flex-1 justify-center items-center">
                     {currentIndex === slides.length - 1 ? (
-                        <TouchableOpacity onPress={skipToEnd} style={styles.button}>
-                            <Text style={styles.buttonText}>Start</Text>
+                        <TouchableOpacity onPress={skipToEnd} className={`py-2 px-4 rounded`}>
+                            <Text className="text-white text-lg">Start</Text>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity onPress={() => ref.current.scrollToEnd()} style={styles.button}>
-                            <Text style={styles.buttonText}>Next</Text>
+                        <TouchableOpacity onPress={handleNext} className={`py-2 px-4 rounded`}>
+                            <Text className="text-white text-lg">Next</Text>
                         </TouchableOpacity>
                     )}
                 </View>
@@ -78,77 +97,5 @@ const OnboardingScreen = ({navigation}) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    footerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 60,
-        backgroundColor: '#3068D7'
-    },
-    paginationContainer: {
-        flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dot: {
-        height: 7,
-        width: 7,
-        borderRadius: 5,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        marginHorizontal: 5,
-    },
-    activeDot: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    },
-    slide: {
-        width: width,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-        height: '100%',
-    },
-    image: {
-        width: 100,
-        height: 100,
-        marginBottom: 50,
-        borderRadius: 90,
-    },
-    title: {
-        fontSize: 24,
-        color: '#ffffff',
-        textAlign: 'center',
-    },
-    subtitle: {
-        fontSize: 16,
-        color: '#ffffff',
-        textAlign: 'center',
-        paddingHorizontal: 20,
-        marginTop: 10,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingBottom: 20,
-    },
-    button: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#3068D7',
-        borderRadius: 5,
-    },
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-    }
-});
 
 export default OnboardingScreen;

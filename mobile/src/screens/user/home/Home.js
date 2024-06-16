@@ -45,39 +45,40 @@ const Home = ({ navigation }) => {
 
     return (
         <View className="flex-1 bg-[#3476EF]">
-            <ScrollView className="flex-1 bg-white rounded-t-[25px] pb-5">
+            <ScrollView className="flex-1 bg-white dark:bg-gray-800 rounded-t-[25px] pb-5">
                 <View className="p-5 mt-2.5">
-                    <Text className="text-2xl font-medium">
+                    <Text className="text-2xl font-medium text-black dark:text-white">
                         Hi, {`${profile?.firstname}`}
                     </Text>
                 </View>
                 <View className="p-5">
-                    <View className="flex-row items-center bg-gray-100 p-3 rounded-md">
+                    <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
                         <EvilIcons name="search" size={30} color="#1c313a" />
                         <TextInput
                             placeholder="Search by booker name"
+                            placeholderTextColor="gray"
                             value={searchQuery}
                             onChangeText={setSearchQuery}
-                            className="flex-1 ml-2"
+                            className="flex-1 ml-2 text-black dark:text-white"
                         />
                     </View>
                 </View>
                 <View className="flex-row justify-center items-center p-5">
                     <TouchableOpacity
                         onPress={() => setFilter("Upcoming")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Upcoming" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Upcoming" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
                         <Text>Upcoming</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setFilter("Past")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Past" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Past" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
                         <Text>Past</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setFilter("Canceled")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Canceled" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Canceled" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
                     >
                         <Text>Canceled</Text>
                     </TouchableOpacity>
@@ -93,7 +94,7 @@ const Home = ({ navigation }) => {
                             />
                         ))
                     ) : (
-                        <Text className="text-gray-500">No {filter.toLowerCase()} appointments</Text>
+                        <Text className="text-gray-500 dark:text-gray-300">No {filter.toLowerCase()} appointments</Text>
                     )}
                 </View>
             </ScrollView>

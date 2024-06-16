@@ -1,20 +1,25 @@
 import "react-native-gesture-handler";
-import React, {useEffect, useMemo, useReducer} from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
-import {AUTH_ACTIONS, authInitialState, authReducer,} from "./src/context/reducers/authReducer";
-import {profileInitialState, profileReducer,} from "./src/context/reducers/profileReducer";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { AUTH_ACTIONS, authInitialState, authReducer } from "./src/context/reducers/authReducer";
+import { profileInitialState, profileReducer } from "./src/context/reducers/profileReducer";
 import AuthContext from "./src/context/AuthContext";
 import ProfileContext from "./src/context/ProfileContext";
 import WelcomeStack from "./src/screens/guest/WelcomeStack";
 import UserScreen from "./src/screens/user/UserScreen";
+import { useColorScheme } from 'nativewind';
+import { NativeWindStyleSheet } from "nativewind";
+import { ColorSchemeProvider } from "./src/context/ColorSchemeContext";
+
+NativeWindStyleSheet.setOutput({
+	default: "native",
+});
 
 export default function App() {
 	const [authState, authDispatch] = useReducer(authReducer, authInitialState);
-	const [profileState, profileDispatch] = useReducer(
-		profileReducer,
-		profileInitialState
-	);
+	const [profileState, profileDispatch] = useReducer(profileReducer, profileInitialState);
+	const { colorScheme, toggleColorScheme } = useColorScheme();
 
 	const MyTheme = {
 		...DefaultTheme,
@@ -35,13 +40,11 @@ export default function App() {
 
 	const getToken = async () => {
 		let auth;
-
 		try {
 			auth = await AsyncStorage.getItem("auth");
 		} catch (err) {
 			console.log(err);
 		}
-
 		authDispatch({
 			type: AUTH_ACTIONS.RESTORE_USER,
 			auth: JSON.parse(auth),
@@ -59,15 +62,15 @@ export default function App() {
 	return (
 		<AuthContext.Provider value={authContextValue}>
 			<ProfileContext.Provider value={profileContextValue}>
-				<NavigationContainer theme={MyTheme}>
-					{authState.auth == null ? (
-						<WelcomeStack />
-					) : (
-						<>
+				<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+					<NavigationContainer theme={MyTheme}>
+						{authState.auth == null ? (
+							<WelcomeStack />
+						) : (
 							<UserScreen />
-						</>
-					)}
-				</NavigationContainer>
+						)}
+					</NavigationContainer>
+				</ColorSchemeProvider>
 			</ProfileContext.Provider>
 		</AuthContext.Provider>
 	);
