@@ -112,6 +112,24 @@
       "canceled": "Anulowane",
       "noAppointments": "Brak spotkań"
     },
+    "profile": {
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+      "email": "Email",
+      "calendarUrl": "Kalendarz URL",
+      "meetingLink": "Link Spotkania",
+      "availableHours": "Dostępne godziny",
+      "availableDays": "Dostępne Dni",
+      "monday": "Poniedziałek",
+      "tuesday": "Wtorek",
+      "wednesday": "Środa",
+      "thursday": "Czwartek",
+      "friday": "Piątek",
+      "saturday": "Sobota",
+      "sunday": "Niedziela",
+      "meetingDuration": "Długość spotkania",
+      "submit": "Potwierdź"
+    },
     "tabs": {
       "labels": {
         "home": "Strona główna",

@@ -7,11 +7,13 @@ import { Buffer } from "buffer";
 import { setUser } from "../../../api/api-user";
 import AuthContext from "../../../context/AuthContext";
 import {useColorSchemeContext} from "../../../context/ColorSchemeContext";
+import {useTranslation} from "react-i18next";
 
 const Profile = ({ toggleEditing, isEditing }) => {
     const { state } = useContext(AuthContext);
     const { profileState } = useContext(ProfileContext);
     const {colorScheme} = useColorSchemeContext();
+    const { t } = useTranslation();
 
     const {
         firstname,
@@ -48,7 +50,14 @@ const Profile = ({ toggleEditing, isEditing }) => {
         setLocalAvailableDays(availableDays ? availableDays.split(',') : []);
     }, [profileState]);
 
-    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const daysOfWeek = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'];
 
     const toggleDay = (day) => {
         const updatedDays = localAvailableDays.includes(day)
@@ -112,57 +121,69 @@ const Profile = ({ toggleEditing, isEditing }) => {
                     />
                 </View>
                 <View className="flex-grow justify-center items-center">
-                    <Text className="text-white bg-transparent mt-0.5">First Name</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.firstName')}
+                    </Text>
                     <TextInput
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
-                        placeholder="First Name"
+                        placeholder={t('screens.profile.firstName')}
                         placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={localFirstname}
                         onChangeText={setLocalFirstname}
                         editable={isEditing}
                     />
 
-                    <Text className="text-white bg-transparent mt-0.5">Last Name</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.lastName')}
+                    </Text>
                     <TextInput
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
-                        placeholder="Last Name"
+                        placeholder={t('screens.profile.lastName')}
                         placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={localLastname}
                         onChangeText={setLocalLastname}
                         editable={isEditing}
                     />
 
-                    <Text className="text-white bg-transparent mt-0.5">Email</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.email')}
+                    </Text>
                     <TextInput
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
-                        placeholder="Email"
+                        placeholder={t('screens.profile.email')}
                         placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={localEmail}
                         onChangeText={setLocalEmail}
                         editable={isEditing}
                     />
 
-                    <Text className="text-white bg-transparent mt-0.5">Calendar URL</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.calendarUrl')}
+                    </Text>
                     <TextInput
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
-                        placeholder="Calendar URL"
+                        placeholder={t('screens.profile.calendarUrl')}
                         placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={localCalendarUrl}
                         onChangeText={setLocalCalendarUrl}
                         editable={isEditing}
                     />
 
-                    <Text className="text-white bg-transparent mt-0.5">Meeting Link</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.meetingLink')}
+                    </Text>
                     <TextInput
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 text-[16px] ${colorScheme === 'dark' ? 'text-gray-300' : 'text-white'} m-3.5 font-light`}
-                        placeholder="Meeting Link"
+                        placeholder={t('screens.profile.meetingLink')}
                         placeholderTextColor={colorScheme === 'dark' ? '#888' : '#fff'}
                         value={localMeetingLink}
                         onChangeText={setLocalMeetingLink}
                         editable={isEditing}
                     />
 
-                    <Text className="text-white bg-transparent mt-0.5">Available Hours</Text>
+                    <Text className="text-white bg-transparent mt-0.5">
+                        {t('screens.profile.availableHours')}
+                    </Text>
                     <View
                         className={`w-[300px] flex-row ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-0.75 m-2 justify-between items-center`}>
                         <TextInput
@@ -184,7 +205,9 @@ const Profile = ({ toggleEditing, isEditing }) => {
                         />
                     </View>
 
-                    <Text className="text-white bg-transparent mt-2">Available Days</Text>
+                    <Text className="text-white bg-transparent mt-2">
+                        {t('screens.profile.availableDays')}
+                    </Text>
                     <View
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-2.5 flex-row flex-wrap justify-start`}>
                         {daysOfWeek.map((day) => (
@@ -206,7 +229,9 @@ const Profile = ({ toggleEditing, isEditing }) => {
                         ))}
                     </View>
 
-                    <Text className="text-white text-center mb-2">Meeting Duration: {localMeetingDuration} min</Text>
+                    <Text className="text-white text-center mb-2">
+                        {t('screens.profile.meetingDuration')}: {localMeetingDuration} min
+                    </Text>
                     <View
                         className={`w-[300px] ${colorScheme === 'dark' ? 'bg-[#4d4d4d]' : 'bg-[#ffffff4d]'} rounded-[25px] p-3 m-3.5`}>
                         <Slider
@@ -233,7 +258,7 @@ const Profile = ({ toggleEditing, isEditing }) => {
                                 }}
                             >
                                 <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>
-                                    Submit
+                                    {t('screens.profile.submit')}
                                 </Text>
                             </TouchableOpacity>
                         </View>
