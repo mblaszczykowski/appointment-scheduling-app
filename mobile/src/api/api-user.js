@@ -29,9 +29,42 @@ const apiGetRequest = async (calendarUrl, token) => {
     }
 };
 
+const apiPutRequest = async (url, data, token) => {
+    let baseUrl;
+    if (Platform.OS === "android") {
+        baseUrl = `${process.env.ANDROID_BASE_URL}`;
+    } else {
+        baseUrl = `${process.env.IOS_BASE_URL}`;
+    }
+    url = baseUrl + url;
+
+    try {
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+
+        const response = await axios.put(url, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating data at ${url}:`, error.response?.data || error.message);
+        return error.response?.data || { error: 'Request failed' };
+    }
+};
+
 const getUser = async (params, credentials) => {
     const url = `/api/users/${params.accountId}`;
     return await apiGetRequest(url, credentials.token);
+};
+
+const setUser = async (uuid, userData, credentials) => {
+    const url = `/api/users/${userData.id}`;
+    return await apiPutRequest(url, userData, credentials.token);
 };
 
 const getAppointments = async (params, credentials) => {
@@ -39,4 +72,4 @@ const getAppointments = async (params, credentials) => {
     return await apiGetRequest(url, credentials.token);
 };
 
-export {getUser, getAppointments};
+export { getUser, setUser, getAppointments };
