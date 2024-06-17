@@ -14,7 +14,7 @@
         "provideEmailPassword": "Proszę podać e-mail i hasło",
         "errorOccurred": "Wystąpił błąd podczas logowania: ",
         "loginFailed": "Logowanie nie powiodło się. Sprawdź swoje połączenie z Internetem.",
-        "dontHaveAccount": "Nie masz konta?",
+        "dontHaveAccount": "Nie masz konta? ",
         "signup": "Zarejestruj się",
         "scanQr": "Skanuj QR"
       }
@@ -88,7 +88,8 @@
         "noAccess": "Brak dostępu do kamery",
         "allowCamera": "Zezwól na dostęp do kamery",
         "notYetScanned": "Jeszcze nie zeskanowano",
-        "scanAgain": "Skanuj ponownie?"
+        "scanAgain": "Skanuj ponownie?",
+        "cancel": "Anuluj"
       }
     },
     "calendar": {

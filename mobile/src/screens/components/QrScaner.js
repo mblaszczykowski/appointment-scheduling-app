@@ -44,7 +44,9 @@ export default function QrScaner({ navigation }) {
             </View>
         );
     }
-
+    const handleCloseScanner = () => {
+        navigation.goBack();
+    };
     // Return the View
     return (
         <View style={styles.container}>
@@ -57,6 +59,10 @@ export default function QrScaner({ navigation }) {
             <Text style={styles.maintext}>{text}</Text>
 
             {scanned && <Button title={t('screens.qrScanner.text.scanAgain')} onPress={() => setScanned(false)} color='tomato' />}
+            <Button
+                title={t('screens.qrScanner.text.cancel')}
+                onPress={handleCloseScanner}
+            />
         </View>
     );
 }

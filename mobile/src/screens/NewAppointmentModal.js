@@ -64,10 +64,13 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     useEffect(() => {
         const fetchData = async () => {
             await fetchUserData()
-            const appointmentsData = await fetchAppointments(userData?.id, selectedDate);
-            const slots = generateTimeSlots(userData.availableFromHour, userData.availableToHour, userData.meetingDuration);
-            const availableSlots = filterBookedSlots(slots, appointmentsData.appointments);
-            setWorkingHours(availableSlots);
+            if(userData?.id !== undefined)
+            {
+                const appointmentsData = await fetchAppointments(userData?.id, selectedDate);
+                const slots = generateTimeSlots(userData.availableFromHour, userData.availableToHour, userData.meetingDuration);
+                const availableSlots = filterBookedSlots(slots, appointmentsData.appointments);
+                setWorkingHours(availableSlots);
+            }
         };
         fetchData().then(r => console.log("fetchData: ", r));
     }, [selectedDate]);
@@ -140,6 +143,8 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             if(selectedDate.length > 10 || selectedDate.length === undefined) {
                 selectedDate = selectedDate.format("YYYY-MM-DD")
             }
+            console.log(userId, selectedDate)
+
             const response = await axios.get(`/api/appointments/user/${userId}?date=${selectedDate}`);
             return response.data;
         } catch (error) {
