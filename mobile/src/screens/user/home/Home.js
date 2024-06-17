@@ -17,10 +17,11 @@ const Home = ({ navigation }) => {
     const [filter, setFilter] = useState("Upcoming");
     const [searchQuery, setSearchQuery] = useState("");
 
-    const actualAppointments = appointmentList?.filter(appointment => appointment.isActual) || [];
+    const actualAppointments = appointmentList?.filter(appointment => appointment.isActual
+        && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
     const canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
     const pastAppointments = appointmentList?.filter(appointment =>
-        moment(appointment.startTime).isBefore(moment())
+        moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))
     ) || [];
 
     const renderAppointments = () => {

@@ -8,11 +8,9 @@ import QRCode from "react-native-qrcode-svg";
 import { useTranslation } from 'react-i18next';
 
 const Calendar = () => {
-    const [calendarUrl, setCalendarUrl] = useState("");
-    useEffect(() => {
-        setCalendarUrl(profile.calendarUrl);
-    }, []);
-    const { colors } = useTheme();
+    const [calendarUrl, setCalendarUrl] = useState(" ");
+
+    const {colors} = useTheme();
     const {
         profileState: { profile, appointments },
     } = useContext(ProfileContext);
@@ -21,6 +19,9 @@ const Calendar = () => {
             auth: { token },
         },
     } = useContext(AuthContext);
+    useEffect(() => {
+        setCalendarUrl(profile.calendarUrl);
+    }, []);
     const [openModal, setOpenModal] = useState(false);
     const { t } = useTranslation();
 
@@ -33,7 +34,7 @@ const Calendar = () => {
                 </Text>
                 <View className="my-5">
                     <QRCode
-                        value={"meetly://calendar/" + calendarUrl}
+                        value={calendarUrl}
                         size={300}
                         color="black"
                         backgroundColor="white"

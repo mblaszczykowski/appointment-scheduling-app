@@ -1,15 +1,8 @@
 import axios from '../../axios';
-import {Platform} from "react-native";
 
 
 const apiGetRequest = async (calendarUrl, token) => {
-    let baseUrl;
-    if (Platform.OS === "android") {
-        baseUrl = `${process.env.ANDROID_BASE_URL}`
-    } else {
-        baseUrl = "http://localhost:8080"
-    }
-    calendarUrl = baseUrl + calendarUrl
+    calendarUrl = `${process.env.BASE_URL}` + calendarUrl
     try {
         const response = await axios.get(calendarUrl, {
             headers: {

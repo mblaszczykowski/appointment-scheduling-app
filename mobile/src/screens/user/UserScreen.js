@@ -10,6 +10,7 @@ import ProfileStack from "./profile/ProfileStack";
 import {Buffer} from 'buffer';
 import LoadingScreen from "./LoadingScreen";
 import {useColorSchemeContext} from "../../context/ColorSchemeContext";
+import NotificationsIcon from "../components/NotificationsIcon";
 
 const Drawer = createDrawerNavigator();
 
@@ -87,6 +88,9 @@ const UserHome = () => {
             <Drawer.Screen
                 name="Home"
                 component={MainTabs}
+                options={{
+                    headerRight: () => <NotificationsIcon/>,
+                }}
             />
             <Drawer.Screen
                 name="Profile"

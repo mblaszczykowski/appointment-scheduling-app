@@ -14,7 +14,7 @@
         "provideEmailPassword": "Please provide e-mail and password",
         "errorOccurred": "Error occurred during login: ",
         "loginFailed": "Login failed. Check your internet connection.",
-        "dontHaveAccount": "Don't have an account?",
+        "dontHaveAccount": "Don't have an account? ",
         "signup": "Signup",
         "scanQr": "ScanQR"
       }
@@ -87,8 +87,9 @@
         "requestingPermission": "Requesting for camera permission",
         "noAccess": "No access to camera",
         "allowCamera": "Allow Camera",
-        "notYetScanned": "Not yet scanned",
-        "scanAgain": "Scan again?"
+        "notYetScanned": "Not scanned yet",
+        "scanAgain": "Scan again?",
+        "cancel": "Cancel"
       }
     },
     "calendar": {

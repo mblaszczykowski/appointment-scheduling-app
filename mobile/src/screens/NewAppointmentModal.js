@@ -1,93 +1,173 @@
-import React, { useContext, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Calendar } from "react-native-calendars";
+import React, {useContext, useEffect, useState} from "react";
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    Modal,
+    Platform,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
+import {Calendar} from "react-native-calendars";
 import AuthContext from "../context/AuthContext";
 import ProfileContext from "../context/ProfileContext";
-import { useColorSchemeContext } from "../context/ColorSchemeContext";
 import { useTranslation } from 'react-i18next';
+import axios from "axios";
+import moment from "moment-timezone";
+import {useColorSchemeContext} from "../context/ColorSchemeContext";
 
-const WORK_HOURS = {
-    start: "07:30",
-    end: "17:30",
-};
-const BLOCKED_HOURS = ["09:00", "12:30"];
-const TIME_SLOTS = Array.from({ length: 24 * 2 }, (_, i) => {
-    const hour = String(Math.floor(i / 2)).padStart(2, '0');
-    const minute = i % 2 === 0 ? '00' : '30';
-    return { time: `${hour}:${minute}` };
-});
+axios.defaults.baseURL = `${process.env.BASE_URL}`
 
-const getFilteredTimes = (timeSlots, start, end) => {
-    const startIndex = timeSlots.findIndex(slot => slot.time === start);
-    const endIndex = timeSlots.findIndex(slot => slot.time === end);
-    return timeSlots.slice(startIndex, endIndex).filter(slot => !BLOCKED_HOURS.includes(slot.time));
-};
 
-const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
-    const { state } = useContext(AuthContext);
-    const { profileState, profileDispatch } = useContext(ProfileContext);
-    const { colorScheme } = useColorSchemeContext();
+const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
+    const {state} = useContext(AuthContext);
+    const {profileState, profileDispatch} = useContext(ProfileContext);
+    const {colorScheme} = useColorSchemeContext();
     const { t } = useTranslation();
     const today = new Date().toISOString().split('T')[0];
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
-    const [workingHours, setWorkingHours] = useState(getFilteredTimes(TIME_SLOTS, WORK_HOURS.start, WORK_HOURS.end));
+    const [workingHours, setWorkingHours] = useState([]);
     const [selectedTime, setSelectedTime] = useState("");
     const [currentScreen, setCurrentScreen] = useState('dateTime');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [meetingNote, setMeetingNote] = useState('');
+    const [userData, setUserData] = useState(null);
+    const [calendarUrl, setCalendarUrl] = useState('');
+    const [selectedDate, setSelectedDate] = useState(moment());
 
-    const selectDay = (day) => setDate(day.dateString);
+    const fetchUserData = async () => {
+        try {
+            if (profileState.profile === null) {
+                const calendarUrl = route.params.calendarUrl
+                setCalendarUrl(calendarUrl)
+                const response = await axios.get(`${process.env.BASE_URL}/api/calendar/${calendarUrl}`);
+                setUserData(response.data);
+            } else {
+                setUserData(profileState.profile);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            //Tu bedzie przekierowanie na ekran z errorem
+            // navigation.navigate('error');
+        }
+
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await fetchUserData()
+            if(userData?.id !== undefined)
+            {
+                const appointmentsData = await fetchAppointments(userData?.id, selectedDate);
+                const slots = generateTimeSlots(userData.availableFromHour, userData.availableToHour, userData.meetingDuration);
+                const availableSlots = filterBookedSlots(slots, appointmentsData.appointments);
+                setWorkingHours(availableSlots);
+            }
+        };
+        fetchData().then(r => console.log("fetchData: ", r));
+    }, [selectedDate]);
+
+    const selectDay = (day) => {
+        setSelectedDate(day.dateString)
+        setDate(day.dateString)
+    };
+
+
 
     const handleCreateAppointment = async () => {
         setLoading(true);
         const appointment = {
-            user: profileState.profile?._id,
-            date,
-            start_time: selectedTime,
-            name,
-            email,
-            meetingNote
+            calendarUrl: userData.calendarUrl,
+            startTime: date + 'T' + selectedTime + ':00',
+            endTime: date + 'T' + moment(selectedTime, 'HH:mm').add(userData.meetingDuration, 'minutes').format('HH:mm:ss'),
+            bookerName: name,
+            bookerEmail: email,
+            meetingNote: meetingNote,
+            isActual: true
         };
-        // Assume createAppointment function is defined
-        /*
-        createAppointment({ token: state.auth?.token }, appointment)
-            .then((data) => {
-                setLoading(false);
-                if (data && data.error) {
-                    console.log(data.error);
-                } else {
-                    profileDispatch({ type: PROFILE_ACTIONS.ADD_APPOINTMENT, appointment: { ...data, doctor: doctor } });
-                    setOpenModal(!openModal);
-                }
-            })
-            .catch((error) => {
-                setLoading(false);
-                console.log(error);
-            });
-        */
+        try{
+            await axios.post('/api/appointments', appointment);
+            handleCancel();
+        }
+        catch (error) {
+            console.error("handleCreateAppointment error: ", error);
+        }
+        setLoading(false);
     };
 
+    const generateTimeSlots = (fromHour, toHour, duration) => {
+        let slots = [];
+        let startTime = new Date();
+        startTime.setHours(fromHour, 0, 0, 0);
+
+        let endTime = new Date(startTime.getTime() + duration * 60000); // set end time by adding duration in minutes
+
+        while (endTime.getHours() <= toHour) {
+            slots.push({
+                start: `${startTime.getHours()}:${startTime.getMinutes() === 0 ? '00' : startTime.getMinutes()}`,
+                end: `${endTime.getHours()}:${endTime.getMinutes() === 0 ? '00' : endTime.getMinutes()}`
+            });
+            startTime = new Date(endTime.getTime());
+            endTime = new Date(startTime.getTime() + duration * 60000);
+        }
+
+        return slots;
+    };
+    const timeToMinutes = (time) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    };
+    const filterBookedSlots = (slots, appointments) => {
+        return slots.filter(slot => {
+            const slotStart = timeToMinutes(slot.start);
+            const slotEnd = timeToMinutes(slot.end);
+            return !appointments.some(appointment => {
+                const appointmentStart = timeToMinutes(appointment.startTime.split('T')[1].substring(0, 5));
+                const appointmentEnd = timeToMinutes(appointment.endTime.split('T')[1].substring(0, 5));
+                return (slotStart < appointmentEnd && slotEnd > appointmentStart);
+            });
+        });
+    };
+
+
+    const fetchAppointments = async (userId, selectedDate) => {
+        try {
+            if(selectedDate.length > 10 || selectedDate.length === undefined) {
+                selectedDate = selectedDate.format("YYYY-MM-DD")
+            }
+            console.log(userId, selectedDate)
+
+            const response = await axios.get(`/api/appointments/user/${userId}?date=${selectedDate}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching appointments:', error);
+            return [];
+        }
+    };
     const renderTimeSlot = ({ item }) => (
         <TouchableOpacity
-            onPress={() => setSelectedTime(item.time)}
-            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.time ? "bg-[#00adf5] border-[#00adf5]" : "bg-white dark:bg-gray-800 border-[#00adf5]"}`}
+            onPress={() => setSelectedTime(item.start)}
+            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.start ? "bg-[#00adf5] border-[#00adf5]" : "bg-white dark:bg-gray-800 border-[#00adf5]"}`}
         >
             <Text
-                className={`font-normal ${selectedTime === item.time ? "text-white" : "text-[#00adf5] dark:text-white"}`}>{item.time}</Text>
+                className={`font-normal ${selectedTime === item.start ? "text-white" : "text-[#00adf5] dark:text-white"}`}>{item.start}</Text>
         </TouchableOpacity>
     );
-
     const renderDateTimeSelection = () => (
         <>
             <View className="flex-row mx-5 mt-3 mb-2">
                 <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")} />
                 <View className="ml-5">
                     <Text
-                        className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>imie</Text>
+                        className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{userData?.firstname}</Text>
                     <Text
-                        className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>opis</Text>
+                        className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>Available meeting
+                        duration: {userData?.meetingDuration} min</Text>
                 </View>
             </View>
             <View
@@ -131,12 +211,11 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
                 data={workingHours}
                 numColumns={4}
                 renderItem={renderTimeSlot}
-                keyExtractor={(item) => item.time}
+                keyExtractor={(item) => item.start}
                 contentContainerStyle={{ alignItems: "center", paddingBottom: 32 }}
             />
         </>
     );
-
     const renderDetailsInput = () => (
         <View className="mx-5 mt-3">
             <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{t("screens.newAppointmentModal.text.selectedDate")}: {date}</Text>
@@ -175,7 +254,6 @@ const NewAppointmentModal = ({ openModal, setOpenModal, user, navigation }) => {
             setOpenModal(!openModal);
         }
     }
-
     return (
         <Modal
             onRequestClose={() => setOpenModal(!openModal)}

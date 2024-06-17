@@ -32,6 +32,7 @@ const MainTabs = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: t('screens.tabs.labels.home'),
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <FontAwesome name="home" size={size} color={color} />
                     ),
@@ -42,6 +43,7 @@ const MainTabs = () => {
                 component={CalendarStack}
                 options={{
                     tabBarLabel: t('screens.tabs.labels.calendar'),
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Fontisto name="date" size={size} color={color} />
                     ),
