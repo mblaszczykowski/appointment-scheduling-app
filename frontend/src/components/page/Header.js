@@ -54,7 +54,7 @@ export default function Header({isLoggedIn, onLogout}) {
                                 My Calendar
                             </Link>
                             <Link type="Link"
-                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-700 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
                                   to={"/dashboard"}>
                                 Dashboard
                             </Link>

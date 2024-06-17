@@ -154,12 +154,14 @@ const AppointmentCard = ({ appointment }) => {
                     <span className="block mb-1 text-xs font-semibold uppercase text-blue-600 dark:text-blue-500">
                         {dayjs(appointment.startTime).format('MMMM D, YYYY')}
                     </span>
-                    <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white">
+                    <h3 className="text-xl mt-3 font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white">
                         {appointment.bookerName}
                     </h3>
-                    <h5 className="mt-3 text-base font-medium text-gray-800 dark:text-neutral-300 dark:hover:text-white">
-                        Meeting note:
-                    </h5>
+                    {appointment.meetingNote !== null && (
+                        <h5 className="mt-3 text-base font-medium text-gray-800 dark:text-neutral-300 dark:hover:text-white">
+                            Meeting note:
+                        </h5>
+                        )}
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500 dark:text-neutral-500">
                             {appointment.meetingNote}

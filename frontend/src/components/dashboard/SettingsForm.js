@@ -11,12 +11,10 @@ import ProfilePicture from "./ProfilePicture";
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
-        .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
         .min(2, 'First name must be at least 2 symbols.')
         .max(20, 'Max length is 20.')
         .required('First name is required.'),
     lastname: Yup.string()
-        .matches(/^[a-zA-Z0-9]+$/, 'Only Latin characters and digits are allowed.')
         .min(2, 'Last name must be at least 2 symbols.')
         .max(20, 'Max length is 20.')
         .required('Last name is required.'),

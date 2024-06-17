@@ -10,15 +10,7 @@ import EyeButton from "../EyeButton";
 const contactSchema = Yup.object().shape({
     login: Yup.string()
         .email('Invalid email address format.')
-        .required('Email is required.'),
-    password: Yup.string()
-        .matches(
-            /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_`+=[\]{};':"\\|,.<>/?]*$/,
-            'At least one digit and one capital letter.',
-        )
-        .min(8, 'Password must be at least 8 symbols.')
-        .max(20, 'Max length is 20.')
-        .required('Password is required.'),
+        .required('Email is required.')
 });
 
 function displayNotification(message, type = "error", duration = 2500,
