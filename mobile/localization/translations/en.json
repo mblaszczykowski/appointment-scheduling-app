@@ -113,6 +113,24 @@
       "canceled": "Canceled",
       "noAppointments": "No appointments"
     },
+    "profile": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "calendarUrl": "Calendar URL",
+      "meetingLink": "Meeting Link",
+      "availableHours": "Available Hours",
+      "availableDays": "Available Days",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "meetingDuration": "Meeting Duration",
+      "submit": "Submit"
+    },
     "tabs": {
       "labels": {
         "home": "Home",
