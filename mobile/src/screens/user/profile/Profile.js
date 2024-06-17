@@ -108,6 +108,7 @@ const Profile = ({ toggleEditing, isEditing }) => {
                     <Image
                         className="w-[140px] h-[140px] rounded-full"
                         source={{ uri: profilePicture }}
+                        style={{ marginTop: 30, marginBottom: 30 }}
                     />
                 </View>
                 <View className="flex-grow justify-center items-center">
@@ -220,22 +221,23 @@ const Profile = ({ toggleEditing, isEditing }) => {
                             disabled={!isEditing}
                         />
                     </View>
-
-                    <View style={{ marginBottom: 60 }}>
-                        <TouchableOpacity
-                            onPress={updateProfile}
-                            style={{
-                                backgroundColor: 'white',
-                                paddingVertical: 10,
-                                paddingHorizontal: 20,
-                                borderRadius: 5
-                            }}
-                        >
-                            <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>
-                                Submit
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    {isEditing && (
+                        <View style={{ marginBottom: 60 }}>
+                            <TouchableOpacity
+                                onPress={updateProfile}
+                                style={{
+                                    backgroundColor: 'white',
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 20,
+                                    borderRadius: 5
+                                }}
+                            >
+                                <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>
+                                    Submit
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
             </ScrollView>
         </Animatable.View>
