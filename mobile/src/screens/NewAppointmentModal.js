@@ -18,11 +18,8 @@ import axios from "axios";
 import moment from "moment-timezone";
 import {useColorSchemeContext} from "../context/ColorSchemeContext";
 
-if (Platform.OS === "android") {
-    axios.defaults.baseURL = `${process.env.ANDROID_BASE_URL}`
-} else {
-    axios.defaults.baseURL = `${process.env.IOS_BASE_URL}`
-}
+axios.defaults.baseURL = `${process.env.BASE_URL}`
+
 
 const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     const {state} = useContext(AuthContext);
@@ -47,7 +44,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             if (profileState.profile === null) {
                 const calendarUrl = route.params.calendarUrl
                 setCalendarUrl(calendarUrl)
-                const response = await axios.get(`/api/calendar/${calendarUrl}`);
+                const response = await axios.get(`${process.env.BASE_URL}/api/calendar/${calendarUrl}`);
                 setUserData(response.data);
             } else {
                 setUserData(profileState.profile);

@@ -18,10 +18,10 @@ const Home = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const actualAppointments = appointmentList?.filter(appointment => appointment.isActual
-        && moment(appointment.startTime).isAfter(moment().tz(`${process.env.TIMEZONE}`))) || [];
+        && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
     const canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
     const pastAppointments = appointmentList?.filter(appointment =>
-        moment(appointment.startTime).isBefore(moment().tz(`${process.env.TIMEZONE}`))
+        moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))
     ) || [];
 
     const renderAppointments = () => {
