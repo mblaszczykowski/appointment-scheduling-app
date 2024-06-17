@@ -50,15 +50,6 @@ const Profile = ({ toggleEditing, isEditing }) => {
         setLocalAvailableDays(availableDays ? availableDays.split(',') : []);
     }, [profileState]);
 
-    // const daysOfWeek = [
-    //     'Monday',
-    //     'Tuesday',
-    //     'Wednesday',
-    //     'Thursday',
-    //     'Friday',
-    //     'Saturday',
-    //     'Sunday'];
-
     const daysOfWeek = {
         "Monday": t('screens.profile.monday'),
         "Tuesday": t('screens.profile.tuesday'),
