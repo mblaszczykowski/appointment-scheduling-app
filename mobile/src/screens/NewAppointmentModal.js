@@ -37,7 +37,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     const [meetingNote, setMeetingNote] = useState('');
     const [userData, setUserData] = useState(null);
     const [calendarUrl, setCalendarUrl] = useState('');
-    const [selectedDate, setSelectedDate] = useState(moment());
+    const [selectedDate, setSelectedDate] = useState(moment().tz("Europe/Warsaw").format("YYYY-MM-DD"));
 
     const fetchUserData = async () => {
         try {
@@ -70,7 +70,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             }
         };
         fetchData().then(r => console.log("fetchData: ", r));
-    }, [selectedDate]);
+    }, [selectedDate, userData]);
 
     const selectDay = (day) => {
         setSelectedDate(day.dateString)
