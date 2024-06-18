@@ -1,13 +1,13 @@
 import React from "react";
 import moment from "moment";
-import {Image, Text, TouchableOpacity, View} from "react-native";
-import {EvilIcons, MaterialIcons} from "@expo/vector-icons";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
-import {useColorSchemeContext} from "../../context/ColorSchemeContext";
-import {cancelMeeting, setUser} from "../../api/api-user";
-import {t} from "i18next";
+import { useColorSchemeContext } from "../../context/ColorSchemeContext";
+import { cancelMeeting, setUser } from "../../api/api-user";
+import { t } from "i18next";
 
-const UserAppointmentCard = ({appointment, token, navigation}) => {
+const UserAppointmentCard = ({ appointment, token, navigation, refreshAppointments }) => {
     const date = moment(appointment.startTime).format("ddd MMM Do YYYY");
     const startTime = moment(appointment.startTime).format("HH:mm");
     const endTime = moment(appointment.endTime).format("HH:mm");
@@ -15,7 +15,7 @@ const UserAppointmentCard = ({appointment, token, navigation}) => {
     const meetingNote = appointment.meetingNote;
     const meetingId = appointment.id;
 
-    const {colorScheme} = useColorSchemeContext();
+    const { colorScheme } = useColorSchemeContext();
     const isDarkMode = colorScheme === 'dark';
 
     return (
@@ -25,7 +25,7 @@ const UserAppointmentCard = ({appointment, token, navigation}) => {
                 <View>
                     <View className="flex-row p-4 md:p-6">
                         <View className="relative ml-4 flex-1">
-                            {!appointment.isActual  && (
+                            {!appointment.isActual && !moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw")) && (
                                 <Text className="absolute top-0 right-0 text-xs text-gray-500">
                                     {t(`screens.home.canceled`)}
                                 </Text>
@@ -37,6 +37,7 @@ const UserAppointmentCard = ({appointment, token, navigation}) => {
                                         try {
                                             await cancelMeeting(meetingId, token);
                                             alert('Meeting canceled');
+                                            refreshAppointments();  // Odświeżenie danych po anulowaniu spotkania
                                         } catch (error) {
                                             console.error("Failed to cancel meeting", error);
                                             alert('Failed to cancel meeting');
@@ -69,7 +70,6 @@ const UserAppointmentCard = ({appointment, token, navigation}) => {
                             </View>
                         </View>
                     </View>
-
                 </View>
             </Animatable.View>
         </View>

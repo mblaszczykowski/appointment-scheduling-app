@@ -43,26 +43,28 @@ const Home = ({ navigation }) => {
         }
     };
 
+    const refreshAppointments = async () => {
+        const token = state.auth;
+        try {
+            setAppointmentList(await fetchAppointments(profile.id, token));
+        } catch (error) {
+            console.log("error", error);
+        }
+    };
+
     useEffect(() => {
         actualAppointments = appointmentList?.filter(appointment => appointment.isActual
             && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
         canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
-        pastAppointments = appointmentList?.filter(appointment =>
+        pastAppointments = appointmentList?.filter(appointment => appointment.isActual &&
             moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))) || [];
     }, [appointmentList]);
 
     useFocusEffect(
         useCallback(() => {
-            const fetchData = async () => {
-                const token = state.auth;
-                try {
-                    setAppointmentList(await fetchAppointments(profile.id, token));
-                } catch (error) {
-                    console.log("error", error);
-                }
-            };
-
-            fetchData();
+            refreshAppointments();
+            const unsubscribe = navigation.addListener('focus', refreshAppointments);
+            return unsubscribe;
         }, [filter, searchQuery])
     );
 
@@ -162,6 +164,7 @@ const Home = ({ navigation }) => {
                         appointment={appointment}
                         token={state.auth}
                         navigation={navigation}
+                        refreshAppointments={refreshAppointments}
                     />
                 ))}
             </View>
