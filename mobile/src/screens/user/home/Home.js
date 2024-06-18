@@ -67,27 +67,24 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
                 <View className="flex-row justify-center items-center p-5">
-                    <TouchableOpacity
-                        onPress={() => setFilter("Upcoming")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Upcoming" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
-                    >
-                        <Text>{t('screens.home.upcoming')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setFilter("Past")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Past" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
-                    >
-                        <Text>{t('screens.home.past')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setFilter("Canceled")}
-                        className={`px-3 py-1 mx-1 rounded-full ${filter === "Canceled" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"}`}
-                    >
-                        <Text>{t('screens.home.canceled')}</Text>
-                    </TouchableOpacity>
+                    {["Upcoming", "Past", "Canceled"].map((type) => (
+                        <TouchableOpacity
+                            key={type}
+                            onPress={() => setFilter(type)}
+                            className={`px-4 py-2 mx-2 rounded-full ${
+                                filter === type
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
+                            }`}
+                        >
+                            <Text className={filter === type ? "text-white" : "text-gray-700 dark:text-gray-300"}>
+                                {t(`screens.home.${type.toLowerCase()}`)}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
                 </View>
 
-                <View className="p-5">
+                <View className="px-2.5">
                     {renderAppointments().length > 0 ? (
                         renderAppointments().map((appointment, index) => (
                             <UserAppointmentCard

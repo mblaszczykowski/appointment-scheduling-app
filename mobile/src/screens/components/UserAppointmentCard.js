@@ -21,10 +21,6 @@ const UserAppointmentCard = ({appointment, navigation}) => {
                              className="bg-white border border-gray-200 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
                 <TouchableOpacity>
                     <View className="flex-row p-4 md:p-6">
-                        <Image
-                            className="h-20 w-20 bg-gray-500 rounded-lg"
-                            source={require("../assets/user.jpg")}
-                        />
                         <View className="ml-4 flex-1">
                             <Text className="text-xl font-semibold text-gray-800 dark:text-neutral-300">
                                 {bookerName}
@@ -43,9 +39,6 @@ const UserAppointmentCard = ({appointment, navigation}) => {
                                 <Text className="text-sm font-extrabold ml-1 text-gray-800 dark:text-neutral-300">
                                     {meetingNote}
                                 </Text>
-                            </View>
-                            <View className="absolute bottom-0 right-0 p-2">
-                                <MaterialIcons name="read-more" size={24} color={isDarkMode ? "#888" : "#1c313a"}/>
                             </View>
                         </View>
                     </View>
