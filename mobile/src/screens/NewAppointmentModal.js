@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import axios from "axios";
 import moment from "moment-timezone";
 import {useColorSchemeContext} from "../context/ColorSchemeContext";
+import {Avatar} from "react-native-paper";
 
 axios.defaults.baseURL = `${process.env.BASE_URL}`
 
@@ -160,13 +161,17 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     );
     const renderDateTimeSelection = () => (
         <>
-            <View className="flex-row mx-5 mt-3 mb-2">
-                <Image className="w-16 h-16 rounded-lg" source={require("./assets/user.jpg")} />
-                <View className="ml-5">
+            <View className="flex-row mx-5 mt-4 mb-4">
+                <Avatar.Image
+                    source={{ uri: userData?.profilePicture }}
+                    size={65}
+                    className=""
+                />
+                <View className="ml-5 mt-1">
                     <Text
-                        className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{userData?.firstname}</Text>
+                        className={`text-lg font-semibold ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{userData?.firstname} {userData?.lastname}</Text>
                     <Text
-                        className={`text-base ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>Available meeting
+                        className={`text-sm ${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>Available meetings
                         duration: {userData?.meetingDuration} min</Text>
                 </View>
             </View>
@@ -183,8 +188,8 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
                         },
                     }}
                     theme={{
-                        backgroundColor: colorScheme === 'dark' ? '#333333' : '#ffffff',
-                        calendarBackground: colorScheme === 'dark' ? '#333333' : '#ffffff',
+                        backgroundColor: colorScheme === 'dark' ? '#111727' : '#ffffff',
+                        calendarBackground: colorScheme === 'dark' ? '#111727' : '#ffffff',
                         textSectionTitleColor: colorScheme === 'dark' ? '#b6c1cd' : '#b6c1cd',
                         selectedDayBackgroundColor: '#00adf5',
                         selectedDayTextColor: '#ffffff',
@@ -261,7 +266,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             transparent
             visible={openModal}
         >
-            <View className={`flex-1 bg-${colorScheme === 'dark' ? 'gray-900' : 'white'} mt-16 rounded-t-2xl`}>
+            <View className={`flex-1 bg-${colorScheme === 'dark' ? 'gray-900' : 'white'} mt-14 rounded-t-2xl`}>
                 <View className="flex-row justify-between mt-5 px-5 rounded-t-2xl">
                     <TouchableOpacity onPress={() => handleCancel()}>
                         <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">{t("screens.newAppointmentModal.text.cancel")}</Text>

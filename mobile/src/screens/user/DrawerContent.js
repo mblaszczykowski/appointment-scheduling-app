@@ -32,16 +32,16 @@ export function DrawerContent({ navigation }) {
             <View className="pl-5 mt-8">
                 <View className="flex-row mt-8">
                     <Avatar.Image
-                        source={require("../assets/user.jpg")}
+                        source={{ uri: profile?.profilePicture }}
                         size={50}
                         className="mt-1"
                     />
                     <View className="ml-4 flex-column">
                         <Title className="text-xl mt-1 font-semibold text-black dark:text-white">
-                            {profile?.firstname} {profile?.lastname}
+                            {profile?.firstname}
                         </Title>
                         <Caption className="text-base leading-4 text-black dark:text-white">
-                            {profile?.email}
+                            {profile?.lastname}
                         </Caption>
                     </View>
                 </View>
