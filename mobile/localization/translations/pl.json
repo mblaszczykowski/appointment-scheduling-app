@@ -112,7 +112,12 @@
       "past": "Przeszłe",
       "canceled": "Anulowane",
       "cancel": "Anuluj",
-      "noAppointments": "Brak spotkań"
+      "noAppointments": "Brak spotkań",
+      "today": "Dzisiaj",
+      "thisWeek": "W tym tygodniu",
+      "thisMonth": "W tym miesiącu",
+      "nextMonth": "W przyszłym miesiącu",
+      "later": "Później"
     },
     "profile": {
       "firstName": "Imię",
