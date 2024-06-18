@@ -54,9 +54,15 @@ const setUser = async (uuid, userData, credentials) => {
     return await apiPutRequest(url, userData, credentials.token);
 };
 
+const cancelMeeting = async (id, credentials) => {
+    const url = `/api/appointments/cancel/${id}`;
+    console.log(credentials);
+    return await apiPutRequest(url, {}, credentials);
+};
+
 const getAppointments = async (params, credentials) => {
     const url = `/api/appointments/user/${params.accountId}`;
     return await apiGetRequest(url, credentials.token);
 };
 
-export { getUser, setUser, getAppointments };
+export { getUser, setUser, getAppointments, cancelMeeting };

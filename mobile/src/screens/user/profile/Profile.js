@@ -245,7 +245,7 @@ const Profile = ({ toggleEditing, isEditing }) => {
                             maximumTrackTintColor="#000000"
                             value={localMeetingDuration}
                             onValueChange={setLocalMeetingDuration}
-                            disabled={!isEditing}
+                            disabled={true}
                         />
                     </View>
 

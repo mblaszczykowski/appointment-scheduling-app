@@ -5,11 +5,14 @@ import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import { useTranslation } from "react-i18next";
+import {Buffer} from "buffer";
+import AuthContext from "../../../context/AuthContext";
 
 const Home = ({ navigation }) => {
     const {
         profileState: { profile, appointments },
     } = useContext(ProfileContext);
+    const { state } = useContext(AuthContext);
 
     const { appointments: appointmentList } = appointments || {};
     const { t } = useTranslation();
@@ -20,9 +23,10 @@ const Home = ({ navigation }) => {
     const actualAppointments = appointmentList?.filter(appointment => appointment.isActual
         && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
     const canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
-    const pastAppointments = appointmentList?.filter(appointment =>
-        moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))
+    const pastAppointments = appointmentList?.filter(appointment => appointment.isActual
+        && moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))
     ) || [];
+
 
     const renderAppointments = () => {
         let filteredAppointments;
@@ -90,6 +94,7 @@ const Home = ({ navigation }) => {
                             <UserAppointmentCard
                                 key={index}
                                 appointment={appointment}
+                                token = {state.auth}
                                 navigation={navigation}
                             />
                         ))
