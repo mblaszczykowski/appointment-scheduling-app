@@ -10,7 +10,6 @@ import WelcomeStack from "./src/screens/guest/WelcomeStack";
 import UserScreen from "./src/screens/user/UserScreen";
 import { NativeWindStyleSheet } from "nativewind";
 import { ColorSchemeProvider, useColorSchemeContext } from "./src/context/ColorSchemeContext";
-import { useTranslation } from 'react-i18next';
 import './localization/i18n';
 
 NativeWindStyleSheet.setOutput({
