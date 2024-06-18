@@ -25,7 +25,6 @@ export default function Dashboard() {
         }
         request('GET', `/api/appointments/user/${getUserIdFromToken()}`, {})
             .then((response) => {
-                console.log(response.data)
                 setAppointments(response.data.appointments);
                 setUsername(response.data.username);
             })

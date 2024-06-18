@@ -1,15 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    Modal,
-    Platform,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
-} from "react-native";
+import {ActivityIndicator, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Calendar} from "react-native-calendars";
 import AuthContext from "../context/AuthContext";
 import ProfileContext from "../context/ProfileContext";
@@ -19,9 +9,9 @@ import moment from "moment-timezone";
 import {useColorSchemeContext} from "../context/ColorSchemeContext";
 
 axios.defaults.baseURL = `${process.env.BASE_URL}`
+moment.tz.setDefault("Europe/Warsaw");
 
-
-const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
+const NewAppointmentModal = ({navigation, openModal, setOpenModal, route}) => {
     const {state} = useContext(AuthContext);
     const {profileState, profileDispatch} = useContext(ProfileContext);
     const {colorScheme} = useColorSchemeContext();
@@ -59,6 +49,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     };
 
     useEffect(() => {
+        setCurrentScreen('dateTime');
         const fetchData = async () => {
             await fetchUserData()
             if(userData?.id !== undefined)
@@ -70,7 +61,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             }
         };
         fetchData().then(r => console.log("fetchData: ", r));
-    }, [selectedDate, userData]);
+    }, [selectedDate, openModal]);
 
     const selectDay = (day) => {
         setSelectedDate(day.dateString)
@@ -83,7 +74,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
         setLoading(true);
         const appointment = {
             calendarUrl: userData.calendarUrl,
-            startTime: date + 'T' + selectedTime + ':00',
+            startTime: date + 'T' + moment(selectedTime, 'HH:mm').format('HH:mm:ss'),
             endTime: date + 'T' + moment(selectedTime, 'HH:mm').add(userData.meetingDuration, 'minutes').format('HH:mm:ss'),
             bookerName: name,
             bookerEmail: email,
@@ -123,10 +114,13 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
         return hours * 60 + minutes;
     };
     const filterBookedSlots = (slots, appointments) => {
+        const now = moment().add(2,'hours')
+        const today = now.day()
         return slots.filter(slot => {
             const slotStart = timeToMinutes(slot.start);
             const slotEnd = timeToMinutes(slot.end);
             return !appointments.some(appointment => {
+                if(moment(appointment.startTime).isBefore(now) && moment(appointment.endTime).day() === today) return true
                 const appointmentStart = timeToMinutes(appointment.startTime.split('T')[1].substring(0, 5));
                 const appointmentEnd = timeToMinutes(appointment.endTime.split('T')[1].substring(0, 5));
                 return (slotStart < appointmentEnd && slotEnd > appointmentStart);
@@ -140,7 +134,6 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             if(selectedDate.length > 10 || selectedDate.length === undefined) {
                 selectedDate = selectedDate.format("YYYY-MM-DD")
             }
-            console.log(userId, selectedDate)
 
             const response = await axios.get(`/api/appointments/user/${userId}?date=${selectedDate}`);
             return response.data;
@@ -176,7 +169,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
                     minDate={today}
                     onDayPress={selectDay}
                     markedDates={{
-                        [date]: {
+                        [selectedDate]: {
                             selected: true,
                             color: "#00B0BF",
                             textColor: "#fff",
@@ -249,6 +242,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
 
     const handleCancel = () => {
         if (profileState.profile === null) {
+            setCurrentScreen('dateTime');
             navigation.navigate("Login");
         } else {
             setOpenModal(!openModal);
