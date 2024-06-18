@@ -1,23 +1,24 @@
-import React, {useContext, useCallback, useEffect, useState} from "react";
-import {ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, { useContext, useCallback, useEffect, useState } from "react";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment-timezone";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import AuthContext from "../../../context/AuthContext";
-import {useFocusEffect} from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 
 moment.tz.setDefault("Europe/Warsaw");
-const Home = ({navigation}) => {
+
+const Home = ({ navigation }) => {
     const {
-        profileState: {profile, appointments},
+        profileState: { profile, appointments },
     } = useContext(ProfileContext);
-    const {state} = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
 
     const [appointmentList, setAppointmentList] = useState(appointments);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [filter, setFilter] = useState("Upcoming");
     const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +42,7 @@ const Home = ({navigation}) => {
             return [];
         }
     };
+
     useEffect(() => {
         actualAppointments = appointmentList?.filter(appointment => appointment.isActual
             && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
@@ -56,23 +58,21 @@ const Home = ({navigation}) => {
                 try {
                     setAppointmentList(await fetchAppointments(profile.id, token));
                 } catch (error) {
-                    console.log("error", error)
+                    console.log("error", error);
                 }
-            }
+            };
 
             fetchData();
-
         }, [filter, searchQuery])
     );
 
-
-    const categorizeAndSortAppointments = (appointments) => {
+    const categorizeAndSortAppointments = (appointments, isPast) => {
         const categories = {
             today: [],
             thisWeek: [],
             thisMonth: [],
-            nextMonth: [],
-            later: []
+            prevMonth: [],
+            earlier: []
         };
 
         const now = moment().tz("Europe/Warsaw");
@@ -80,16 +80,30 @@ const Home = ({navigation}) => {
         appointments.forEach(appointment => {
             const startTime = moment(appointment.startTime).tz("Europe/Warsaw");
 
-            if (startTime.isSame(now, 'day')) {
-                categories.today.push(appointment);
-            } else if (startTime.isSame(now, 'week')) {
-                categories.thisWeek.push(appointment);
-            } else if (startTime.isSame(now, 'month')) {
-                categories.thisMonth.push(appointment);
-            } else if (startTime.isSame(now.clone().add(1, 'month'), 'month')) {
-                categories.nextMonth.push(appointment);
+            if (isPast) {
+                if (startTime.isSame(now, 'day')) {
+                    categories.today.push(appointment);
+                } else if (startTime.isSame(now, 'week')) {
+                    categories.thisWeek.push(appointment);
+                } else if (startTime.isSame(now, 'month')) {
+                    categories.thisMonth.push(appointment);
+                } else if (startTime.isSame(now.clone().subtract(1, 'month'), 'month')) {
+                    categories.prevMonth.push(appointment);
+                } else {
+                    categories.earlier.push(appointment);
+                }
             } else {
-                categories.later.push(appointment);
+                if (startTime.isSame(now, 'day')) {
+                    categories.today.push(appointment);
+                } else if (startTime.isSame(now, 'week')) {
+                    categories.thisWeek.push(appointment);
+                } else if (startTime.isSame(now, 'month')) {
+                    categories.thisMonth.push(appointment);
+                } else if (startTime.isSame(now.clone().add(1, 'month'), 'month')) {
+                    categories.prevMonth.push(appointment);
+                } else {
+                    categories.earlier.push(appointment);
+                }
             }
         });
 
@@ -120,15 +134,16 @@ const Home = ({navigation}) => {
         const filteredAndSortedAppointments = filteredAppointments.filter(appointment =>
             appointment.bookerName.toLowerCase().includes(searchQuery.toLowerCase())
         );
-        const categorizedAppointments = categorizeAndSortAppointments(filteredAndSortedAppointments);
+        const isPast = filter === "Past";
+        const categorizedAppointments = categorizeAndSortAppointments(filteredAndSortedAppointments, isPast);
 
         return (
             <>
                 {renderCategory(categorizedAppointments.today, t('screens.home.today'))}
-                {renderCategory(categorizedAppointments.thisWeek, t('screens.home.thisWeek'))}
-                {renderCategory(categorizedAppointments.thisMonth, t('screens.home.thisMonth'))}
-                {renderCategory(categorizedAppointments.nextMonth, t('screens.home.nextMonth'))}
-                {renderCategory(categorizedAppointments.later, t('screens.home.later'))}
+                {renderCategory(categorizedAppointments.thisWeek, isPast ? t('screens.home.lastWeek') : t('screens.home.thisWeek'))}
+                {renderCategory(categorizedAppointments.thisMonth, isPast ? t('screens.home.lastMonth') : t('screens.home.thisMonth'))}
+                {renderCategory(categorizedAppointments.prevMonth, isPast ? t('screens.home.prevMonth') : t('screens.home.nextMonth'))}
+                {renderCategory(categorizedAppointments.earlier, isPast ? t('screens.home.earlier') : t('screens.home.later'))}
             </>
         );
     };
@@ -163,7 +178,7 @@ const Home = ({navigation}) => {
                 </View>
                 <View className="px-5 mb-3">
                     <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
-                        <EvilIcons name="search" size={30} color="#1c313a"/>
+                        <EvilIcons name="search" size={30} color="#1c313a" />
                         <TextInput
                             placeholder={t('screens.home.searchPlaceholder')}
                             placeholderTextColor="gray"

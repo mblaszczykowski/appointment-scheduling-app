@@ -117,7 +117,11 @@
       "thisWeek": "This week",
       "thisMonth": "This month",
       "nextMonth": "Next month",
-      "later": "Later"
+      "later": "Later",
+      "earlier": "Earlier",
+      "lastWeek": "Last week",
+      "lastMonth": "Last month",
+      "prevMonth": "Previous month"
     },
     "profile": {
       "firstName": "First Name",

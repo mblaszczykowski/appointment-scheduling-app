@@ -117,7 +117,11 @@
       "thisWeek": "W tym tygodniu",
       "thisMonth": "W tym miesiącu",
       "nextMonth": "W przyszłym miesiącu",
-      "later": "Później"
+      "later": "Później",
+      "earlier": "Wcześniej",
+      "lastWeek": "W zeszłym tygodniu",
+      "lastMonth": "W zeszłym miesiącu",
+      "prevMonth": "Poprzedni miesiąc"
     },
     "profile": {
       "firstName": "Imię",
