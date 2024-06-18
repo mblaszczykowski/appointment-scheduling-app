@@ -28,8 +28,8 @@ const Calendar = () => {
     return (
         <View className="flex-1 bg-[#3476EF]">
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
-                        className="bg-white dark:bg-gray-800 rounded-t-[25px] pt-5">
-                <Text className="text-xl text-gray-600 dark:text-white my-2 text-center px-5">
+                        className="bg-white dark:bg-gray-800 rounded-t-[25px]">
+                <Text className="text-xl font-semibold text-gray-600 dark:text-white my-2 text-center px-5">
                     {t('screens.calendar.text.qrCodeToYourCalendar')}
                 </Text>
                 <View className="my-5">
