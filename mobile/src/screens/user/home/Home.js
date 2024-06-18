@@ -58,7 +58,7 @@ const Home = ({ navigation }) => {
                         {t('screens.home.hi')}, {`${profile?.firstname}`}
                     </Text>
                 </View>
-                <View className="p-5">
+                <View className="px-5 mb-5">
                     <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
                         <EvilIcons name="search" size={30} color="#1c313a" />
                         <TextInput
@@ -70,7 +70,7 @@ const Home = ({ navigation }) => {
                         />
                     </View>
                 </View>
-                <View className="flex-row justify-center items-center p-5">
+                <View className="flex-row justify-center items-center p-1">
                     {["Upcoming", "Past", "Canceled"].map((type) => (
                         <TouchableOpacity
                             key={type}
@@ -81,7 +81,7 @@ const Home = ({ navigation }) => {
                                     : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
                             }`}
                         >
-                            <Text className={filter === type ? "text-white" : "text-gray-700 dark:text-gray-300"}>
+                            <Text className={filter === type ? "text-white dark:text-black" : "text-gray-700 dark:text-gray-300"}>
                                 {t(`screens.home.${type.toLowerCase()}`)}
                             </Text>
                         </TouchableOpacity>
@@ -99,7 +99,7 @@ const Home = ({ navigation }) => {
                             />
                         ))
                     ) : (
-                        <Text className="text-gray-500 dark:text-gray-300">
+                        <Text className="text-gray-500 dark:text-gray-300 text-lg mt-12 text-center">
                             {t('screens.home.noAppointments')}
                         </Text>
                     )}

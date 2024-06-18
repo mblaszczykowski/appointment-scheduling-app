@@ -89,7 +89,7 @@ const UserHome = () => {
             drawerContent={(props) => <DrawerContent {...props} />}
         >
             <Drawer.Screen
-                name="Home"
+                name=" "
                 component={MainTabs}
                 options={({ navigation }) => ({
                     headerRight: () => <NotificationsIcon />,
