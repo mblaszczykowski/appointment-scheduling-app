@@ -164,7 +164,9 @@
         },
         "details": {
           "header": "Enter Details"
-        }
+        },
+        "provideNameEmail": "Please provide name and email",
+        "invalidEmail": "Invalid email format"
       }
     }
   }

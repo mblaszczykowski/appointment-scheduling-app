@@ -78,9 +78,21 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
         setDate(day.dateString)
     };
 
-
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
 
     const handleCreateAppointment = async () => {
+        if (!name.trim() || !email.trim()) {
+            alert(t('screens.newAppointmentModal.text.provideNameEmail'));
+            return;
+        }
+        if (!validateEmail(email)) {
+            alert(t('screens.newAppointmentModal.text.invalidEmail'));
+            return;
+        }
+
         setLoading(true);
         const appointment = {
             calendarUrl: userData.calendarUrl,
@@ -91,11 +103,10 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             meetingNote: meetingNote,
             isActual: true
         };
-        try{
+        try {
             await axios.post('/api/appointments', appointment);
             handleCancel();
-        }
-        catch (error) {
+        } catch (error) {
             console.error("handleCreateAppointment error: ", error);
         }
         setLoading(false);
@@ -135,7 +146,6 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
         });
     };
 
-
     const fetchAppointments = async (userId, selectedDate) => {
         try {
             if(selectedDate.length > 10 || selectedDate.length === undefined) {
@@ -153,12 +163,13 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
     const renderTimeSlot = ({ item }) => (
         <TouchableOpacity
             onPress={() => setSelectedTime(item.start)}
-            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.start ? "bg-[#00adf5] border-[#00adf5]" : "bg-white dark:bg-gray-800 border-[#00adf5]"}`}
+            className={`m-1 w-20 p-2.5 rounded-lg items-center border ${selectedTime === item.start ? "bg-[#3476EF] border-[#3476EF]" : "bg-white dark:bg-gray-800 border-[#3476EF]"}`}
         >
             <Text
                 className={`font-normal ${selectedTime === item.start ? "text-white" : "text-[#00adf5] dark:text-white"}`}>{item.start}</Text>
         </TouchableOpacity>
     );
+
     const renderDateTimeSelection = () => (
         <>
             <View className="flex-row mx-5 mt-4 mb-4">
@@ -183,7 +194,7 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
                     markedDates={{
                         [date]: {
                             selected: true,
-                            color: "#00B0BF",
+                            color: "#3476EF",
                             textColor: "#fff",
                         },
                     }}
@@ -191,16 +202,16 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
                         backgroundColor: colorScheme === 'dark' ? '#111727' : '#ffffff',
                         calendarBackground: colorScheme === 'dark' ? '#111727' : '#ffffff',
                         textSectionTitleColor: colorScheme === 'dark' ? '#b6c1cd' : '#b6c1cd',
-                        selectedDayBackgroundColor: '#00adf5',
+                        selectedDayBackgroundColor: '#3476EF',
                         selectedDayTextColor: '#ffffff',
-                        todayTextColor: '#00adf5',
+                        todayTextColor: '#3476EF',
                         dayTextColor: colorScheme === 'dark' ? '#d9e1e8' : '#2d4150',
                         textDisabledColor: colorScheme === 'dark' ? '#d9e1e8' : '#d9e1e8',
-                        dotColor: '#00adf5',
+                        dotColor: '#3476EF',
                         selectedDotColor: '#ffffff',
-                        arrowColor: colorScheme === 'dark' ? 'white' : 'orange',
-                        monthTextColor: colorScheme === 'dark' ? 'white' : 'blue',
-                        indicatorColor: colorScheme === 'dark' ? 'white' : 'blue',
+                        arrowColor: "#3476EF",
+                        monthTextColor: "#3476EF",
+                        indicatorColor: '#3476EF',
                         textDayFontWeight: '300',
                         textMonthFontWeight: 'bold',
                         textDayHeaderFontWeight: '300',
@@ -221,33 +232,40 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             />
         </>
     );
+
+    const isDarkMode = colorScheme === 'dark';
     const renderDetailsInput = () => (
         <View className="mx-5 mt-3">
-            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{t("screens.newAppointmentModal.text.selectedDate")}: {date}</Text>
-            <Text className={`text-md font-medium mb-2 ${colorScheme === 'dark' ? 'text-white' : 'text-black'}`}>{t("screens.newAppointmentModal.text.selectedTime")}: {selectedTime}</Text>
+            <Text className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                {t("screens.newAppointmentModal.text.selectedTime")}: {selectedTime}
+            </Text>
+            <Text className={`text-md font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                {t("screens.newAppointmentModal.text.selectedDate")}: {date}
+            </Text>
+
             <TextInput
-                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] my-3 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
                 placeholder={t("screens.newAppointmentModal.text.namePlaceholder")}
-                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                 value={name}
                 onChangeText={setName}
             />
             <TextInput
-                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] mt-1 mb-4 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
                 placeholder={t("screens.newAppointmentModal.text.emailPlaceholder")}
-                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                className={`border ${colorScheme === 'dark' ? 'border-gray-700' : 'border-gray-300'} rounded-lg p-2 mb-3 text-${colorScheme === 'dark' ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] mb-3 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
                 placeholder={t("screens.newAppointmentModal.text.meetingNotePlaceholder")}
-                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'gray'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
                 value={meetingNote}
                 onChangeText={setMeetingNote}
             />
             <TouchableOpacity onPress={() => setCurrentScreen('dateTime')}>
-                <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">{t("screens.newAppointmentModal.text.back")}</Text>
+                <Text className="text-[#3476EF] mt-2 ml-1 text-lg font-medium">{t("screens.newAppointmentModal.text.back")}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -269,18 +287,18 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             <View className={`flex-1 bg-${colorScheme === 'dark' ? 'gray-900' : 'white'} mt-14 rounded-t-2xl`}>
                 <View className="flex-row justify-between mt-5 px-5 rounded-t-2xl">
                     <TouchableOpacity onPress={() => handleCancel()}>
-                        <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">{t("screens.newAppointmentModal.text.cancel")}</Text>
+                        <Text className="text-[#3476EF] text-lg font-medium">{t("screens.newAppointmentModal.text.cancel")}</Text>
                     </TouchableOpacity>
                     {currentScreen === 'dateTime' ? (
                         <TouchableOpacity onPress={() => setCurrentScreen('details')} disabled={!selectedTime || !date}>
-                            <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">{t("screens.newAppointmentModal.text.next")}</Text>
+                            <Text className="text-[#3476EF] text-lg font-medium">{t("screens.newAppointmentModal.text.next")}</Text>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity onPress={handleCreateAppointment} disabled={!name || !email || !meetingNote}>
+                        <TouchableOpacity onPress={handleCreateAppointment}>
                             {loading ? (
                                 <ActivityIndicator className="mx-3" size="small" color="#01478F" />
                             ) : (
-                                <Text className="text-[#01478F] dark:text-[#4EA1D3] text-lg font-medium">{t("screens.newAppointmentModal.text.confirm")}</Text>
+                                <Text className="text-[#3476EF] text-lg font-medium">{t("screens.newAppointmentModal.text.confirm")}</Text>
                             )}
                         </TouchableOpacity>
                     )}

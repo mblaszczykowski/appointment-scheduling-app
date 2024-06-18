@@ -164,7 +164,9 @@
         },
         "details": {
           "header": "Wprowadź szczegóły"
-        }
+        },
+        "provideNameEmail": "Proszę podać imię i e-mail",
+        "invalidEmail": "Nieprawidłowy adres e-maila"
       }
     }
   }
