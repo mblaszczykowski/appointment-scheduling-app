@@ -112,7 +112,12 @@
       "past": "Past",
       "canceled": "Canceled",
       "cancel": "Cancel",
-      "noAppointments": "No appointments"
+      "noAppointments": "No appointments",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "nextMonth": "Next month",
+      "later": "Later"
     },
     "profile": {
       "firstName": "First Name",
