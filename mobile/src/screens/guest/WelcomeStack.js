@@ -6,6 +6,7 @@ import Onboarding from "./Onboarding";
 import QrScaner from "../components/QrScaner";
 import NewAppointmentModal from "../NewAppointmentModal";
 import PasswordReset from "./PasswordReset";
+import Home from "../user/home/Home";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const WelcomeStack = () => {
             <Stack.Screen name="QrScaner" component={QrScaner}/>
             <Stack.Screen name="PasswordReset" component={PasswordReset}/>
             <Stack.Screen name="NewAppointmentModal" component={NewAppointmentModal}/>
+            <Stack.Screen name="Home" component={Home}/>
         </Stack.Navigator>
     );
 };

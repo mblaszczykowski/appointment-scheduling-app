@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import AuthContext from "../../../context/AuthContext";
-import { useTheme } from "@react-navigation/native";
+import {useNavigation, useTheme} from "@react-navigation/native";
 import NewAppointmentModal from "../../NewAppointmentModal";
 import QRCode from "react-native-qrcode-svg";
 import { useTranslation } from 'react-i18next';
 
 const Calendar = () => {
     const [calendarUrl, setCalendarUrl] = useState(" ");
-
+    const navigation = useNavigation();
     const {colors} = useTheme();
     const {
         profileState: { profile, appointments },
@@ -49,7 +49,7 @@ const Calendar = () => {
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
-            <NewAppointmentModal openModal={openModal} setOpenModal={setOpenModal} user={profile} />
+            <NewAppointmentModal navigation={navigation} openModal={openModal} setOpenModal={setOpenModal} user={profile} />
         </View>
     );
 };
