@@ -1,32 +1,30 @@
-import React, { useContext, useCallback, useEffect, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ProfileContext from "../../../context/ProfileContext";
 import UserAppointmentCard from "../../components/UserAppointmentCard";
 import moment from "moment-timezone";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import AuthContext from "../../../context/AuthContext";
-import { useFocusEffect } from "@react-navigation/native";
+import {useFocusEffect} from "@react-navigation/native";
 import axios from "axios";
 
 moment.tz.setDefault("Europe/Warsaw");
-
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
     const {
-        profileState: { profile, appointments },
+        profileState: {profile, appointments},
     } = useContext(ProfileContext);
-    const { state } = useContext(AuthContext);
+    const {state} = useContext(AuthContext);
 
     const [appointmentList, setAppointmentList] = useState(appointments);
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const [filter, setFilter] = useState("Upcoming");
     const [searchQuery, setSearchQuery] = useState("");
-
-    let actualAppointments = appointmentList?.filter(appointment => appointment.isActual
+    let actualAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment => appointment.isActual
         && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
-    let canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
-    let pastAppointments = appointmentList?.filter(appointment =>
+    let canceledAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment => !appointment.isActual) || [];
+    let pastAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment =>
         moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))) || [];
 
     const fetchAppointments = async (userId, token) => {
@@ -53,18 +51,17 @@ const Home = ({ navigation }) => {
     };
 
     useEffect(() => {
-        actualAppointments = appointmentList?.filter(appointment => appointment.isActual
+        actualAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment => appointment.isActual
             && moment(appointment.startTime).isAfter(moment().tz("Europe/Warsaw"))) || [];
-        canceledAppointments = appointmentList?.filter(appointment => !appointment.isActual) || [];
-        pastAppointments = appointmentList?.filter(appointment => appointment.isActual &&
+        canceledAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment => !appointment.isActual) || [];
+        pastAppointments = (Array.isArray(appointmentList) ? appointmentList : [])?.filter(appointment => appointment.isActual &&
             moment(appointment.startTime).isBefore(moment().tz("Europe/Warsaw"))) || [];
     }, [appointmentList]);
 
     useFocusEffect(
         useCallback(() => {
             refreshAppointments();
-            const unsubscribe = navigation.addListener('focus', refreshAppointments);
-            return unsubscribe;
+            return navigation.addListener('focus', refreshAppointments);
         }, [filter, searchQuery])
     );
 
@@ -181,7 +178,7 @@ const Home = ({ navigation }) => {
                 </View>
                 <View className="px-5 mb-3">
                     <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
-                        <EvilIcons name="search" size={30} color="#1c313a" />
+                        <EvilIcons name="search" size={30} color="#1c313a"/>
                         <TextInput
                             placeholder={t('screens.home.searchPlaceholder')}
                             placeholderTextColor="gray"
