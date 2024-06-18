@@ -23,13 +23,7 @@ const apiGetRequest = async (calendarUrl, token) => {
 };
 
 const apiPutRequest = async (url, data, token) => {
-    let baseUrl;
-    if (Platform.OS === "android") {
-        baseUrl = `${process.env.ANDROID_BASE_URL}`;
-    } else {
-        baseUrl = `${process.env.IOS_BASE_URL}`;
-    }
-    url = baseUrl + url;
+    url = `${process.env.BASE_URL}` + url;
 
     try {
         const formData = new FormData();
