@@ -8,7 +8,6 @@ import ProfileContext from "../../context/ProfileContext";
 import { AUTH_ACTIONS } from "../../context/reducers/authReducer";
 import { logout } from "../../api/api-auth";
 import { useColorSchemeContext } from "../../context/ColorSchemeContext";
-import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { useTranslation } from 'react-i18next';
 
 export function DrawerContent({ navigation }) {
@@ -65,15 +64,10 @@ export function DrawerContent({ navigation }) {
                             )}
                             label={t('screens.drawer.settings')}
                             labelStyle={{ color: colorScheme === "dark" ? "#FFFFFF" : "#000000" }}
+                            onPress={() => navigation.navigate("Settings")}
                         />
                     </View>
-                    <View className="flex-1 flex justify-center mt-6">
-                        <View className="flex-row justify-center items-center space-x-2">
-                            <Text className="text-md font-medium text-black dark:text-white">{t('screens.drawer.darkMode')}</Text>
-                            <Switch value={colorScheme === 'dark'} onValueChange={toggleColorSchemeMethod} />
-                        </View>
-                    </View>
-                    <LanguageSwitcher />
+
                 </View>
             </DrawerContentScrollView>
             <View className="mb-4">

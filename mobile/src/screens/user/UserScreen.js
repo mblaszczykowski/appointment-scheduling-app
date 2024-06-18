@@ -13,6 +13,7 @@ import { useColorSchemeContext } from "../../context/ColorSchemeContext";
 import NotificationsIcon from "../components/NotificationsIcon";
 import { FontAwesome } from "@expo/vector-icons";
 import MenuIcon from "../components/MenuIcon";
+import SettingsStack from "./settings/SettingsStack";
 
 const Drawer = createDrawerNavigator();
 
@@ -98,6 +99,10 @@ const UserHome = () => {
             <Drawer.Screen
                 name="Profile"
                 component={ProfileStack}
+            />
+            <Drawer.Screen
+                name="Settings"
+                component={SettingsStack}
             />
         </Drawer.Navigator>
     );
