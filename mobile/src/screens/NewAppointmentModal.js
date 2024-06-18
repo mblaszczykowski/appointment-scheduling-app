@@ -244,23 +244,23 @@ const NewAppointmentModal = ({openModal, setOpenModal, route, navigation}) => {
             </Text>
 
             <TextInput
-                className={`rounded-[25px] p-3 text-[16px] my-3 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] my-3 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
                 placeholder={t("screens.newAppointmentModal.text.namePlaceholder")}
-                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#666'}
                 value={name}
                 onChangeText={setName}
             />
             <TextInput
-                className={`rounded-[25px] p-3 text-[16px] mt-1 mb-4 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] mt-1 mb-4 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
                 placeholder={t("screens.newAppointmentModal.text.emailPlaceholder")}
-                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#666'}
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                className={`rounded-[25px] p-3 text-[16px] mb-3 font-light bg-[#ffffff4d] dark:bg-gray-700 text-${isDarkMode ? 'white' : 'black'}`}
+                className={`rounded-[25px] p-3 text-[16px] mb-3 font-light ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
                 placeholder={t("screens.newAppointmentModal.text.meetingNotePlaceholder")}
-                placeholderTextColor={isDarkMode ? '#bbb' : '#fff'}
+                placeholderTextColor={isDarkMode ? '#bbb' : '#666'}
                 value={meetingNote}
                 onChangeText={setMeetingNote}
             />
