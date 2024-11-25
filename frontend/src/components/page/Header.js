@@ -6,6 +6,8 @@ import {request} from "../../util/axios_helper";
 
 export default function Header({isLoggedIn, onLogout}) {
     const [calendarUrl, setCalendarUrl] = useState('');
+    const [showActions, setShowActions] = useState(false);
+
     useEffect(() => {
         const fetchCalendarUrl = () => {
             if (!isLoggedIn) {
@@ -24,6 +26,11 @@ export default function Header({isLoggedIn, onLogout}) {
 
         fetchCalendarUrl();
     }, [isLoggedIn]);
+
+    const toggleActions = () => {
+        setShowActions((prev) => !prev);
+    };
+
     return (
         <header className="flex justify-center w-full py-4 z-50">
             <nav className="relative max-w-7xl w-full flex justify-between items-center px-4 md:px-8 mx-auto"
@@ -48,26 +55,43 @@ export default function Header({isLoggedIn, onLogout}) {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Link type="Link"
-                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
-                                  to={"/calendar/" + calendarUrl}>
-                                My Calendar
-                            </Link>
-                            <Link type="Link"
-                                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-700 text-white hover:bg-blue-500 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
-                                  to={"/dashboard"}>
-                                Dashboard
-                            </Link>
-                            <button
-                                type="button"
-                                className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-gray-200 text-black hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:hover:bg-white/10 dark:text-white dark:hover:text-white"
-                                onClick={onLogout}>
-                                Log out
-                            </button>
+                            {showActions ? (
+                                <>
+                                    <Link
+                                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-500 text-white hover:bg-blue-600 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+                                        to={"/calendar/" + calendarUrl}>
+                                        My Calendar
+                                    </Link>
+                                    <Link
+                                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-blue-700 text-white hover:bg-blue-600 transition disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-blue-500"
+                                        to={"/dashboard"}>
+                                        Dashboard
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-gray-200 text-black hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-white/10 dark:text-white dark:hover:text-white"
+                                        onClick={onLogout}>
+                                        Log out
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-gray-200 text-black hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-white/10 dark:text-white dark:hover:text-white"
+                                        onClick={toggleActions}>
+                                        Back
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-gray-200 text-black hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-white/10 dark:text-white dark:hover:text-white"
+                                    onClick={toggleActions}>
+                                    Actions
+                                </button>
+                            )}
                         </React.Fragment>
                     )}
                 </div>
             </nav>
         </header>
     );
-};
+}
