@@ -172,6 +172,8 @@ public class MailService {
         var token = generateCancelMeetingToken(appointment);
         var cancelMeetingLink = baseUrl + path + token;
 
+        String dashboardLink = baseUrl + "/dashboard";
+
         if (isBooker) {
             textBody = String.format("""
                         Hello, %s
@@ -230,14 +232,15 @@ public class MailService {
                         Meeting note:
                         %s
 
-                        You can see all your meetings here: http://localhost:3000/dashboard
+                        You can see all your meetings here: %s
                         Regards,
                         Team Meetly""",
                     calendarOwner.getFullName(),
                     appointment.getBookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointment.getMeetingNote());
+                    appointment.getMeetingNote(),
+                    dashboardLink);
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -253,7 +256,7 @@ public class MailService {
                             <p>Hello, %s</p>
                             <p>You have a new meeting with <strong>%s</strong> on <strong>%s</strong> CET at <a href="%s" class="button">this link</a></p>
                             <p><strong>Meeting note:</strong><br />%s</p>
-                            <p>You can see all your meetings here: <a href="http://localhost:3000/dashboard" class="button">Dashboard</a></p>
+                            <p>You can see all your meetings here: <a href="%s" class="button">Dashboard</a></p>
                             <p>Regards,<br /><strong>Team Meetly</strong></p>
                         </div>
                         </body>
@@ -264,7 +267,8 @@ public class MailService {
                     appointment.getBookerName(),
                     formattedDateTime,
                     calendarOwner.getMeetingLink(),
-                    appointment.getMeetingNote());
+                    appointment.getMeetingNote(),
+                    dashboardLink);
         }
 
         try {
@@ -288,6 +292,8 @@ public class MailService {
         String formattedDateTime = appointment.getStartTime().format(formatter);
         String textBody;
         String htmlBody;
+
+        var dashboardLink = baseUrl + "/dashboard";
 
         if (isBooker) {
             textBody = String.format("""
@@ -333,13 +339,14 @@ public class MailService {
                         Your meeting with %s on %s CET at %s has been canceled.
                         
 
-                        You can see all your meetings here: http://localhost:3000/dashboard
+                        You can see all your meetings here: %s
                         Regards,
                         Team Meetly""",
                     calendarOwner.getFullName(),
                     appointment.getBookerName(),
                     formattedDateTime,
-                    calendarOwner.getMeetingLink());
+                    calendarOwner.getMeetingLink(),
+                    dashboardLink);
 
             htmlBody = String.format("""
                         <!DOCTYPE html>
@@ -354,7 +361,7 @@ public class MailService {
                             <h1>Cancel Meeting Confirmation</h1>
                             <p>Hello, %s</p>
                             <p>Your meeting with <strong>%s</strong> on <strong>%s</strong> CET has been canceled</p>
-                            <p>You can see all your meetings here: <a href="http://localhost:3000/dashboard" class="button">Dashboard</a></p>
+                            <p>You can see all your meetings here: <a href="%s" class="button">Dashboard</a></p>
                             <p>Regards,<br /><strong>Team Meetly</strong></p>
                         </div>
                         </body>
@@ -364,7 +371,8 @@ public class MailService {
                     calendarOwner.getFullName(),
                     appointment.getBookerName(),
                     formattedDateTime,
-                    calendarOwner.getMeetingLink());
+                    calendarOwner.getMeetingLink(),
+                    dashboardLink);
         }
 
         try {
