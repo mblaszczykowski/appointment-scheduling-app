@@ -1,6 +1,9 @@
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
 export const getAuthToken = () => {
     return window.localStorage.getItem('auth_token');
 };
@@ -26,11 +29,7 @@ export const getUserIdFromToken = () => {
     }
 };
 
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-axios.defaults.headers.post['Content-Type'] = 'application/json';
-
 export const request = (method, url, data) => {
-
     let headers = {};
     if (getAuthToken() !== null && getAuthToken() !== "null") {
         headers = {'Authorization': `Bearer ${getAuthToken()}`};
