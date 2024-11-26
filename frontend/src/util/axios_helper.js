@@ -26,7 +26,7 @@ export const getUserIdFromToken = () => {
     }
 };
 
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const request = (method, url, data) => {
