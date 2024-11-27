@@ -9,6 +9,7 @@ import com.calendly.repositories.UserRepository;
 import com.calendly.requests.*;
 import com.calendly.services.TokenService;
 import com.calendly.services.UserService;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,11 @@ public class UserController {
         this.mailService = mailService;
         this.userRepository = userRepository;
         this.tokenResetRepository = tokenResetRepository;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers(HttpServletRequest httpRequest) {
+        return userService.getAllUsersDetails(userService, httpRequest);
     }
 
     @GetMapping("{uuid}")

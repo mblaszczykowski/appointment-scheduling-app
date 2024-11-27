@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.calendly.services.TokenService.EXPIRATION_TIME_REFRESH;
 import static com.calendly.services.TokenService.generateToken;
@@ -181,7 +182,8 @@ public class UserService {
                 userRegistrationRequest.availableToHour(),
                 userRegistrationRequest.availableDays(),
                 userRegistrationRequest.meetingDuration(),
-                null);
+                null,
+                false);
         userDAO.addUser(user);
 
         // logujemy od razu poki co po rejestracji, bez aktywacji
@@ -388,11 +390,41 @@ public class UserService {
         }
         var user = userService.getUserById(uuid);
         var userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(),
-                user.getEmail(), user.getPassword(), user.getCalendarUrl(), user.getMeetingLink(),
+                user.getEmail(), user.getPassword(), user.isAdmin(), user.getCalendarUrl(), user.getMeetingLink(),
                 user.getAvailableFromHour(), user.getAvailableToHour(), user.getAvailableDays(), user.getMeetingDuration(),
                 user.getProfilePicture());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDTO);
+    }
+
+    public ResponseEntity<?> getAllUsersDetails(UserService userService, HttpServletRequest request) {
+        //Check if user is logged in
+        ResponseEntity<?> checkAuthorizationResult = checkAuthorization(request);
+        if (checkAuthorizationResult.getStatusCode() != HttpStatus.OK) {
+            return checkAuthorizationResult;
+        }
+        List<User> users = userService.getAllUsers();
+
+        List<UserDTO> userDTOs = users.stream()
+                .map(user -> new UserDTO(
+                        user.getId(),
+                        user.getFirstname(),
+                        user.getLastname(),
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.isAdmin(),
+                        user.getCalendarUrl(),
+                        user.getMeetingLink(),
+                        user.getAvailableFromHour(),
+                        user.getAvailableToHour(),
+                        user.getAvailableDays(),
+                        user.getMeetingDuration(),
+                        user.getProfilePicture()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userDTOs);
     }
 }
