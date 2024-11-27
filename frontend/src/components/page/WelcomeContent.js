@@ -172,23 +172,8 @@ export default function WelcomeContent({show}) {
                     <h2 className="text-2xl font-bold md:text-4xl md:leading-tight">Pricing</h2>
                     <p className="mt-1 text-gray-600">Whatever your status, our offers evolve according to your
                         needs.</p>
+                    <p>Monthly prices shown.</p>
                 </div>
-
-                <div className="flex justify-center items-center">
-                    <label className="min-w-14 text-sm text-gray-500 me-3">Monthly</label>
-                    <input type="checkbox" id="hs-basic-with-description"
-                           className="relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent rounded-full cursor-pointer transition-colors duration-200 focus:ring-blue-600 checked:bg-none checked:text-blue-600 checked:border-blue-600 before:inline-block before:size-6 before:bg-white checked:before:translate-x-full before:rounded-full before:shadow"/>
-                    <label className="relative min-w-14 text-sm text-gray-500 ms-3">
-                        Annual
-                        <span className="absolute -top-10 start-auto -end-28">
-        <span className="flex items-center">
-          <span
-              className="mt-3 inline-block whitespace-nowrap text-[11px] font-semibold uppercase bg-blue-600 text-white rounded-full py-1 px-2.5">Save up to 10%</span>
-        </span>
-      </span>
-                    </label>
-                </div>
-
                 <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:items-center">
                     <div className="flex flex-col border border-gray-200 text-center rounded-xl p-8">
                         <h4 className="font-medium text-lg text-gray-800">Free</h4>
@@ -209,7 +194,7 @@ export default function WelcomeContent({show}) {
                         </p>
                         <h4 className="font-medium text-lg text-gray-800">Startup</h4>
                         <span className="mt-5 font-bold text-5xl text-gray-800"><span
-                            className="font-bold text-2xl -me-2">$</span>39</span>
+                            className="font-bold text-2xl me-1">$</span>39</span>
                         <p className="mt-2 text-sm text-gray-500">All the basics for starting a new business</p>
                         <ul className="mt-7 space-y-2.5 text-sm">
                             <li className="flex gap-x-2"><span className="text-gray-800">2 users</span></li>
@@ -223,7 +208,7 @@ export default function WelcomeContent({show}) {
                     <div className="flex flex-col border border-gray-200 text-center rounded-xl p-8">
                         <h4 className="font-medium text-lg text-gray-800">Team</h4>
                         <span className="mt-5 font-bold text-5xl text-gray-800"><span
-                            className="font-bold text-2xl -me-2">$</span>89</span>
+                            className="font-bold text-2xl me-1">$</span>89</span>
                         <p className="mt-2 text-sm text-gray-500">Everything you need for a growing business</p>
                         <ul className="mt-7 space-y-2.5 text-sm">
                             <li className="flex gap-x-2"><span className="text-gray-800">5 users</span></li>
@@ -237,7 +222,7 @@ export default function WelcomeContent({show}) {
                     <div className="flex flex-col border border-gray-200 text-center rounded-xl p-8">
                         <h4 className="font-medium text-lg text-gray-800">Enterprise</h4>
                         <span className="mt-5 font-bold text-5xl text-gray-800"><span
-                            className="font-bold text-2xl -me-2">$</span>149</span>
+                            className="font-bold text-2xl me-1">$</span>149</span>
                         <p className="mt-2 text-sm text-gray-500">Advanced features for scaling your business</p>
                         <ul className="mt-7 space-y-2.5 text-sm">
                             <li className="flex gap-x-2"><span className="text-gray-800">10 users</span></li>

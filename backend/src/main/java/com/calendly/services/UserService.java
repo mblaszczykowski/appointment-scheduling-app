@@ -167,9 +167,6 @@ public class UserService {
             return checkEmailExistsResult;
         }
 
-        // dodac dla pozostalych pól sprawdzenia
-        // szczegolnie sprawdzic czy nie ma nikt linka takiego jak podany, jak tak to trzeba ladny error wyswietlic na froncie zeby link zostal zmieniony, bez przkierowania ani wywalania, trzeba na froncie to obsluzyc
-
         //Encrypting password
         String generatedSecuredPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
         User user = new User(firstname,
