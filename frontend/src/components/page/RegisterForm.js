@@ -66,7 +66,7 @@ const validationSchemas = [
     })
 ];
 
-function displayNotification(message, type = "error", duration = 2500,
+function displayNotification(message, type = "error", duration = 5000,
                              transition = Slide, position = "top-center") {
     toast[type](message, {
         position: position,
