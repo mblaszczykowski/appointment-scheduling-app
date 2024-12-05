@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../logo.svg';
 import { request } from "../../util/axios_helper";
@@ -8,6 +8,7 @@ export default function Header({ isLoggedIn, onLogout }) {
     const [calendarUrl, setCalendarUrl] = useState('');
     const [isUserAdmin, setIsUserAdmin] = useState('');
     const [showMenu, setShowMenu] = useState(false);
+    const menuRef = useRef(null);
 
     useEffect(() => {
         const fetchCalendarUrl = () => {
@@ -32,6 +33,23 @@ export default function Header({ isLoggedIn, onLogout }) {
     const toggleMenu = () => {
         setShowMenu((prev) => !prev);
     };
+
+    const closeMenu = () => {
+        setShowMenu(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                closeMenu();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <header className="flex justify-center w-full py-4 z-50">
@@ -67,7 +85,7 @@ export default function Header({ isLoggedIn, onLogout }) {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <div className="relative">
+                            <div className="relative" ref={menuRef}>
                                 <button
                                     type="button"
                                     className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-gray-200 text-black hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-white/10 dark:text-white dark:hover:text-white whitespace-nowrap"
@@ -80,12 +98,14 @@ export default function Header({ isLoggedIn, onLogout }) {
                                         <Link
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md whitespace-nowrap"
                                             to={"/dashboard"}
+                                            onClick={closeMenu}
                                         >
                                             Dashboard
                                         </Link>
                                         <Link
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md whitespace-nowrap"
                                             to={"/calendar/" + calendarUrl}
+                                            onClick={closeMenu}
                                         >
                                             My Calendar
                                         </Link>
@@ -93,6 +113,7 @@ export default function Header({ isLoggedIn, onLogout }) {
                                             <Link
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md whitespace-nowrap"
                                                 to={"/adminpage/"}
+                                                onClick={closeMenu}
                                             >
                                                 Admin Page
                                             </Link>
@@ -100,7 +121,10 @@ export default function Header({ isLoggedIn, onLogout }) {
                                         <button
                                             type="button"
                                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md whitespace-nowrap"
-                                            onClick={onLogout}
+                                            onClick={() => {
+                                                onLogout();
+                                                closeMenu();
+                                            }}
                                         >
                                             Log out
                                         </button>
@@ -108,7 +132,6 @@ export default function Header({ isLoggedIn, onLogout }) {
                                 )}
                             </div>
                         </React.Fragment>
-
                     )}
                 </div>
             </nav>
