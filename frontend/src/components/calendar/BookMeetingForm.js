@@ -8,7 +8,6 @@ export default function BookMeetingForm({ onSubmit, onCancel }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         onSubmit(name, email, notes);
-        console.log(name, email, notes);
     };
 
     return (
