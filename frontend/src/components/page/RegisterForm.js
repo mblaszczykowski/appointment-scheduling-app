@@ -54,7 +54,8 @@ const validationSchemas = [
         availableToHour: Yup.number()
             .min(0, 'Earliest hour must be 0.')
             .max(23, 'Latest hour can be 23.')
-            .required('Available to hour is required.'),
+            .required('Available to hour is required.')
+            .moreThan(Yup.ref('availableFromHour'), 'Available to hour must be later than available from hour.'),
         availableDays: Yup.array()
             .of(Yup.string().required())
             .min(1, 'At least one day must be selected.')
