@@ -8,6 +8,7 @@ import {getUserIdFromToken, request} from "../../util/axios_helper";
 import EyeButton from "../EyeButton";
 import {Slide, toast} from "react-toastify";
 import ProfilePicture from "./ProfilePicture";
+import axios from 'axios';
 
 const generalValidationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -40,7 +41,8 @@ const generalValidationSchema = Yup.object().shape({
     availableToHour: Yup.number()
         .min(0, 'Earliest hour must be 0.')
         .max(23, 'Latest hour can be 23.')
-        .required('Available to hour is required.'),
+        .required('Available to hour is required.')
+        .moreThan(Yup.ref('availableFromHour'), 'Available to hour must be later than available from hour.'),
     availableDays: Yup.array()
         .of(Yup.string().required())
         .min(1, 'At least one day must be selected.')
@@ -225,7 +227,42 @@ function SettingsForm() {
 
             validationSchema={currentPasswordValid ? passwordValidationSchema : generalValidationSchema}
 
-            onSubmit={async (values, {setSubmitting}) => {
+            onSubmit={async (values, { setSubmitting, setFieldError }) => {
+                const { email, calendarUrl } = values;
+                let hasError = false;
+
+                if (email !== userData.email) {
+                    try {
+                        await axios.get(`/api/users/email/${email}`);
+                        // Email exists in the database
+                        setFieldError('email', 'Email already exists.');
+                        hasError = true;
+                    } catch (error) {
+                        if (error.response && error.response.status !== 404) {
+                            setFieldError('email', 'Email already exists.');
+                            hasError = true;
+                        }
+                    }
+                }
+
+                if (calendarUrl !== userData.calendarUrl) {
+                    try {
+                        await axios.get(`/api/calendar/${calendarUrl}`);
+                        setFieldError('calendarUrl', 'Calendar URL already exists.');
+                        hasError = true;
+                    } catch (error) {
+                        if (error.response && error.response.status !== 404) {
+                            setFieldError('calendarUrl', 'Calendar URL already exists.');
+                            hasError = true;
+                        }
+                    }
+                }
+
+                if (hasError) {
+                    setSubmitting(false);
+                    return;
+                }
+
                 handleUpdate(values);
                 setSubmitting(false);
             }}
